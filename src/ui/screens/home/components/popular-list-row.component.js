@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 const SupWrapper = styled(View)`
     padding:${props => props.theme.space[1]};
 `
-const SubWrapper = styled(View)`
+const SubWrapper = styled(TouchableOpacity)`
     flexDirection:row;
     alignItems:center;
 `
@@ -16,16 +16,18 @@ const ProductImage = styled(Image)`
     width:100px;
     height:150px;
     borderRadius:${props => props.theme.radius[2]};
-    backgroundColor:${props=>props.theme.color.gray};
+    backgroundColor:${props=>props.theme.color.lightGray};
 `
 const ProductPrice = styled(Text)`
 
 color:${props => props.theme.color.primary};
 fontWeight:bold;
+fontSize:${props=>props.theme.text.subtitle};
 `
 const ProductName = styled(Text)`
 
 color:${props => props.theme.color.black};
+fontWeight:bold;
 
 `
 
@@ -49,10 +51,11 @@ const StarIcon = styled(Icon).attrs(props => (
 `
 const PopularProductRow = ({
     item,
-    index
+    index,
+    goToProductDetail
 }) => (
     <SupWrapper key={index}>
-        <SubWrapper>
+        <SubWrapper onPress={goToProductDetail}>
             <ProductImage source={{ uri: item.productImageUri }} />
 
             <Wrapper>

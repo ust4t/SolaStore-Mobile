@@ -6,13 +6,17 @@ import HomeNavigator from './home.navigator';
 import UserNavigator from './user.navigator';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import NotificationNavigator from './notification.navigator';
+import { inject, observer } from 'mobx-react';
+import LoadingModal from '../components/modals/loading.modal';
+import BasketNavigator from './basket.navigator';
 enableScreens(true);
 const Tab = createBottomTabNavigator();
 const hideBottomList = [];
 
 
-
+@inject("BusyStore")
+@observer
 class MainNavigator extends Component {
     constructor(props) {
         super(props);
@@ -48,6 +52,7 @@ class MainNavigator extends Component {
                         headerShown: false,
                         tabBarStyle: {
                             borderTopColor: 'rgba(0, 0, 0, .2)',
+                            height: 0
                         },
                         // tabBarInactiveTintColor: 'red',
                         // tabBarActiveTintColor: colors.bg.primary,
@@ -55,7 +60,14 @@ class MainNavigator extends Component {
                     })}>
                     <Tab.Screen name="homeNavigator" component={HomeNavigator} />
                     <Tab.Screen name="userNavigator" component={UserNavigator} />
+                    <Tab.Screen name="notificationNavigator" component={NotificationNavigator} />
+                    <Tab.Screen name="basketNavigator" component={BasketNavigator} />
                 </Tab.Navigator>
+                {
+                    this.props.BusyStore.requestCount > 0 &&
+                   <LoadingModal />
+                }
+            
             </NavigationContainer>
         );
     }

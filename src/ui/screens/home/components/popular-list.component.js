@@ -5,30 +5,40 @@ import CategoryListRow from './category-list-row.component';
 import PopularProductRow from './popular-list-row.component';
 
 const SupWrapper = styled(View)`
-    paddingLeft:${props => props.theme.space[1]};
-    paddingTop:${props => props.theme.space[1]};
+    marginLeft:${props => props.theme.space[3]};
+    paddingTop:${props => props.theme.space[3]};
+    paddingBottom:200px;
     
 `
 const Label = styled(Text)`
-    color:${props => props.theme.color.primary};
+    color:${props => props.theme.color.tertiary};
     fontSize:${props => props.theme.text.h2};
+    fontWeight:bold;
     
 `
 const ProductVerticalFlatList = styled(FlatList).attrs(props => ({
-    horizontal: false
+    horizontal: false,
+    
 }))`
-
+marginTop:${props => props.theme.space[2]};
 `
 
 
 const PopularList = ({
-    popularProducts
+    popularProducts,
+    goToProductDetail
 }) => (
     <SupWrapper>
         <Label>Popular</Label>
-        <ProductVerticalFlatList
+        {
+            popularProducts.map((item, index) => 
+                <PopularProductRow item={item} index={index} goToProductDetail={goToProductDetail} />)
+
+        }
+        
+        {/* <ProductVerticalFlatList
             data={popularProducts}
-            renderItem={({ item, index }) => <PopularProductRow item={item} index={index} />} />
+            renderItem={({ item, index }) => /> */}
 
     </SupWrapper>
 );
