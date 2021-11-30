@@ -1,0 +1,1 @@
+export const space = ["0px", "5px", "10px", "20px", "40px", "60px"];
