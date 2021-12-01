@@ -7,6 +7,8 @@ import SearchBar from '../../../home/components/search-bar.component';
 import { inject, observer } from 'mobx-react';
 import ProductListHeader from '../components/product-list-header.component';
 import { Products } from '../../../../../util/fake-data';
+import BaseScreen from '../../../../shared/base.screen';
+import productService from '../../../../../services/remote/product.service';
 const FlatListOfProducts = styled(FlatList)`
   
 `
@@ -19,26 +21,29 @@ const PageWrapper = styled(View)`
 
 @inject("BusyStore")
 @observer
-class ProductList extends Component {
+class ProductList extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
+            ...this.state,
             products: []
         };
     }
 
     /////////////////////////////
-    ////////NAVIGATION
-    goToProductDetail=()=>{
+    ////////NAVIGATION  
+    goToProductDetail = () => {
         this.props.navigation.navigate("ProductDetail")
     }
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.props.BusyStore.increase()
-            setTimeout(()=>{
-                this.setState({products:Products})
-                this.props.BusyStore.decrease()
-            },400)
+            console.log(this.props)
+            // this.props.BusyStore.increase()
+            setTimeout(() => {
+                // this.setState({ products: Products })
+                // this.props.BusyStore.decrease()
+                this.doRequestAsync(()=>productService.GetAllByCategoryID())
+            }, 200)
         })
     }
 
@@ -55,6 +60,9 @@ class ProductList extends Component {
                         ListHeaderComponent={<ProductListHeader />}
                     />
                 </PageWrapper>
+
+
+                <this.RenderErrorModal />
 
             </SafeArea>
         );
