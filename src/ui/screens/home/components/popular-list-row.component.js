@@ -10,19 +10,19 @@ const SubWrapper = styled(TouchableOpacity)`
     alignItems:center;
 `
 const Wrapper = styled(View)`
-padding:${props=>props.theme.space[1]};
+padding:${props => props.theme.space[1]};
 `
 const ProductImage = styled(Image)`
     width:100px;
     height:150px;
     borderRadius:${props => props.theme.radius[2]};
-    backgroundColor:${props=>props.theme.color.lightGray};
+    backgroundColor:${props => props.theme.color.lightGray};
 `
 const ProductPrice = styled(Text)`
 
 color:${props => props.theme.color.primary};
 fontWeight:bold;
-fontSize:${props=>props.theme.text.subtitle};
+fontSize:${props => props.theme.text.subtitle};
 `
 const ProductName = styled(Text)`
 
@@ -35,9 +35,9 @@ const IconWrapper = styled(View)`
     flexDirection:row;
     alignItems:center;
 `
-const StarCount=styled(Text)`
-    fontSize:${props=>props.theme.text.extraSmall};
-    marginLeft:${props=>props.theme.space[1]};
+const StarCount = styled(Text)`
+    fontSize:${props => props.theme.text.extraSmall};
+    marginLeft:${props => props.theme.space[1]};
 `
 
 const StarIcon = styled(Icon).attrs(props => (
@@ -53,28 +53,31 @@ const PopularProductRow = ({
     item,
     index,
     goToProductDetail
-}) => (
-    <SupWrapper key={index}>
-        <SubWrapper onPress={goToProductDetail}>
-            <ProductImage source={{ uri: item.productImageUri }} />
+}) => {
+    const { productImageUri, productName, originalPrice } = item
+    return (
+        <SupWrapper key={index}>
+            <SubWrapper onPress={goToProductDetail}>
+                <ProductImage source={{ uri: productImageUri }} resizeMode="stretch"/>
 
-            <Wrapper>
-                <ProductName>{item.productName}</ProductName>
-                <ProductPrice>{item.price}</ProductPrice>
+                <Wrapper>
+                    <ProductName>{productName}</ProductName>
+                    <ProductPrice>{originalPrice}</ProductPrice>
 
-                <IconWrapper>
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarCount>4.5</StarCount>
+                    <IconWrapper>
+                        <StarIcon />
+                        <StarIcon />
+                        <StarIcon />
+                        <StarIcon />
+                        <StarIcon />
+                        <StarCount>4.5</StarCount>
 
-                </IconWrapper>
-            </Wrapper>
+                    </IconWrapper>
+                </Wrapper>
 
-        </SubWrapper>
-    </SupWrapper>
-);
+            </SubWrapper>
+        </SupWrapper>
+    );
+}
 
 export default PopularProductRow;

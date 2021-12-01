@@ -6,11 +6,13 @@ import QuantitySelector from './quantity-selector.component';
 import ColorSelector from './color-selector.component';
 import PrimaryButton from '../../../../components/primary-button.component';
 import { useState } from 'react/cjs/react.production.min';
+import { SeperatorFromTopOrBottom } from '../../../../components/shared-styled.components';
 
 const SupWrapper = styled(View)`
  
     padding:${props => props.theme.space[3]};
-    borderTopLeftRadius:${props => props.theme.radius[2]};
+    borderTopLeftRadius:${props => props.theme.radius[4]};
+    borderTopRightRadius:${props => props.theme.radius[4]};
     backgroundColor:${props => props.theme.color.white};
     flex:1;
     paddingBottom:200px;
@@ -24,8 +26,9 @@ const HeaderWrapper = styled(View)`
 const NameAndStarWrapper = styled(View)`
 `
 const Name = styled(Text)`
-color:${props => props.theme.color.primary};
+color:${props => props.theme.color.tertiary};
 fontWeight:bold;
+fontSize:${props => props.theme.text.h2};
 `
 const Price = styled(Text)`
 color:${props => props.theme.color.primary};
@@ -60,7 +63,7 @@ const VariationItemWrapper = styled(View)`
 
 const VariationName = styled(Text)`
     flex:1;
-    color:${props => props.theme.color.primary};
+    color:${props => props.theme.color.tertiary};
 `
 
 const Description = styled(Text)`
@@ -74,7 +77,7 @@ const ProductDetailBody = ({
     product = { name: "Orange Summer", price: "$97" }
 }) => {
     const { name, price } = product;
-   
+
     return (
         <SupWrapper >
             <HeaderWrapper>
@@ -116,10 +119,11 @@ const ProductDetailBody = ({
             <VariationItemWrapper>
 
                 <VariationName>
-                    Description
+                    Description :
 </VariationName>
 
             </VariationItemWrapper>
+            <SeperatorFromTopOrBottom />
             <Description>
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
             </Description>

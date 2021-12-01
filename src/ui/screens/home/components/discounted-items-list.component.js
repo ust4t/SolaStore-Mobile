@@ -17,6 +17,9 @@ const Label = styled(Text)`
 `
 const ProductHorizontalFlatList = styled(FlatList).attrs(props => ({
     horizontal: true,
+    contentContainerStyle: {
+        paddingRight:parseInt(props.theme.space[3].substring(0,2))
+    }
  
 }))`
 paddingTop:${props => props.theme.space[2]};
@@ -29,8 +32,7 @@ const DiscountedItems = ({
     <SupWrapper>
         <Label>Sale Discount</Label>
         <ProductHorizontalFlatList
-            showHorizontalScrolIndicator={false}
-            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             data={products}
             renderItem={({ item, index }) => <DiscountedItem item={item} index={index} goToProductDetail={goToProductDetail}/>} />
 

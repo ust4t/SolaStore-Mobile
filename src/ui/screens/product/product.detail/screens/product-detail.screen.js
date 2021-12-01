@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import styled from 'styled-components';
+import { color } from '../../../../../infrastructure/theme/color';
 import PrimaryButton from '../../../../components/primary-button.component';
 import { SafeArea, ScrollablePage } from '../../../../components/shared-styled.components';
 import Body from '../components/product-detail-body.component';
@@ -24,7 +25,7 @@ class ProductDetail extends Component {
 
     render() {
         return (
-            <SafeArea>
+            <SafeArea style={{backgroundColor:color.lightGray}}>
                 <ScrollablePage>
                     <Slider />
                     <Body />
@@ -32,7 +33,7 @@ class ProductDetail extends Component {
 
 
                 <ButtonWrapper>
-                    <PrimaryButton text="ADD TO CART" />
+                    <PrimaryButton text="ADD TO CART" action={()=>alert("Atanmamış!")} />
                 </ButtonWrapper>
             </SafeArea>
         );

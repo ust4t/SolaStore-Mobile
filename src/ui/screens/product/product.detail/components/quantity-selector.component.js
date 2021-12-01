@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { addIcon, removeIcon } from '../../../../../util/icons';
@@ -8,8 +8,9 @@ const Wrapper = styled(View)`
     flexDirection:row;
     alignItems:center;
     justifyContent:space-around;
+
 `
-const IconWrapper = styled(View)`
+const IconWrapper = styled(TouchableOpacity)`
     backgroundColor:${props => props.theme.color.lightGray};
     padding:${props=>props.theme.space[1]};
 
@@ -29,11 +30,17 @@ const CounterIcon = styled(Icon).attrs(props => ({
     size: 20
 }))`
 `
+
+const Br=styled(View)`
+backgroundColor:${props => props.theme.color.lightGray};
+padding:${props=>props.theme.space[2]};
+`
 const QuantitySelector = ({
     count = 1
 }) => (
-    <Wrapper>
-        <IconWrapper>
+    <Wrapper >
+  
+        <IconWrapper onPress={()=>alert("Atanmamış!")}>
             <CounterIcon name={addIcon} />
         </IconWrapper>
         <CountWrapper>
@@ -42,7 +49,7 @@ const QuantitySelector = ({
             </CountText>
 
         </CountWrapper>
-        <IconWrapper>
+        <IconWrapper onPress={()=>alert("Atanmamış!")}>
             <CounterIcon name={removeIcon} />
         </IconWrapper>
     </Wrapper>

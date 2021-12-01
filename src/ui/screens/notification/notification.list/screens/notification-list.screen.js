@@ -12,7 +12,7 @@ class NotificationList extends Component {
 
   render() {
     return (
-      <SafeArea>
+      <SafeArea style={{justifyContent:'center',alignItems:'center'}}>
         <Text style={{color:"red",fontWeight:'bold'}}> notification-list.screen(Geliştirme Aşamasında)</Text>
         <Tabbar navigation={this.props.navigation} navigatorName={"notificationNavigator"} />
       </SafeArea>

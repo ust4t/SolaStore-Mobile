@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { SafeArea, ScrollablePage } from '../../../components/shared-styled.components';
-import { addressIcon, heartIcon, homeIcon, infoIcon, personIcon, walletIcon } from '../../../../util/icons';
+import { ErrorText, SafeArea, ScrollablePage } from '../../../components/shared-styled.components';
+import { addressIcon, heartIcon, homeIcon, infoIcon, ordersIcon, personIcon, settingsIcon, walletIcon } from '../../../../util/icons';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Tabbar from '../../../components/tabbar.component';
+import { inject, observer } from 'mobx-react';
 
 const Wrapper = styled(View)`
 flex:1;
@@ -14,12 +15,16 @@ flex:1;
 `
 const TouchableItem = styled(View)`
     backgroundColor:${props => props.theme.color.white};
-    padding:${props => props.theme.space[3]};
+    
+    marginTop:${props => props.theme.space[2]};
+    borderRadius:${props => props.theme.radius[2]};
+
+`
+const TouchableInner = styled(TouchableOpacity)`
+padding:${props => props.theme.space[3]};
     flexDirection:row;
     alignItems:center;
     borderRadius:${props => props.theme.radius[2]};
-    marginTop:${props => props.theme.space[2]};
-
 `
 
 const ItemIcon = styled(Icon).attrs(props => ({
@@ -64,27 +69,30 @@ const PersonIcon = styled(Icon).attrs(props => ({
 
 
 `
+@inject("UserStore")
+@observer
 class UserScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
         };
     }
+    logOut=()=>{this.props.UserStore.logout()}
 
     render() {
         const ProfileItems = [
-            { text: "Account", icon: personIcon, action: () => { } },
-            { text: "My Address", icon: addressIcon, action: () => { } },
-            { text: "My Order", icon: walletIcon, action: () => { } },
-            { text: "My Favourites", icon: heartIcon, action: () => { } },
-            { text: "Payment", icon: walletIcon, action: () => { } },
-            { text: "Settings", icon: infoIcon, action: () => { } }
+            { text: "Account", icon: personIcon, action: () => {alert("Atanmamış!") } },
+            { text: "My Address", icon: addressIcon, action: () => {alert("Atanmamış!") } },
+            { text: "My Order", icon: ordersIcon, action: () => { alert("Atanmamış!")} },
+            { text: "My Favourites", icon: heartIcon, action: () => {alert("Atanmamış!") } },
+            { text: "Payment", icon: walletIcon, action: () => {alert("Atanmamış!") } },
+            { text: "Settings", icon: settingsIcon, action: () => {alert("Atanmamış!") } }
         ]
         return (
             <SafeArea>
 
                 <ScrollView
-                showsVerticalScrollIndicator={false}>
+                    showsVerticalScrollIndicator={false}>
                     <Wrapper>
                         <HeaderWrapper>
                             <PersonIconWrapper>
@@ -97,6 +105,12 @@ class UserScreen extends Component {
                             <UserMailText>
                                 kYLİE_04@GMAİL.COM
                         </UserMailText>
+
+                        <TouchableOpacity onPress={this.logOut}>
+                            <ErrorText>
+                                Çıkış Yap
+                            </ErrorText>
+                        </TouchableOpacity>
                         </HeaderWrapper>
                         {
                             ProfileItems.map((item, index) => {
@@ -111,9 +125,13 @@ class UserScreen extends Component {
                                         shadowRadius: 3.84,
 
                                         elevation: 5,
-                                    }}>
-                                        <ItemIcon name={item.icon} />
-                                        <ItemText>{item.text}</ItemText>
+                                    }}
+                                    >
+                                        <TouchableInner onPress={item.action}>
+                                            <ItemIcon name={item.icon} />
+                                            <ItemText>{item.text}</ItemText>
+                                        </TouchableInner>
+
                                     </TouchableItem>
                                 )
                             })

@@ -13,7 +13,7 @@ borderRadius:${props => props.theme.radius[2]};
 `
 const ProductImage = styled(Image)`
     width:120px;
-    height:120px;
+    height:170px;
 `
 
 const ProductDescriptionWrapper = styled(View)`
@@ -47,6 +47,8 @@ const DiscWrapper = styled(View)`
 position:absolute;
 right:${props => props.theme.space[2]};
 top:0px;
+zIndex:99;
+elevation:99;
 
 `
 const DiscWrapperTwo = styled(View)`
@@ -105,7 +107,7 @@ const DiscountedProductRow = ({
                 </View>
 
             </DiscWrapper>
-            <ProductImage source={{ uri: item.productImageUri }} />
+            <ProductImage source={{ uri: item.productImageUri }} resizeMode="stretch" />
 
             <ProductDescriptionWrapper>
 

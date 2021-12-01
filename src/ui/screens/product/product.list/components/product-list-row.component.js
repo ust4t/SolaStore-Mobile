@@ -14,7 +14,7 @@ const SubWrapper = styled(TouchableOpacity)`
 
 const ProductImage = styled(Image)`
 width:100%;
-height:150px;
+height:190px;
 
 
 borderRadius:${props => props.theme.radius[2]};
@@ -61,21 +61,25 @@ const StarIcon = styled(Icon).attrs(props => (
 import Icon from 'react-native-vector-icons/Ionicons'
 const ProductListRow = ({
     item,
-    index
+    index,
+    goToProductDetail
 }) => {
-    const { image, name, price = 65 } = item;
+    const { productImageUri,
+        productName,
+        originalPrice,
+        discountedPrice } = item;
     return (
 
         <SupWrapper key={index}>
-            <SubWrapper>
-                <ProductImage source={{ uri: image }} 
+            <SubWrapper onPress={goToProductDetail}>
+                <ProductImage source={{ uri: productImageUri }} resizeMode="stretch"
                 // style={{ flex: 1, resizeMode: "contain", aspectRatio: 1 }} 
                 />
                 <DescriptionWrapper>
 
                     <DescriptionLeft>
                         <NameText>
-                            {name}
+                            {productName}
                         </NameText>
                         <IconWrapper>
                             <StarIcon />
@@ -89,7 +93,7 @@ const ProductListRow = ({
                     </DescriptionLeft>
 
                     <DescriptionRight>
-                        <PriceText>{price}</PriceText>
+                        <PriceText>{originalPrice}</PriceText>
                     </DescriptionRight>
                 </DescriptionWrapper>
             </SubWrapper>

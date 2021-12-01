@@ -25,7 +25,7 @@ const SearchEditText = styled(TextInput)`
     padding:${props => props.theme.space[1]};
     paddingLeft:${props => props.theme.space[2]};
 `
-const SearchIconWrapper = styled(View)`
+const SearchIconWrapper = styled(TouchableOpacity)`
 borderRadius:${props => props.theme.radius[3]};
 backgroundColor:${props => props.theme.color.secondary};
 justifyContent:center;
@@ -60,7 +60,7 @@ const SearchBar = ({
         <SearchBarView>
             <SearchEditText placeholder="Search" value="" />
 
-            <SearchIconWrapper>
+            <SearchIconWrapper onPress={()=>alert("Atanmamış!")}>
                 <SearchIcon name={searchIcon} />
             </SearchIconWrapper>
         </SearchBarView>

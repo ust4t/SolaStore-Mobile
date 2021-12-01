@@ -6,6 +6,7 @@ import ProductListRow from '../components/product-list-row.component';
 import SearchBar from '../../../home/components/search-bar.component';
 import { inject, observer } from 'mobx-react';
 import ProductListHeader from '../components/product-list-header.component';
+import { Products } from '../../../../../util/fake-data';
 const FlatListOfProducts = styled(FlatList)`
   
 `
@@ -25,27 +26,22 @@ class ProductList extends Component {
             products: []
         };
     }
+
+    /////////////////////////////
+    ////////NAVIGATION
+    goToProductDetail=()=>{
+        this.props.navigation.navigate("ProductDetail")
+    }
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.props.BusyStore.increase()
             setTimeout(()=>{
-                this.populatePRroducts()
+                this.setState({products:Products})
                 this.props.BusyStore.decrease()
             },400)
         })
     }
 
-    populatePRroducts = () => {
-        const products = [];
-        for (var i = 0; i < 20; i++) {
-            products.push({
-                image: "",
-                name: `${i}.product`,
-                price: ` ${i}$`
-            })
-        }
-        this.setState({ products: [...this.state.products, ...products] })
-    }
 
     render() {
         return (
@@ -55,7 +51,7 @@ class ProductList extends Component {
                         showsVerticalScrollIndicator={false}
                         numColumns={2}
                         data={this.state.products}
-                        renderItem={({ item, index }) => <ProductListRow item={item} index={index} />}
+                        renderItem={({ item, index }) => <ProductListRow item={item} index={index} goToProductDetail={this.goToProductDetail} />}
                         ListHeaderComponent={<ProductListHeader />}
                     />
                 </PageWrapper>

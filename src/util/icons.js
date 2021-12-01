@@ -223,9 +223,25 @@ const notificationIcon=Platform.select({
     ios:"ios-notifications",
     android:"md-notifications"
 })
+
+const eyeIcon=Platform.select({
+    ios:"ios-eye",
+    android:"md-eye"
+})
+
+const eyeOffIcon=Platform.select({
+    ios:"ios-eye-off",
+    android:"md-eye-off"
+})
+const settingsIcon=Platform.select({
+    ios:"ios-settings",
+    android:"md-settings"
+})
 export  {
     cartIcon,starIcon,cancelIcon,addIcon,removeIcon,homeIcon,searchIcon,giftIcon,personIcon,caretIcon,watchIcon,cashIcon,carIcon,
     ordersIcon,caretForward,readerIcon,cardIcon,addressIcon,infoIcon,basketIcon,starSharIcon,trashIcon,locateIcon,businessIcon,
     lockIcon,arrowBack,locationIcon,checkmarkIcon,walletIcon,heartIcon,appsIcon,heartOutlineIcon,forwardChevron,downChevron,logOutIdon
-    ,elipsisHorizontalIcon,trashBinOutline,alertIcon,filterIcon,ellipsisVertical,optionsIcon,notificationIcon
+    ,elipsisHorizontalIcon,trashBinOutline,alertIcon,filterIcon,ellipsisVertical,optionsIcon,notificationIcon,
+    eyeIcon,eyeOffIcon,settingsIcon
+
 }

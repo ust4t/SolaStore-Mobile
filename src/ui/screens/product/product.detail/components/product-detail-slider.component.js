@@ -36,9 +36,9 @@ borderRadius:4px;
 `
 const deviceWidth = Dimensions.get('window').width
 const ProductDetailSlider = ({
-    images = ["https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80",
+    images = ["https://www.collezione.com/Uploads/UrunResimleri/kadin-siyah-slim-----elbise-b1fd.jpg",
         "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80",
-        "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80"]
+        "https://www.collezione.com/Uploads/UrunResimleri/kadin-siyah-slim-----elbise-b1fd.jpg"]
 }) => {
     const [activePage, setActivePage] = useState(0);
     return (
@@ -51,7 +51,7 @@ const ProductDetailSlider = ({
                 {
                     images.map((item, index) => {
                         return (
-                            <SliderImage source={{ uri: item }} key={index} />
+                            <SliderImage source={{ uri: item }} key={index} resizeMode="contain" />
                         )
                     })
                 }
