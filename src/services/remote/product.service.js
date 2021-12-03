@@ -10,8 +10,17 @@ class ProductService extends BaseService {
         this.controllerName = "Product";
     }
     GetAllByCategoryID = async () => {
-        console.log("product.service line 10")
         let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetAllByCategoryID`, null);
+        return this.handleResponse(rsp)
+    }
+
+    GetSaleProducts = async () => {
+        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetSaleProducts`, null);
+        return this.handleResponse(rsp)
+    }
+
+    GetBestSellerProducts = async () => {
+        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetBestSellerProducts`, null);
         return this.handleResponse(rsp)
     }
 }

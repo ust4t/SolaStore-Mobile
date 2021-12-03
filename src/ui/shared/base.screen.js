@@ -28,7 +28,7 @@ class BaseScreen extends PureComponent {
             console.log("base.screen line 28")
             console.log(response)
 
-            if (response.resultStatus == resultStatus.SUCCESS) {
+            if (response.resultStatus == resultStatus.success) {
                 return response.data
             } else throw new Error(response.errorMessage)
         } catch (error) {

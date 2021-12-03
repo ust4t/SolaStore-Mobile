@@ -4,6 +4,8 @@
 
 class RemoteDataAccessObject {
     apiUrl = "http://api.solastore.com.tr";
+    sourceProof = "ugurturkmenn@gmail.com";
+    lang = "TR";
 
 
     PostRequest = async (route = "", requestObject = null, signal = null) => {
@@ -16,12 +18,20 @@ class RemoteDataAccessObject {
             signal
         }))
     }
-    GetRequest(route="",signal=null,...params){
-        let url=this.apiUrl + "/api/" + route;
-        params.map((item,index)=>{
-            if(index==0)url+=`?${item}`;
-            else url+= `&${item}`;
+    GetRequest(route = "", signal = null, params=[]) {
+        let url = this.apiUrl + "/api/" + route;
+
+        url += `?sourceProof=${this.sourceProof}`
+        url += `&lang=${this.lang}`
+
+        params.map((item, index) => {
+            // if (index == 0) url += `?${item}`;
+            // else url += `&${item}`;
+            url += `&${item.name}=${item.val}`;
         })
+        
+
+
 
         console.log(url)
         return this.timeout(7000, fetch(url, {
@@ -33,7 +43,7 @@ class RemoteDataAccessObject {
         }))
     }
 
-   
+
     timeout(ms, promise) {
         return new Promise(function (resolve, reject) {
             setTimeout(function () {

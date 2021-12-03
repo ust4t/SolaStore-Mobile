@@ -54,15 +54,15 @@ const PopularProductRow = ({
     index,
     goToProductDetail
 }) => {
-    const { productImageUri, productName, originalPrice } = item
+    const {productShortName,price,oldPrice}=item
     return (
         <SupWrapper key={index}>
             <SubWrapper onPress={goToProductDetail}>
-                <ProductImage source={{ uri: productImageUri }} resizeMode="stretch"/>
+                <ProductImage source={{ uri: "" }} resizeMode="stretch"/>
 
                 <Wrapper>
-                    <ProductName>{productName}</ProductName>
-                    <ProductPrice>{originalPrice}</ProductPrice>
+                    <ProductName>{productShortName}</ProductName>
+                    <ProductPrice>{price}</ProductPrice>
 
                     <IconWrapper>
                         <StarIcon />

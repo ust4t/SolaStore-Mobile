@@ -62,7 +62,7 @@ color:${props => props.theme.color.white};
 fontSize:${props => props.theme.text.extraSmall};
 `
 
-const Triangles=styled(View)`
+const Triangles = styled(View)`
 borderTopColor:${props => props.theme.color.orange};
 `
 
@@ -72,57 +72,61 @@ const DiscountedProductRow = ({
     item,
     index,
     goToProductDetail
-}) => (
-    <SupWrapper key={index}>
+}) => {
+    const {productShortName,price,oldPrice}=item
+    return (
+        <SupWrapper key={index}>
 
-        <SubWrapper onPress={goToProductDetail}>
-            <DiscWrapper >
-                <DiscWrapperTwo>
-                    <DiscText>Disc</DiscText>
-                    <DiscText style={{fontWeight:'bold'}}>50%</DiscText>
-                </DiscWrapperTwo>
+            <SubWrapper onPress={goToProductDetail}>
+                <DiscWrapper >
+                    <DiscWrapperTwo>
+                        <DiscText>Disc</DiscText>
+                        <DiscText style={{ fontWeight: 'bold' }}>50%</DiscText>
+                    </DiscWrapperTwo>
 
-                <View style={{ flexDirection: 'row',justifyContent:"space-between" }}>
-                    <Triangles style={{
-                        width: 0,
-                        height: 0,
-                        backgroundColor: "transparent",
-                        borderStyle: "solid",
-                        borderRightWidth: 10,
-                        borderTopWidth: 10,
-                        borderRightColor: "transparent",
-                       
-                    }}></Triangles>
-                    <Triangles style={{
-                        width: 0,
-                        height: 0,
-                        backgroundColor: "transparent",
-                        borderStyle: "solid",
-                        borderRightWidth: 10,
-                        borderTopWidth: 10,
-                        borderRightColor: "transparent",
-            
-                        transform: [{ rotate: "90deg" }]
-                    }}></Triangles>
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
+                        <Triangles style={{
+                            width: 0,
+                            height: 0,
+                            backgroundColor: "transparent",
+                            borderStyle: "solid",
+                            borderRightWidth: 10,
+                            borderTopWidth: 10,
+                            borderRightColor: "transparent",
 
-            </DiscWrapper>
-            <ProductImage source={{ uri: item.productImageUri }} resizeMode="stretch" />
+                        }}></Triangles>
+                        <Triangles style={{
+                            width: 0,
+                            height: 0,
+                            backgroundColor: "transparent",
+                            borderStyle: "solid",
+                            borderRightWidth: 10,
+                            borderTopWidth: 10,
+                            borderRightColor: "transparent",
 
-            <ProductDescriptionWrapper>
+                            transform: [{ rotate: "90deg" }]
+                        }}></Triangles>
+                    </View>
 
-                <ProductName>{item.productName}</ProductName>
+                </DiscWrapper>
+                <ProductImage source={{ uri: item.productImageUri }} resizeMode="stretch" />
 
-                <PriceWrapper>
-                    <OriginalPriceText>{item.originalPrice}</OriginalPriceText>
-                    <DiscountedPriceText>{item.discountedPrice}</DiscountedPriceText>
-                </PriceWrapper>
+                <ProductDescriptionWrapper>
 
-            </ProductDescriptionWrapper>
+                    <ProductName>{productShortName}</ProductName>
 
-        </SubWrapper>
+                    <PriceWrapper>
+                        <OriginalPriceText>{price}</OriginalPriceText>
+                        <DiscountedPriceText>{oldPrice}</DiscountedPriceText>
+                    </PriceWrapper>
 
-    </SupWrapper>
-);
+                </ProductDescriptionWrapper>
+
+            </SubWrapper>
+
+        </SupWrapper>
+    );
+
+}
 
 export default React.memo(DiscountedProductRow);

@@ -9,6 +9,8 @@ import { inject, observer } from 'mobx-react';
 import PrimaryButton from '../../../components/primary-button.component';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { eyeOffIcon } from '../../../../util/icons';
+import BaseScreen from '../../../shared/base.screen';
+import userService from '../../../../services/remote/user.service';
 const Header = styled(View)`
     backgroundColor:${props => props.theme.color.secondary};
     borderBottomEndRadius:${props => props.theme.radius[3]};
@@ -58,21 +60,32 @@ const EyeIcon = styled(Icon).attrs({
 
 
 
-@inject("UserStore")
+@inject("UserStore", "BusyStore")
 @observer
-class UserLogin extends Component {
+class UserLogin extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
+            ...this.state
         };
     }
 
     ///////////////////////////
     ////NVAIGATIONS
-    goToRegister=()=>{this.props.navigation.navigate("RegisterScreen")}
+    goToRegister = () => { this.props.navigation.navigate("RegisterScreen") }
 
-    handleLoginFormAsync = async () => {
-        this.props.UserStore.login()
+    handleLoginFormAsync = async (values) => {
+        console.log("user-login.screen line 78")
+        console.log(values)
+        let dtoResponse = await this.doRequestAsync(() => userService.isMember(values.mail, values.password))
+        console.log(dtoResponse)
+        if (dtoResponse) {
+            if (dtoResponse.userID == 0) {
+                this.showErrorModal("Kullanıcı Bulunamadı");
+            } else this.props.UserStore.login()
+
+        }
+
     }
 
     render() {
@@ -93,31 +106,44 @@ class UserLogin extends Component {
                     </Header>
 
                     <Formik
+                        onSubmit={this.handleLoginFormAsync}
                         initialValues={{
-                            name: "",
-                            password: ""
+                            mail: "muammersalkim@hotmail.com",
+                            password: "anestunara1"
                         }}
                         validationSchema={
                             Yup.object().shape({
-                                name: Yup.string(),
-                                password: Yup.string()
+                                mail: Yup.string().required("Telefon numarası girin!"),
+                                password: Yup.string().required("Şifre gerekli!").min(8, "En az 8 karakter").max(30, "En fazla 30 karakter")
                             })
                         }
-                        onSubmit={this.handleLoginFormAsync}>
+
+                    >
                         {({ values, handleChange, handleSubmit, errors, touched, setFieldTouched, isValid }) => (
                             <Form>
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Name..." />
+                                        placeholder="Name..."
+                                        value={values.mail}
+                                        onChangeText={handleChange("mail")}
+                                        onBlur={() => { setFieldTouched("mail") }} />
                                 </InputWrapper>
+                                {errors.mail && touched.mail &&
+                                    <ErrorText style={{ width: '100%', textAlign: 'center', fontSize: 10, color: 'red' }}>{errors.mail}</ErrorText>}
                                 <SeperatorFromTopOrBottom />
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Password..." />
+                                        placeholder="Password..."
+                                        value={values.password}
+                                        onChangeText={handleChange("password")}
+                                        onBlur={() => { setFieldTouched("password") }}
+                                        secureTextEntry={true} />
                                     <IconTouchable>
                                         <EyeIcon />
                                     </IconTouchable>
                                 </InputWrapper>
+                                {errors.password && touched.password &&
+                                    <ErrorText style={{ width: '100%', textAlign: 'center', fontSize: 10, color: 'red' }}>{errors.password}</ErrorText>}
                                 <SeperatorFromTopOrBottom />
                                 <ErrorTextWrapper>
                                     <ErrorText>
@@ -126,18 +152,21 @@ class UserLogin extends Component {
                                 </ErrorTextWrapper>
 
                                 <SeperatorFromTopOrBottom />
+
                                 <PrimaryButton text="SIGN IN" action={handleSubmit} />
                             </Form>
                         )}
                     </Formik>
 
-
+                    {/* <PrimaryButton text="SIGN IN" action={this.handleLoginFormAsync} /> */}
 
                 </ScrollablePage>
 
 
 
                 <Tabbar navigation={this.props.navigation} navigatorName={"userNavigator"} />
+
+                <this.RenderErrorModal />
             </SafeArea>
         );
     }

@@ -5,29 +5,30 @@ import { resultStatus } from "../util/enums/result-status";
 
 
 
-class BaseService{
-    constructor(){
+class BaseService {
+    constructor() {
 
     }
-    handleResponse=async (rsp)=>{
+    handleResponse = async (rsp) => {
         console.log("base.service line 13")
         console.log(rsp)
-        if(rsp.status==200){
+        if (rsp.status == 200) {
 
-            rsp=await rsp.json();
+            rsp = await rsp.json();
 
-            if(rsp.statusCode==0){
+            // if(rsp.statusCode==0){
 
-                return new DtoResponse(resultStatus.success,rsp)
-            }
+            //     return new DtoResponse(resultStatus.success,rsp)
+            // }
+            return new DtoResponse(resultStatus.success, rsp)
 
-            return new DtoResponse(resultStatus.error,null,rsp.stateMessage)
+            // return new DtoResponse(resultStatus.error,null,rsp.stateMessage)
 
-        }else if(rsp.status==401){
-            return new DtoResponse(resultStatus.error,null,"Authentication Error!")
+        } else if (rsp.status == 401) {
+            return new DtoResponse(resultStatus.error, null, "Authentication Error!")
         }
 
-        return new DtoResponse(resultStatus.error,null,"Servise erişelemiyor!");
+        return new DtoResponse(resultStatus.error, null, "Servise erişelemiyor!");
     }
 
 

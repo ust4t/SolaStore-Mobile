@@ -1,5 +1,5 @@
 
 export const resultStatus=Object.freeze({
-    SUCCESS:1,
-    ERROR:2
+    success:1,
+    error:2
 })
