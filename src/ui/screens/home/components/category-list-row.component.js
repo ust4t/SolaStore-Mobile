@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
+import { imageUrl } from '../../../../util/constants';
 
 const Wrapper = styled(TouchableOpacity)`
 padding:${props => props.theme.space[1]};
@@ -8,7 +9,7 @@ alignItems:center;
 `
 const IconWrapper = styled(View)`
 backgroundColor:${props => props.theme.color.white};
-padding:${props => props.theme.space[1]};
+
 borderRadius:${props => props.theme.radius[2]};
 
 `
@@ -21,8 +22,10 @@ marginTop:${props => props.theme.space[1]};
 
 `
 const CategoryIcon = styled(Image)`
-    height:50px;
-    width:50px;
+width:75px;
+    height:112px;
+    borderRadius:${props => props.theme.radius[2]};
+    
 `
 
 const CategoryListRow = ({
@@ -30,11 +33,13 @@ const CategoryListRow = ({
     index,
     goToProductList
 }) => {
-    const {selectedCategoryName,squareCategoryPictureGuidName}=item;
+    const { selectedCategoryName, squareCategoryPictureGuidName, categoryID } = item;
     return (
-        <Wrapper key={index} onPress={goToProductList}>
+        <Wrapper key={index} onPress={() => goToProductList(categoryID)} style={{
+            
+        }}>
             <IconWrapper>
-                <CategoryIcon source={{ uri: squareCategoryPictureGuidName}} />
+                <CategoryIcon source={{ uri: imageUrl+squareCategoryPictureGuidName }} />
             </IconWrapper>
             <CategoryTitle>
                 {selectedCategoryName}

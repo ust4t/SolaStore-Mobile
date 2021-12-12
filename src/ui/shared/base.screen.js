@@ -27,11 +27,20 @@ class BaseScreen extends PureComponent {
 
             console.log("base.screen line 28")
             console.log(response)
+            console.log(response.resultStatus)
+           
 
             if (response.resultStatus == resultStatus.success) {
                 return response.data
-            } else throw new Error(response.errorMessage)
+            } else if (response.resultStatus == resultStatus.noContent) {
+                return []
+             } else if (response.resultStatus == resultStatus.notFound) {
+                console.log("not founddddddddddd cevabı")
+                return "notFound"
+             }
+            else throw new Error(response.errorMessage)
         } catch (error) {
+            console.log(error)
             if (this._isMounted) this.showErrorModal(error.message ? error.message : "Bir Hata İle Karşılaştık :(");
 
         } finally {

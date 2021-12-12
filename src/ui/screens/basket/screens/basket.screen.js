@@ -3,63 +3,138 @@ import { View, Text, FlatList } from 'react-native';
 import styled from 'styled-components';
 import PermissionModal from '../../../components/modals/permission-modal.component';
 import ScreenHeader from '../../../components/screen-header.component';
-import { SafeArea, ScrollablePage } from '../../../components/shared-styled.components';
+import { SafeArea, ScrollablePage, SeperatorFromTopOrBottom } from '../../../components/shared-styled.components';
+import BaseScreen from '../../../shared/base.screen';
 import BasketFooter from '../components/basket-footer.component';
 import BasketItem from '../components/basket-items-list-row.component';
-
-const BasketItemsFlatList = styled(FlatList)`
+import { inject, observer } from 'mobx-react';
+import basketService from '../../../../services/remote/basket.service';
+import { showToast } from '../../../../util/toast-message';
+import Tabbar from '../../../components/tabbar.component';
+import I18n from 'i18n-js';
+const BasketItemsFlatList = styled(FlatList).attrs({
+    contentContainerStyle: {
+        paddingBottom: 200
+    }
+})`
 
 `
-class BasketScreen extends Component {
+
+@inject("BusyStore", "UserStore")
+@observer
+class BasketScreen extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
-            products: [{
-                name: "Levi's Jeans",
-                price: "$76",
-                count: 2
-            },
-            {
-                name: "Levi's Jeans",
-                price: "$76",
-                count: 2
-            }],
+            ...this.state,
+            products: [],
 
 
             permissionModalVisible: false,
+            totalPrice: ""
 
 
         };
+        this.unsubscribe = null;
+        this.itemToBeDeleted = null;
     }
     //////////////////////
     ////MODALS
     hidePermissionModal = () => { this.setState({ permissionModalVisible: false }) }
-    showPermissionModal = () => { this.setState({ permissionModalVisible: true }) }
-    goBack=()=>{this.props.navigation.goBack()}
+    showPermissionModal = (itemToBeDeleted) => {
+        this.itemToBeDeleted = itemToBeDeleted;
+        this.setState({ permissionModalVisible: true })
+    }
+    goBack = () => { this.props.navigation.goBack() }
+    //////////////////////
+    ////NAVIGATIONS
+    goToCheckout = () => {
+        if (this.state.totalPrice == "") {
+            showToast(I18n.t("emptyBasket"))
+        } else this.props.navigation.navigate("CheckoutScreen")
 
+    }
+    goToProductDetail = (productId) => { this.props.navigation.navigate("ProductDetail", { productId }) }
+
+    componentDidMount() {
+        this.unsubscribe = this.props.navigation.addListener("focus", (e) => {
+            this.getBasket()
+        })
+    }
+    componentWillUnmount() { this.props.navigation.removeListener(this.unsubscribe) }
+
+    getBasket = async () => {
+        let data = await this.doRequestAsync(basketService.getBasketItems)
+        if (data) {
+            let total = 0;
+            data.map((item, index) => {
+                total += item.price * item.quantity;
+            })
+            this.setState({
+                products: data,
+                totalPrice: total
+            })
+        }
+    }
     deleteItemAsync = async () => {
-        this.showPermissionModal()
+        let data = await this.doRequestAsync(() => basketService.removeFromBasket(this.itemToBeDeleted))
+        if (data) {
+            this.hidePermissionModal()
+            this.getBasket()
+        }
+    }
+    increase = async (productID) => {
+        this.props.BusyStore.increase()
+        let data = await this.doRequestAsync(() => basketService.IncreaseProductCountInChart(productID))
+        if (data) {
+            await this.getBasket()
+        }
+        this.props.BusyStore.decrease()
+    }
+    decrease = async (productID) => {
+        this.props.BusyStore.increase()
+        let data = await this.doRequestAsync(() => basketService.DecreaseProductCountInChart(productID))
+        if (data) {
+            this.getBasket()
+        }
+        this.props.BusyStore.decrease()
     }
 
     render() {
         return (
             <SafeArea>
-                <ScreenHeader title="My Cart" goBack={this.goBack} />
+                <ScreenHeader title={I18n.t("myCart")} goBack={this.goBack} />
+                <SeperatorFromTopOrBottom />
                 <BasketItemsFlatList
                     data={this.state.products}
-                    renderItem={({ item, index }) => <BasketItem item={item} index={index} showPermissionModal={this.showPermissionModal}/>}
+                    ListHeaderComponent={
+                        <BasketFooter totalPrice={this.state.totalPrice} action={this.goToCheckout}
+                            position="relative" />
+                    }
+                    renderItem={({ item, index }) => <BasketItem
+                        item={item}
+                        index={index}
+                        showPermissionModal={this.showPermissionModal}
+                        increase={this.increase}
+                        decrease={this.decrease}
+                        goToProductDetail={this.goToProductDetail} />}
                 />
 
 
-                <BasketFooter />
+
 
                 <PermissionModal
                     permissionModalVisible={this.state.permissionModalVisible}
                     hidePermissionModal={this.hidePermissionModal}
-                    acceptMessage="Sil"
+                    acceptMessage={I18n.t("delete")}
                     onAccepted={this.deleteItemAsync}
-                    warningMessage="Ürün Silinsin mi?"
+                    warningMessage={I18n.t("productDeleteMessage")}
                 />
+
+
+                <this.RenderErrorModal />
+
+                <Tabbar navigation={this.props.navigation} navigatorName={"basketNavigator"} />
 
 
             </SafeArea>

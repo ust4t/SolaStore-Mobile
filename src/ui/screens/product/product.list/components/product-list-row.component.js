@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dimensions, View, Image, TouchableOpacity, Text } from 'react-native';
 import styled from 'styled-components';
+import { heartDislikeIcon } from '../../../../../util/icons';
 
 
 const SupWrapper = styled(View)`
@@ -14,11 +15,11 @@ const SubWrapper = styled(TouchableOpacity)`
 
 const ProductImage = styled(Image)`
 width:100%;
-height:190px;
+height:${props=>497*(((Dimensions.get('window').width / 2)-(parseInt(props.theme.space[3].substring(0, 2))+2*parseInt(props.theme.space[2].substring(0, 2))))/331)};
 
 
 borderRadius:${props => props.theme.radius[2]};
-backgroundColor:${props => props.theme.color.lightGray};
+
 `
 const DescriptionWrapper = styled(View)`
     flexDirection:row;
@@ -29,7 +30,16 @@ const DescriptionLeft = styled(View)`
 flex:1;
 `
 const DescriptionRight = styled(View)`
-
+flexDirection:row;
+alignItems:center;
+justifyContent:center;
+`
+const DiscountedPriceText = styled(Text)`
+color:${props => props.theme.color.black};
+fontSize:${props => props.theme.text.extraSmall};
+textDecorationLine:line-through;
+marginLeft:${props => props.theme.space[1]};
+opacity:0.4;
 `
 const NameText = styled(Text)`
 color:${props => props.theme.color.primary};
@@ -58,30 +68,55 @@ const StarIcon = styled(Icon).attrs(props => (
 ))`
 
 `
+
+const HeartDislikeIcon = styled(Icon).attrs(props => (
+    {
+        color: props.theme.color.error,
+        size: 20,
+        name: heartDislikeIcon
+    }
+))`
+position:absolute;
+top:10px;
+right:10px;
+zIndex:99;
+elevation:99;
+
+`
 import Icon from 'react-native-vector-icons/Ionicons'
+import { midImageUrl } from '../../../../../util/constants';
+import { SeperatorFromRightOrLeft } from '../../../../components/shared-styled.components';
 const ProductListRow = ({
     item,
     index,
-    goToProductDetail
+    goToProductDetail,
+
+
+    inFavorites = false,
+    removeFavoriteProduct
 }) => {
-    const { productImageUri,
-        productName,
-        originalPrice,
-        discountedPrice } = item;
+    const { productShortName,
+        price,
+        oldPrice,
+        pictures,
+        productID } = item;
     return (
 
         <SupWrapper key={index}>
-            <SubWrapper onPress={goToProductDetail}>
-                <ProductImage source={{ uri: productImageUri }} resizeMode="stretch"
+            <SubWrapper onPress={() => goToProductDetail(productID)}>
+                {
+                    inFavorites && <HeartDislikeIcon onPress={() => removeFavoriteProduct(productID)} />
+                }
+                <ProductImage source={{ uri: pictures[0] ? midImageUrl + pictures[0].guidName : "" }} resizeMode="contain"
                 // style={{ flex: 1, resizeMode: "contain", aspectRatio: 1 }} 
                 />
                 <DescriptionWrapper>
 
                     <DescriptionLeft>
                         <NameText>
-                            {productName}
+                            {productShortName}
                         </NameText>
-                        <IconWrapper>
+                        {/* <IconWrapper>
                             <StarIcon />
                             <StarIcon />
                             <StarIcon />
@@ -89,11 +124,18 @@ const ProductListRow = ({
                             <StarIcon />
                             <StarCount>4.5</StarCount>
 
-                        </IconWrapper>
+                        </IconWrapper> */}
                     </DescriptionLeft>
+                    <SeperatorFromRightOrLeft />
 
                     <DescriptionRight>
-                        <PriceText>{originalPrice}</PriceText>
+                        <PriceText>${price}</PriceText>
+                        {
+                            oldPrice != 0 &&
+                            <DiscountedPriceText>
+                                {oldPrice}
+                            </DiscountedPriceText>
+                        }
                     </DescriptionRight>
                 </DescriptionWrapper>
             </SubWrapper>

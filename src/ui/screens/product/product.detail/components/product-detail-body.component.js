@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import QuantitySelector from './quantity-selector.component';
@@ -7,6 +7,8 @@ import ColorSelector from './color-selector.component';
 import PrimaryButton from '../../../../components/primary-button.component';
 import { useState } from 'react/cjs/react.production.min';
 import { SeperatorFromTopOrBottom } from '../../../../components/shared-styled.components';
+import ProductVariation from './product-variation.component';
+import I18n from 'i18n-js';
 
 const SupWrapper = styled(View)`
  
@@ -34,8 +36,20 @@ const Price = styled(Text)`
 color:${props => props.theme.color.primary};
 fontWeight:bold;
 fontSize:${props => props.theme.text.h2};
-`
 
+`
+const DiscountedPriceText = styled(Text)`
+color:${props => props.theme.color.black};
+fontSize:${props => props.theme.text.extraSmall};
+textDecorationLine:line-through;
+marginLeft:${props => props.theme.space[1]};
+opacity:0.4;
+`
+const PriceWrapper = styled(View)`
+flexDirection:row;
+alignItems:center;
+justifyContent:center;
+`
 
 const IconWrapper = styled(View)`
     flexDirection:row;
@@ -74,9 +88,10 @@ color:${props => props.theme.color.primary};
 
 
 const ProductDetailBody = ({
-    product = { name: "Orange Summer", price: "$97" }
+    name, price, description, variations, onVariationSelected, count, decrease, increase,
+    sizes, oldPrice
 }) => {
-    const { name, price } = product;
+
 
     return (
         <SupWrapper >
@@ -85,7 +100,7 @@ const ProductDetailBody = ({
                     <Name>
                         {name}
                     </Name>
-                    <IconWrapper>
+                    {/* <IconWrapper>
                         <StarIcon />
                         <StarIcon />
                         <StarIcon />
@@ -93,40 +108,68 @@ const ProductDetailBody = ({
                         <StarIcon />
                         <StarCount>4.5</StarCount>
 
-                    </IconWrapper>
+                    </IconWrapper> */}
                 </NameAndStarWrapper>
-                <Price>
-                    {price}
-                </Price>
+                <PriceWrapper>
+                    <Price>
+                        ${price}
+                    </Price>
+                    {oldPrice != 0 &&
+                        <DiscountedPriceText>{oldPrice}</DiscountedPriceText>}
+                </PriceWrapper>
+
 
             </HeaderWrapper>
             <VariationItemWrapper>
 
                 <VariationName>
-                    Select Quality :
+                    {I18n.t("selectQuality")} :
                 </VariationName>
-                <QuantitySelector />
+                <QuantitySelector
+                    count={count}
+                    increase={increase}
+                    decrease={decrease} />
             </VariationItemWrapper>
 
             <VariationItemWrapper>
 
                 <VariationName>
-                    Choose a color :
+                    {I18n.t("sizes")} :
                 </VariationName>
-                <ColorSelector />
+                <Description>
+                    {sizes}
+                </Description>
             </VariationItemWrapper>
+
 
             <VariationItemWrapper>
 
                 <VariationName>
-                    Description :
+                    {I18n.t("chooseColor")} :
+                </VariationName>
+
+                {/* <ColorSelector /> */}
+            </VariationItemWrapper>
+
+            <FlatList
+                horizontal={true}
+                data={variations}
+                renderItem={({ item, index }) => <ProductVariation item={item} index={index} action={onVariationSelected} />}
+            />
+
+            <VariationItemWrapper>
+
+                <VariationName>
+                    {I18n.t("description")} :
 </VariationName>
 
             </VariationItemWrapper>
             <SeperatorFromTopOrBottom />
             <Description>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                {description}
             </Description>
+
+
 
 
 

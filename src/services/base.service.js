@@ -14,7 +14,11 @@ class BaseService {
         console.log(rsp)
         if (rsp.status == 200) {
 
-            rsp = await rsp.json();
+            try {
+                rsp = await rsp.json();
+            } catch (error) {
+                return new DtoResponse(resultStatus.success, rsp)
+            }
 
             // if(rsp.statusCode==0){
 
@@ -26,6 +30,11 @@ class BaseService {
 
         } else if (rsp.status == 401) {
             return new DtoResponse(resultStatus.error, null, "Authentication Error!")
+        } else if (rsp.status == 204) {
+            return new DtoResponse(resultStatus.noContent, null, "No Content")
+        }
+        else if (rsp.status == 404) {
+            return new DtoResponse(resultStatus.notFound, null, "notFound")
         }
 
         return new DtoResponse(resultStatus.error, null, "Servise erişelemiyor!");

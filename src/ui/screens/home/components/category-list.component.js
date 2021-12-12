@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import styled from 'styled-components';
@@ -32,7 +33,7 @@ const CategoryList = ({
     goToProductList
 }) => (
     <SupWrapper>
-        <Label>Category</Label>
+        <Label> {I18n.t("categories")}</Label>
         <CategoryHorizontalFlatList
 
             showsHorizontalScrollIndicator={false}

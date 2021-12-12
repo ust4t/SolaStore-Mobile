@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import styled from 'styled-components';
@@ -29,7 +30,7 @@ const PopularList = ({
     goToProductDetail
 }) => (
     <SupWrapper>
-        <Label>Popular</Label>
+        <Label>{I18n.t("bestSellers")}</Label>
         {
             popularProducts.map((item, index) => 
                 <PopularProductRow item={item} index={index} goToProductDetail={goToProductDetail} />)

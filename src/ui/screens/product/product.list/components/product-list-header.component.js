@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { filterIcon } from '../../../../../util/icons';
 import SearchBar from '../../../home/components/search-bar.component';
+import I18n from 'i18n-js';
 const SupWrapper = styled(View)`
 
 `
@@ -32,18 +33,18 @@ flexDirection:row;
 `
 
 const ProductListHeader = ({
-
+    goToBasket, productCount, showFilterModal
 }) => (
     <SupWrapper>
-        <SearchBar />
+        {/* <SearchBar goToBasket={goToBasket} /> */}
         <Wrapper >
             <ProductCountText>
-                20 Items Found
+                {productCount} {I18n.t("itemsFound")}
         </ProductCountText>
             <View style={{ flex: 1 }}></View>
-            <FilterTouchable onPress={()=>alert("Atanmamış!")}>
+            <FilterTouchable onPress={showFilterModal}>
                 <FilterIcon />
-                <FilterText>Filters</FilterText>
+                <FilterText>{I18n.t("filters")}</FilterText>
             </FilterTouchable>
 
         </Wrapper>

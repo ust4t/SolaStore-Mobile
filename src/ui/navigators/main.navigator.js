@@ -10,6 +10,7 @@ import NotificationNavigator from './notification.navigator';
 import { inject, observer } from 'mobx-react';
 import LoadingModal from '../components/modals/loading.modal';
 import BasketNavigator from './basket.navigator';
+import SearchNavigator from './search.navigator';
 enableScreens(true);
 const Tab = createBottomTabNavigator();
 const hideBottomList = [];
@@ -60,8 +61,13 @@ class MainNavigator extends Component {
                     })}>
                     <Tab.Screen name="homeNavigator" component={HomeNavigator} />
                     <Tab.Screen name="userNavigator" component={UserNavigator} />
-                    <Tab.Screen name="notificationNavigator" component={NotificationNavigator} />
-                    <Tab.Screen name="basketNavigator" component={BasketNavigator} />
+                    <Tab.Screen name="searchNavigator" component={SearchNavigator} />
+                    <Tab.Screen name="basketNavigator" component={BasketNavigator} 
+                    options={({route})=>(
+                        {
+                            unmountOnBlur:true
+                        }
+                    )} />
                 </Tab.Navigator>
                 {
                     this.props.BusyStore.requestCount > 0 &&

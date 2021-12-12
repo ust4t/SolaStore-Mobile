@@ -8,9 +8,10 @@ import * as Yup from 'yup'
 import { inject, observer } from 'mobx-react';
 import PrimaryButton from '../../../components/primary-button.component';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { eyeOffIcon } from '../../../../util/icons';
+import { eyeIcon, eyeOffIcon } from '../../../../util/icons';
 import BaseScreen from '../../../shared/base.screen';
 import userService from '../../../../services/remote/user.service';
+import I18n from 'i18n-js';
 const Header = styled(View)`
     backgroundColor:${props => props.theme.color.secondary};
     borderBottomEndRadius:${props => props.theme.radius[3]};
@@ -51,13 +52,27 @@ const ErrorTextWrapper = styled(View)`
     width:100%;
     alignItems:flex-end;
 `
-const EyeIcon = styled(Icon).attrs({
+const EyeOffIcon = styled(Icon).attrs({
     color: "gray",
     size: 20,
     name: eyeOffIcon
 })`
 `
 
+const EyeIcon = styled(Icon).attrs({
+    color: "gray",
+    size: 20,
+    name: eyeIcon
+})`
+`
+const NavigationTouch = styled(TouchableOpacity)`
+    alignItems:center;
+    padding:${props => props.theme.space[1]};
+`
+const NavigationText = styled(Text)`
+    opacity:0.8;
+    textDecorationLine:underline;
+`
 
 
 @inject("UserStore", "BusyStore")
@@ -66,26 +81,27 @@ class UserLogin extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
-            ...this.state
+            ...this.state,
+
+            passwordIsVisible: false
         };
     }
 
     ///////////////////////////
     ////NVAIGATIONS
     goToRegister = () => { this.props.navigation.navigate("RegisterScreen") }
+    goToSettings = () => { this.props.navigation.navigate("SettingScreen") }
+    goToContact = () => { this.props.navigation.navigate("ContactScreen") }
+
+    changePasswordVisibility = () => { this.setState({ passwordIsVisible: !this.state.passwordIsVisible }) }
 
     handleLoginFormAsync = async (values) => {
-        console.log("user-login.screen line 78")
-        console.log(values)
         let dtoResponse = await this.doRequestAsync(() => userService.isMember(values.mail, values.password))
-        console.log(dtoResponse)
         if (dtoResponse) {
-            if (dtoResponse.userID == 0) {
-                this.showErrorModal("Kullanıcı Bulunamadı");
-            } else this.props.UserStore.login()
-
+            if (dtoResponse == "notFound") {
+                this.showErrorModal(I18n.t("infoControl"));
+            } else this.props.UserStore.login(dtoResponse)
         }
-
     }
 
     render() {
@@ -96,25 +112,27 @@ class UserLogin extends BaseScreen {
                         <SignUpWrapper>
                             <Touchable onPress={this.goToRegister}>
                                 <SignUpText>
-                                    SIGN UP
+                                    {I18n.t("signup")}
                                 </SignUpText>
                             </Touchable>
 
                         </SignUpWrapper>
-                        <SignInText>Sign in</SignInText>
-                        <HeaderMessage>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</HeaderMessage>
+                        <SignInText>{I18n.t("login")}</SignInText>
+                        <HeaderMessage>
+                            {I18n.t("welcome")}
+                        </HeaderMessage>
                     </Header>
 
                     <Formik
                         onSubmit={this.handleLoginFormAsync}
                         initialValues={{
-                            mail: "muammersalkim@hotmail.com",
-                            password: "anestunara1"
+                            mail: "",
+                            password: ""
                         }}
                         validationSchema={
                             Yup.object().shape({
-                                mail: Yup.string().required("Telefon numarası girin!"),
-                                password: Yup.string().required("Şifre gerekli!").min(8, "En az 8 karakter").max(30, "En fazla 30 karakter")
+                                mail: Yup.string().required(I18n.t("required")),
+                                password: Yup.string().required(I18n.t("required"))
                             })
                         }
 
@@ -123,7 +141,7 @@ class UserLogin extends BaseScreen {
                             <Form>
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Name..."
+                                        placeholder={I18n.t("emailOrPhone")}
                                         value={values.mail}
                                         onChangeText={handleChange("mail")}
                                         onBlur={() => { setFieldTouched("mail") }} />
@@ -132,28 +150,45 @@ class UserLogin extends BaseScreen {
                                     <ErrorText style={{ width: '100%', textAlign: 'center', fontSize: 10, color: 'red' }}>{errors.mail}</ErrorText>}
                                 <SeperatorFromTopOrBottom />
                                 <InputWrapper>
+
                                     <Input
-                                        placeholder="Password..."
+                                        placeholder={I18n.t("password")}
                                         value={values.password}
                                         onChangeText={handleChange("password")}
                                         onBlur={() => { setFieldTouched("password") }}
-                                        secureTextEntry={true} />
-                                    <IconTouchable>
-                                        <EyeIcon />
+                                        secureTextEntry={!this.state.passwordIsVisible} />
+                                    <IconTouchable onPress={this.changePasswordVisibility}>
+                                        {
+                                            this.state.passwordIsVisible ?
+
+                                                <EyeIcon />
+                                                :
+
+                                                <EyeOffIcon />
+                                        }
+
                                     </IconTouchable>
                                 </InputWrapper>
                                 {errors.password && touched.password &&
                                     <ErrorText style={{ width: '100%', textAlign: 'center', fontSize: 10, color: 'red' }}>{errors.password}</ErrorText>}
                                 <SeperatorFromTopOrBottom />
-                                <ErrorTextWrapper>
+                                {/* <ErrorTextWrapper>
                                     <ErrorText>
                                         Forgot password ?
                                 </ErrorText>
                                 </ErrorTextWrapper>
 
-                                <SeperatorFromTopOrBottom />
+                                <SeperatorFromTopOrBottom /> */}
 
-                                <PrimaryButton text="SIGN IN" action={handleSubmit} />
+                                <PrimaryButton text={I18n.t("login")} action={handleSubmit} />
+
+                                {/* <SeperatorFromTopOrBottom />
+                                <NavigationTouch onPress={this.goToSettings}>
+                                    <NavigationText>Choose  your  language</NavigationText>
+                                </NavigationTouch>
+                                <NavigationTouch onPress={this.goToContact}>
+                                    <NavigationText>Contact  Us</NavigationText>
+                                </NavigationTouch> */}
                             </Form>
                         )}
                     </Formik>

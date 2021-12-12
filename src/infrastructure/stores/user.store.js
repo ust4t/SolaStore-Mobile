@@ -1,22 +1,56 @@
 import { makeObservable, observable, computed, action } from "mobx"
+import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react/cjs/react.production.min";
+import userLocalService from "../../services/local/user-local.service";
 
 
 class UserStore {
-    isLogined=false
+    isLogined = false
+    userID = null
+    userName = null
+    userSurname = null
+    userEmail = null
+    userPhone=null
 
-    login=()=>{
-        this.isLogined=true;
+    updateNameAndSurname=(userName,userSurname)=>{
+        this.userName=userName;
+        this.userSurname=userSurname;
     }
-    logout=()=>{
-        this.isLogined=false;
+    updatePhone=(userPhone)=>{
+        this.userPhone=userPhone;
+    }
+  
+
+    login = (userData) => {
+        console.log("user.store line 22")
+        console.log(userData)
+        userLocalService.storeUserData(userData)
+        this.userID = userData.userID
+        this.userName = userData.userName
+        this.userSurname = userData.userSurname
+        this.userEmail = userData.userEmail
+        this.userPhone=userData.userPhone
+
+    }
+    logout = () => {
+        this.userID = null
+        this.userName = null
+        this.userSurname = null
+        this.userEmail = null
+        this.userPhone=null
+        userLocalService.storeUserData(null);
     }
 
 
-    constructor(){
+    constructor() {
         makeObservable(this, {
-            isLogined:observable,
-            login:action,
-            logout:action
+            userID: observable,
+            userName: observable,
+            userSurname: observable,
+            userEmail: observable,
+            login: action,
+            logout: action,
+            updateNameAndSurname:action,
+            updatePhone:action
         })
     }
 }

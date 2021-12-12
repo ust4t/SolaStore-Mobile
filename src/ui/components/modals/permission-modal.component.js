@@ -5,6 +5,8 @@ import LottieView from 'lottie-react-native';
 import PrimaryButton from '../primary-button.component';
 import ErrorButton from '../error-button.component';
 import SecondaryButton from '../secondary-button.component';
+import { SeperatorFromRightOrLeft } from '../shared-styled.components';
+import I18n from 'i18n-js';
 
 const ModalWrapper = styled(View)`
     width:100%;
@@ -63,7 +65,8 @@ const PermissionModal = ({
                 <ErrorText >{warningMessage}</ErrorText>
                 <ButtonsWrapper>
                     <ErrorButton text={acceptMessage} action={onAccepted} />
-                    <SecondaryButton text={"Kapat"} action={hidePermissionModal} />
+                    <SeperatorFromRightOrLeft />
+                    <SecondaryButton text={I18n.t("close")} action={hidePermissionModal} />
                 </ButtonsWrapper>
 
             </ContentWrapper>

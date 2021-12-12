@@ -9,7 +9,8 @@ export const color = {
     gray:"#CCD9D3",
     lightGray:"#eaeaea",
     transparentBlack:"rgba(0,0,0,0.4)",
-    error:"#B72242"
+    error:"#B72242",
+    pink:"#ffc8dd"
 
 
 

@@ -36,11 +36,13 @@ backgroundColor:${props => props.theme.color.lightGray};
 padding:${props=>props.theme.space[2]};
 `
 const QuantitySelector = ({
-    count = 1
+    count = 1,
+    increase,
+    decrease
 }) => (
     <Wrapper >
   
-        <IconWrapper onPress={()=>alert("Atanmamış!")}>
+        <IconWrapper onPress={increase}>
             <CounterIcon name={addIcon} />
         </IconWrapper>
         <CountWrapper>
@@ -49,7 +51,7 @@ const QuantitySelector = ({
             </CountText>
 
         </CountWrapper>
-        <IconWrapper onPress={()=>alert("Atanmamış!")}>
+        <IconWrapper onPress={decrease}>
             <CounterIcon name={removeIcon} />
         </IconWrapper>
     </Wrapper>

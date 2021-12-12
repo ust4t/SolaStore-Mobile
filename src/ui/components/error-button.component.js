@@ -8,6 +8,8 @@ const Touchable = styled(TouchableOpacity)`
     padding:${props => props.theme.space[2]};
     justifyContent:center;
     alignItems:center;
+    flex:1;
+   
 
 `
 const TouchableText = styled(Text)`

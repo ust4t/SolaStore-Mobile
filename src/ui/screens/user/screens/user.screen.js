@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { ErrorText, SafeArea, ScrollablePage } from '../../../components/shared-styled.components';
-import { addressIcon, heartIcon, homeIcon, infoIcon, ordersIcon, personIcon, settingsIcon, walletIcon } from '../../../../util/icons';
+import { addressIcon, basketIcon, heartIcon, homeIcon, whatsappIcon, ordersIcon, personIcon, settingsIcon, walletIcon, lockIcon } from '../../../../util/icons';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Tabbar from '../../../components/tabbar.component';
 import { inject, observer } from 'mobx-react';
+import I18n from 'i18n-js';
 
 const Wrapper = styled(View)`
 flex:1;
@@ -77,16 +78,27 @@ class UserScreen extends Component {
         this.state = {
         };
     }
-    logOut=()=>{this.props.UserStore.logout()}
+    logOut = () => { this.props.UserStore.logout() }
 
+    /////////////////////
+    ////NAVIGATION
+    goToFavorites = () => { this.props.navigation.navigate("UserFavoriteListScreen") }
+    goToOrders = () => { this.props.navigation.navigate("OrderListScreen") }
+    goToProfile = () => { this.props.navigation.navigate("ProfileScreen") }
+    goToBasket = () => { this.props.navigation.navigate("basketNavigator") }
+    goToContact = () => { this.props.navigation.navigate("ContactScreen") }
+    goToSettings = () => { this.props.navigation.navigate("SettingScreen") }
+    goNewPassword = () => { this.props.navigation.navigate("NewPasswordScreen") }
     render() {
         const ProfileItems = [
-            { text: "Account", icon: personIcon, action: () => {alert("Atanmamış!") } },
-            { text: "My Address", icon: addressIcon, action: () => {alert("Atanmamış!") } },
-            { text: "My Order", icon: ordersIcon, action: () => { alert("Atanmamış!")} },
-            { text: "My Favourites", icon: heartIcon, action: () => {alert("Atanmamış!") } },
-            { text: "Payment", icon: walletIcon, action: () => {alert("Atanmamış!") } },
-            { text: "Settings", icon: settingsIcon, action: () => {alert("Atanmamış!") } }
+            { text: I18n.t("myAccount"), icon: personIcon, action: this.goToProfile },
+            { text:  I18n.t("myCart"), icon: basketIcon, action: this.goToBasket },
+            { text:  I18n.t("myOrders"), icon: ordersIcon, action: this.goToOrders },
+            { text:  I18n.t("favorites"), icon: heartIcon, action: this.goToFavorites },
+            { text:  I18n.t("settings"), icon: settingsIcon, action: this.goToSettings },
+            { text: I18n.t("psChange"), icon: lockIcon, action: this.goNewPassword },
+            { text:  I18n.t("contact"), icon: whatsappIcon, action: this.goToContact },
+
         ]
         return (
             <SafeArea>
@@ -100,17 +112,17 @@ class UserScreen extends Component {
                             </PersonIconWrapper>
 
                             <UserNameText>
-                                Kylie
-                        </UserNameText>
+                                {this.props.UserStore.userName} {this.props.UserStore.userSurname}
+                            </UserNameText>
                             <UserMailText>
-                                kYLİE_04@GMAİL.COM
-                        </UserMailText>
+                                {this.props.UserStore.userEmail}
+                            </UserMailText>
 
-                        <TouchableOpacity onPress={this.logOut}>
-                            <ErrorText>
-                                Çıkış Yap
+                            <TouchableOpacity onPress={this.logOut}>
+                                <ErrorText>
+                                    {I18n.t("logout")}
                             </ErrorText>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
                         </HeaderWrapper>
                         {
                             ProfileItems.map((item, index) => {

@@ -4,21 +4,23 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { trashIcon } from '../../../../util/icons';
 import styled from 'styled-components';
 import QuantitySelector from '../../product/product.detail/components/quantity-selector.component';
+import { imageUrl, midImageUrl } from '../../../../util/constants';
+import I18n from 'i18n-js';
 const SupWrapper = styled(View)`
     backgroundColor:${props => props.theme.color.white};
     padding:${props => props.theme.space[2]};
     marginTop:${props => props.theme.space[1]};
     marginBottom:${props => props.theme.space[1]};
 `
-const SubWrapper = styled(View)`
+const SubWrapper = styled(TouchableOpacity)`
     flexDirection:row;
     marginTop:${props => props.theme.space[2]};
 `
 const ItemImage = styled(Image)`
-    width:120px;
-    height:120px;
-    borderRadius:${props => props.theme.radius[1]};
-    backgroundColor:${props => props.theme.color.lightGray};
+width:100px;
+height:150px;
+borderRadius:${props => props.theme.radius[2]};
+   
 `
 const ItemDescriptionWrapper = styled(View)`
 marginLeft:${props => props.theme.space[1]};
@@ -78,24 +80,27 @@ const RemoveIcon = styled(Icon).attrs(props => ({
 const BasketItem = ({
     item,
     index,
-    showPermissionModal
+    showPermissionModal,
+    increase,
+    decrease,
+    goToProductDetail
 }) => {
-    const { name, price, count } = item;
+    const { productShortName, price, currency, quantity, pictureOneGuidName, productID } = item;
     return (
         <SupWrapper key={index} >
             <Header >
-                <RemoveTouchable onPress={showPermissionModal}>
+                <RemoveTouchable onPress={() => showPermissionModal(productID)}>
                     <RemoveIcon />
                 </RemoveTouchable>
 
             </Header>
-            <SubWrapper>
-                <ItemImage />
+            <SubWrapper onPress={() => goToProductDetail(productID)}>
+                <ItemImage source={{ uri: midImageUrl + pictureOneGuidName }} resizeMode="contain" />
                 <ItemDescriptionWrapper>
-                    <ItemName>{name}</ItemName>
-                    <VariationText>Color:Dark Grey</VariationText>
-                    <VariationText>Size : L</VariationText>
-                    <Price>{price}</Price>
+                    <ItemName>{productShortName}</ItemName>
+                    {/* <VariationText>Color:Dark Grey</VariationText>
+                    <VariationText>Size : L</VariationText> */}
+                    <Price>{`${currency} ${price}`}</Price>
                 </ItemDescriptionWrapper>
 
 
@@ -103,12 +108,15 @@ const BasketItem = ({
 
             <Footer>
                 <QuantitySelectorWrapper>
-                    <QuantitySelector count={count} />
+                    <QuantitySelector
+                        count={quantity}
+                        increase={() => increase(productID)}
+                        decrease={() => decrease(productID)} />
                 </QuantitySelectorWrapper>
 
                 <SubTotalWrapper>
-                    <ItemName>Sub Total :     </ItemName>
-                    <SubTotalText>152$</SubTotalText>
+                    <ItemName>{I18n.t("subTotal")} :     </ItemName>
+                    <SubTotalText>$ {`${price * quantity} ${currency}`}</SubTotalText>
                 </SubTotalWrapper>
             </Footer>
         </SupWrapper>

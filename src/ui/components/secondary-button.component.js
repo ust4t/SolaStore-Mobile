@@ -10,6 +10,7 @@ const Touchable = styled(TouchableOpacity)`
     alignItems:center;
     borderWidth:1px;
     borderColor:${props => props.theme.color.primary};
+    flex:1;
 
 `
 const TouchableText = styled(Text)`

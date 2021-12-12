@@ -29,7 +29,9 @@ const Input=styled(TextInput)`
 const SeperatorFromTopOrBottom=styled(View)`
     height:${props=>props.theme.space[2]};
 `
-
+const SeperatorFromRightOrLeft=styled(View)`
+    width:${props=>props.theme.space[2]};
+`
 const ErrorText=styled(Text)`
     color:${props=>props.theme.color.error};
 `
@@ -42,5 +44,6 @@ export {
     InputWrapper,
     Input,
     SeperatorFromTopOrBottom,
-    ErrorText
+    ErrorText,
+    SeperatorFromRightOrLeft
 }

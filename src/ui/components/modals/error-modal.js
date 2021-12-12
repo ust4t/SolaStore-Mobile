@@ -3,6 +3,8 @@ import { Modal, View, Text } from 'react-native';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 import ErrorButton from '../error-button.component';
+import { SeperatorFromTopOrBottom } from '../shared-styled.components';
+import I18n from 'i18n-js';
 const ModalWrapper = styled(View)`
     width:100%;
     height:100%;
@@ -46,8 +48,10 @@ const ErrorModal = ({
                     autoPlay={true}
                     loop={true}
                 />
+                <SeperatorFromTopOrBottom />
                 <ErrorText >{errorMessage}</ErrorText>
-                <ErrorButton text={"Kapat"} action={hideErrorModal} />
+                <SeperatorFromTopOrBottom />
+                <ErrorButton text={I18n.t("close")} action={hideErrorModal} />
             </ContentWrapper>
 
 

@@ -237,11 +237,31 @@ const settingsIcon=Platform.select({
     ios:"ios-settings",
     android:"md-settings"
 })
+
+const heartDislikeIcon=Platform.select({
+    ios:"ios-heart-dislike-outline",
+    android:"md-heart-dislike-outline"
+})
+
+const whatsappIcon=Platform.select({
+    ios:"ios-logo-whatsapp",
+    android:"md-logo-whatsapp"
+})
+
+const FlagIcon=Platform.select({
+    ios:"ios-flag-outline",
+    android:"md-flag-outline"
+})
+
+const PlayIcon=Platform.select({
+    ios:"ios-play-circle-outline",
+    android:"md-play-circle-outline"
+})
 export  {
     cartIcon,starIcon,cancelIcon,addIcon,removeIcon,homeIcon,searchIcon,giftIcon,personIcon,caretIcon,watchIcon,cashIcon,carIcon,
     ordersIcon,caretForward,readerIcon,cardIcon,addressIcon,infoIcon,basketIcon,starSharIcon,trashIcon,locateIcon,businessIcon,
     lockIcon,arrowBack,locationIcon,checkmarkIcon,walletIcon,heartIcon,appsIcon,heartOutlineIcon,forwardChevron,downChevron,logOutIdon
     ,elipsisHorizontalIcon,trashBinOutline,alertIcon,filterIcon,ellipsisVertical,optionsIcon,notificationIcon,
-    eyeIcon,eyeOffIcon,settingsIcon
+    eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon
 
 }
