@@ -47,7 +47,7 @@ const HomeMenu = ({
             <TouchItem onPress={goToFavorites}>
                 <TouchIcon name={heartIcon} />
                 <TouchText>
-                    {I18n.t("favorites")}
+                    {I18n.t("$AnaSayfaFavorilerim")}
                 </TouchText>
             </TouchItem>
             <Seperator style={{ transform: [{ rotate: "10deg" }] }}></Seperator>

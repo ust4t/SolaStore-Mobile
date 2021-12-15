@@ -31,7 +31,7 @@ const DiscountedItems = ({
     goToProductDetail
 }) => (
     <SupWrapper>
-        <Label>{I18n.t("saleDiscount")}</Label>
+        <Label>{I18n.t("$AnaSayfaİndirim")}</Label>
         <ProductHorizontalFlatList
             showsHorizontalScrollIndicator={false}
             data={products}

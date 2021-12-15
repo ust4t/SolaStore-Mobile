@@ -33,7 +33,7 @@ const CategoryList = ({
     goToProductList
 }) => (
     <SupWrapper>
-        <Label> {I18n.t("categories")}</Label>
+        <Label> {I18n.t("$DetayliAramaKategoriler")}</Label>
         <CategoryHorizontalFlatList
 
             showsHorizontalScrollIndicator={false}

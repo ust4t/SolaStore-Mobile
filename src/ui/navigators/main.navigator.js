@@ -11,6 +11,18 @@ import { inject, observer } from 'mobx-react';
 import LoadingModal from '../components/modals/loading.modal';
 import BasketNavigator from './basket.navigator';
 import SearchNavigator from './search.navigator';
+import tr from '../../../assets/i18n/tr';
+import ru from '../../../assets/i18n/ru';
+import ar from '../../../assets/i18n/ar';
+import fr from '../../../assets/i18n/fr';
+import en from '../../../assets/i18n/en';
+
+
+import languageService from '../../services/remote/language.service';
+import { resultStatus } from '../../util/enums/result-status';
+import I18n from 'i18n-js';
+import userLocalService from '../../services/local/user-local.service';
+import Splash from '../components/splash.component';
 enableScreens(true);
 const Tab = createBottomTabNavigator();
 const hideBottomList = [];
@@ -22,10 +34,65 @@ class MainNavigator extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            languagesLoading:true
         };
     }
 
+    componentDidMount(){
+        this.getSelectedLanguage()
+    }
+
+    getSelectedLanguage = async () => {
+        const rsp = await userLocalService.getLanguagePref();
+        if (rsp) {
+            I18n.locale = rsp;
+        }
+        this.getAll()
+        
+    }
+
+    getAll=async (language)=>{
+        let rsp=await languageService.GetAll()
+       
+        if(rsp.resultStatus==resultStatus.success){
+           
+            rsp=rsp.data;
+           
+            console.log("------------------")
+            console.log(I18n.locale)
+
+            if(I18n.locale=="tr-TR"){
+                rsp.map((item,index)=>{
+                    tr[item.defaultValue.replace(".","")]=item.selectedValue
+                })
+            }else if(I18n.locale=="en-EN"){
+                rsp.map((item,index)=>{
+                    en[item.defaultValue.replace(".","")]=item.selectedValue
+                })
+            }else if(I18n.locale=="ru-RU"){
+                rsp.map((item,index)=>{
+                    ru[item.defaultValue.replace(".","")]=item.selectedValue
+                })
+            }else if(I18n.locale=="ar-AR"){
+                rsp.map((item,index)=>{
+                    ar[item.defaultValue.replace(".","")]=item.selectedValue
+                })
+            }else if(I18n.locale=="fr-FR"){
+                rsp.map((item,index)=>{
+                    fr[item.defaultValue.replace(".","")]=item.selectedValue
+                })
+            }
+
+        }
+        this.setState({
+            languagesLoading:false
+        })
+    }
+
     render() {
+        if(this.state.languagesLoading){
+            return <Splash />
+        }
         return (
             <NavigationContainer>
                 <Tab.Navigator

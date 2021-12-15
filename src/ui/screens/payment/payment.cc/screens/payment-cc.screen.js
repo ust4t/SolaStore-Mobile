@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, InteractionManager } from 'react-native';
-import { WebView } from 'react-native-webview';
+
 import { SafeArea } from '../../../../components/shared-styled.components';
 
 class PaymentCC extends Component {
@@ -49,24 +49,7 @@ class PaymentCC extends Component {
         formData.append("paymentType", "CC")
         return (
             <SafeArea>
-                <WebView
-                    style={{ flex: 1, resizeMode: 'cover', }}
-                    originWhitelist={['*']}
-                    scalesPageToFit={false}
-                    javaScriptEnabled={true}
-
-                    androidHardwareAccelerationDisabled={true}
-                    source={{
-                        // uri: "https://38f8-159-146-70-60.ngrok.io/Home/Payment",
-                        // headers: {
-                        //     cookie: "UserLogin=approved;UserID=318"
-                        // },
-                        // // body:new URLSearchParams("SalesRepID=9999&BuyerName=ASDASD"),
-                        // method:"POST"
-                    
-                    }}
-                    injectedJavaScript={`SalesRepID=9999;BuyarName=asdasd`} 
-                />
+            
             </SafeArea>
         );
     }

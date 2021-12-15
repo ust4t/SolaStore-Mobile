@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { color } from '../../../../../infrastructure/theme/color';
 import productService from '../../../../../services/remote/product.service';
 import PrimaryButton from '../../../../components/primary-button.component';
-import { ErrorText, SafeArea, ScrollablePage } from '../../../../components/shared-styled.components';
+import { ErrorText, SafeArea, ScrollablePage, SeperatorFromRightOrLeft } from '../../../../components/shared-styled.components';
 import BaseScreen from '../../../../shared/base.screen';
 import Body from '../components/product-detail-body.component';
 import Slider from '../components/product-detail-slider.component';
@@ -14,10 +14,17 @@ import favoriteService from '../../../../../services/remote/favorite.service';
 import basketService from '../../../../../services/remote/basket.service';
 import { showToast } from '../../../../../util/toast-message';
 import I18n from 'i18n-js';
+import CartButton from '../components/cart-button.component';
 const FavoriteButtonWrapper = styled(View)`
     position:absolute;
     top:10px;
     right:10px;
+    flexDirection:row;
+    alignItems:center;
+    alignItems:center;
+    padding:${props=>props.theme.space[1]};
+    backgroundColor:${props=>props.theme.color.transparentWhite};
+    borderRadius:${props=>props.theme.radius[2]};
 `
 
 
@@ -75,7 +82,7 @@ class ProductDetail extends BaseScreen {
     ///////NAVIGATIONS
     goToUserTab = () => { this.props.navigation.jumpTo("userNavigator") }
     goToVideoPlayer = () => { this.props.navigation.navigate("ProductVideoPlayer", { videoName: this.state.videoName,name:this.state.name}) }
-
+    goToBasketTab=()=>{this.props.navigation.jumpTo("basketNavigator") }
     //////////////////////
     ///////STATE CHANGES
     increse = () => { this.setState({ count: this.state.count += 1 }) }
@@ -183,7 +190,9 @@ class ProductDetail extends BaseScreen {
 
 
                 <FavoriteButtonWrapper>
+                <CartButton action={this.goToBasketTab}/>
                     <FavoriteButton action={this.addToFavorites} isFavorite={this.state.isFavorite} />
+                   
                 </FavoriteButtonWrapper>
 
                 <this.RenderErrorModal />

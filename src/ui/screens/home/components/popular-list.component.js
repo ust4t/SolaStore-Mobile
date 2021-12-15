@@ -30,7 +30,7 @@ const PopularList = ({
     goToProductDetail
 }) => (
     <SupWrapper>
-        <Label>{I18n.t("bestSellers")}</Label>
+        <Label>{I18n.t("$AnaSayfaÇokSatanlar")}</Label>
         {
             popularProducts.map((item, index) => 
                 <PopularProductRow item={item} index={index} goToProductDetail={goToProductDetail} />)

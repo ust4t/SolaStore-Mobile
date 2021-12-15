@@ -16,10 +16,13 @@ import { inject, observer } from 'mobx-react';
 import productService from '../../../../services/remote/product.service';
 import userService from '../../../../services/remote/user.service';
 import userLocalService from '../../../../services/local/user-local.service';
+import languageService from '../../../../services/remote/language.service';
 import I18n from '../../../../../assets/i18n/_i18n';
+import _I18n from '../../../../../assets/i18n/_i18n';
 import HomeMenu from '../components/home-menu.component';
 import LanguageSelector from '../components/language-selector.component';
 import { showToast } from '../../../../util/toast-message';
+import tr from '../../../../../assets/i18n/tr';
 
 @inject("BusyStore", "UserStore")
 @observer
@@ -49,6 +52,7 @@ class HomeScreen extends BaseScreen {
             this.getAllCategories()
             this.getDiscountedProducts()
             this.getBestSellers()
+            
         })
     }
 
@@ -92,6 +96,8 @@ class HomeScreen extends BaseScreen {
             })
         }
     }
+
+   
     /////////////////////////
     ///////NAVIGATIONS
     goToProductList = (categoryID) => { this.props.navigation.navigate("ProductList", { categoryID }) }
