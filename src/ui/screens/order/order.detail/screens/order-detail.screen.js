@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, InteractionManager, FlatList, TextInput } from 'react-native';
+import { View, Text, InteractionManager, FlatList, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import orderService from '../../../../../services/remote/order.service';
 import ScreenHeader from '../../../../components/screen-header.component';
-import { SafeArea } from '../../../../components/shared-styled.components';
+import { ErrorText, SafeArea, SeperatorFromTopOrBottom } from '../../../../components/shared-styled.components';
 import BaseScreen from '../../../../shared/base.screen';
 import OrderDetailItem from '../components/order-detail-item-row.component';
 import { inject, observer } from 'mobx-react';
 import I18n from 'i18n-js';
+import PrimaryButton from '../../../../components/primary-button.component';
 
 const ItemsFlatList = styled(FlatList).attrs({
     contentContainerStyle: {
@@ -36,6 +37,38 @@ fontWeight:bold;
 fontSize:${props => props.theme.text.h2};
 `
 
+const OrderInfoText = styled(Text)`
+    textAlign:center;
+    width:100%;
+    fontSize:${props => props.theme.text.subtitle};
+   
+    color:${props => props.theme.color.succes};
+
+
+`
+const OrderInfoHeader = styled(View)`
+    alignItems:center;
+    width:100%;
+    padding:${props => props.theme.space[2]};
+    backgroundColor:${props => props.theme.color.white};
+`
+
+const Touchable = styled(TouchableOpacity)`
+    backgroundColor:${props => props.theme.color.white};
+    borderRadius:${props => props.theme.radius[4]};
+    padding:${props=>props.theme.space[2]};
+    justifyContent:center;
+    alignItems:center;
+    borderWidth:1px;
+    borderColor:${props => props.theme.color.primary};
+    width:100%;
+
+`
+const TouchableText = styled(Text)`
+    color:${props => props.theme.color.black};
+   
+`
+
 @inject("BusyStore", "UserStore")
 @observer
 class OrderDetail extends BaseScreen {
@@ -43,7 +76,8 @@ class OrderDetail extends BaseScreen {
         super(props);
         this.state = {
             ...this.state,
-            orderItems: []
+            orderItems: [],
+            totalAmount: ""
         };
     }
 
@@ -54,6 +88,9 @@ class OrderDetail extends BaseScreen {
             this.getDetail()
         })
     }
+    componentWillUnmount() {
+        this.props.UserStore.orderId = null;
+    }
 
     ////////////////
     ////NAVIGATIONS
@@ -62,9 +99,17 @@ class OrderDetail extends BaseScreen {
 
 
     getDetail = async () => {
-        let rsp = await this.doRequestAsync(() => orderService.getOrderDetail(this.props.route.params.orderId))
+
+        let rsp = await this.doRequestAsync(() => orderService.getOrderDetail(
+            this.props.UserStore.orderId != null ? this.props.UserStore.orderId :
+                this.props.route.params.orderId
+        ))
         if (rsp) {
-            this.setState({ orderItems: rsp })
+            let total = 0;
+            rsp.map((item) => {
+                total += item.price * item.quantity
+            })
+            this.setState({ orderItems: rsp, totalAmount: total })
         }
     }
 
@@ -72,7 +117,21 @@ class OrderDetail extends BaseScreen {
     render() {
         return (
             <SafeArea>
-                <ScreenHeader title={I18n.t("orderDetail")} goBack={this.goBack} />
+                <ScreenHeader title={I18n.t("$SiparisSiparisDetay")} goBack={this.goBack} />
+                {
+                    this.props.UserStore.orderId != null &&
+                    <OrderInfoHeader>
+                        <OrderInfoText>{I18n.t("$UyarilarSiparisinizAlinmistir")}</OrderInfoText>
+                        <SeperatorFromTopOrBottom />
+                        <Touchable onPress={this.goBack}>
+                            <TouchableText>
+                                {I18n.t("$SiparisAlisveriseDevamEt")}
+                            </TouchableText>
+
+                        </Touchable>
+            
+                    </OrderInfoHeader>
+                }
                 <ItemsFlatList
                     data={this.state.orderItems}
                     renderItem={({ item, index }) => <OrderDetailItem item={item} index={index} />}
@@ -81,10 +140,10 @@ class OrderDetail extends BaseScreen {
 
                 <Footer>
                     <SubTotalText>
-                        {I18n.t("subTotal")}
+                        {I18n.t("$AnaSayfaToplam")}
                     </SubTotalText>
                     <SubTotalPriceText>
-                        $ {this.props.route.params.totalAmount}
+                        $ {this.state.totalAmount}
                     </SubTotalPriceText>
                 </Footer>
 

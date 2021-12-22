@@ -102,13 +102,15 @@ class RegisterScreen extends BaseScreen {
                         <SignUpWrapper>
                             <Touchable onPress={this.goToLogin}>
                                 <SignInText>
-                                    SIGN IN
+                                    {I18n.t("$HesabimGirisYap")}
                                 </SignInText>
                             </Touchable>
 
                         </SignUpWrapper>
-                        <SignUpText>Sign up</SignUpText>
-                        <HeaderMessage>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</HeaderMessage>
+                        <SignUpText>  {I18n.t("$HesabimKayitOl")}</SignUpText>
+                        <HeaderMessage>
+                            {I18n.t("$AnaSayfaHoşgeldiniz")}
+                        </HeaderMessage>
                     </Header>
 
                     <Formik
@@ -122,12 +124,12 @@ class RegisterScreen extends BaseScreen {
                         }}
                         validationSchema={
                             Yup.object().shape({
-                                name: Yup.string().required(I18n.t("required")),
-                                surname: Yup.string().required(I18n.t("required")),
-                                phone: Yup.string().required(I18n.t("required")),
-                                email: Yup.string().required(I18n.t("required")),
-                                password: Yup.string().required(I18n.t("required")),
-                                passwordConfirm: Yup.string().required(I18n.t("required"))
+                                name: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                surname: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                phone: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                email: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                password: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                passwordConfirm: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz"))
                             })
                         }
                         onSubmit={this.handleLoginFormAsync}>
@@ -136,7 +138,7 @@ class RegisterScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Name..."
+                                        placeholder={I18n.t("$HesabimAdi")}
                                         value={values.name}
                                         onChangeText={handleChange("name")}
                                         onBlur={() => { setFieldTouched("name") }} />
@@ -147,7 +149,7 @@ class RegisterScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Surname..."
+                                        placeholder={I18n.t("$HesabimSoyadi")}
                                         value={values.surname}
                                         onChangeText={handleChange("surname")}
                                         onBlur={() => { setFieldTouched("surname") }} />
@@ -159,7 +161,7 @@ class RegisterScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Phone..."
+                                        placeholder={I18n.t("$HesabimTelefon")}
                                         value={values.phone}
                                         onChangeText={handleChange("phone")}
                                         onBlur={() => { setFieldTouched("phone") }} />
@@ -171,7 +173,7 @@ class RegisterScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Email..."
+                                        placeholder={I18n.t("$HesabimEpostaAdresi")}
                                         value={values.email}
                                         onChangeText={handleChange("email")}
                                         onBlur={() => { setFieldTouched("email") }} />
@@ -183,7 +185,7 @@ class RegisterScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Password..."
+                                        placeholder={I18n.t("$HesabimSifre")}
                                         value={values.password}
                                         onChangeText={handleChange("password")}
                                         onBlur={() => { setFieldTouched("password") }}
@@ -196,7 +198,7 @@ class RegisterScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder="Password Confirm..."
+                                        placeholder={I18n.t("$HesabimSifreTekrari")}
                                         value={values.passwordConfirm}
                                         onChangeText={handleChange("passwordConfirm")}
                                         onBlur={() => { setFieldTouched("passwordConfirm") }}
@@ -213,7 +215,7 @@ class RegisterScreen extends BaseScreen {
 
 
 
-                                <PrimaryButton text="SIGN UP" action={handleSubmit} />
+                                <PrimaryButton text={I18n.t("$HesabimKayitOl")} action={handleSubmit} />
                             </Form>
                         )}
                     </Formik>

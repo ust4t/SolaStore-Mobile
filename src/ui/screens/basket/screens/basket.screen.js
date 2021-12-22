@@ -14,7 +14,8 @@ import Tabbar from '../../../components/tabbar.component';
 import I18n from 'i18n-js';
 const BasketItemsFlatList = styled(FlatList).attrs({
     contentContainerStyle: {
-        paddingBottom: 200
+        paddingBottom: 200,
+        paddingTop: 10
     }
 })`
 
@@ -50,7 +51,7 @@ class BasketScreen extends BaseScreen {
     ////NAVIGATIONS
     goToCheckout = () => {
         if (this.state.totalPrice == "") {
-            showToast(I18n.t("emptyBasket"))
+            showToast(I18n.t("$CartSepetBos"))
         } else this.props.navigation.navigate("CheckoutScreen")
 
     }
@@ -103,8 +104,8 @@ class BasketScreen extends BaseScreen {
     render() {
         return (
             <SafeArea>
-                <ScreenHeader title={I18n.t("myCart")} goBack={this.goBack} />
-                <SeperatorFromTopOrBottom />
+                <ScreenHeader title={I18n.t("$AnaSayfaSepet")} goBack={this.goBack} />
+
                 <BasketItemsFlatList
                     data={this.state.products}
                     ListHeaderComponent={
@@ -126,15 +127,15 @@ class BasketScreen extends BaseScreen {
                 <PermissionModal
                     permissionModalVisible={this.state.permissionModalVisible}
                     hidePermissionModal={this.hidePermissionModal}
-                    acceptMessage={I18n.t("delete")}
+                    acceptMessage={I18n.t("$SepetSil")}
                     onAccepted={this.deleteItemAsync}
-                    warningMessage={I18n.t("productDeleteMessage")}
+                    warningMessage={I18n.t("$SepetUrunSilinsinMi")}
                 />
 
 
                 <this.RenderErrorModal />
 
-                <Tabbar navigation={this.props.navigation} navigatorName={"basketNavigator"} />
+                {/* <Tabbar navigation={this.props.navigation} navigatorName={"basketNavigator"} /> */}
 
 
             </SafeArea>

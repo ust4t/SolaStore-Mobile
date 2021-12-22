@@ -16,6 +16,7 @@ import ContactScreen from '../screens/contact/contact.screen';
 import SettingScreen from '../screens/settings/screens/setting.screen';
 import OrderDetail from '../screens/order/order.detail/screens/order-detail.screen';
 import NewPasswordScreen from '../screens/user/user.new-password/screens/new-password.screen';
+import UserMenu from '../screens/user/user.menu/screens/user-menu.screen';
 enableScreens(true);
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,9 @@ const UserNavigator = inject("UserStore")(observer(({
                     </>
                     :
                     <>
+                     
+                        <Stack.Screen options={{ headerShown: false }} name="UserMenu" component={UserMenu} />
+                        <Stack.Screen options={{ headerShown: false }} name="UserFavoriteListScreen" component={UserFavoriteListScreen} />
                         <Stack.Screen options={{ headerShown: false }} name="UserLogin" component={UserLogin} />
                         <Stack.Screen options={{ headerShown: false }} name="RegisterScreen" component={RegisterScreen} />
                         <Stack.Screen options={{ headerShown: false }} name="ContactScreen" component={ContactScreen} />

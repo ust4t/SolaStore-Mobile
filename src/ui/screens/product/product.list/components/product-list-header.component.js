@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { filterIcon } from '../../../../../util/icons';
+import { cancelIcon, filterIcon } from '../../../../../util/icons';
 import SearchBar from '../../../home/components/search-bar.component';
 import I18n from 'i18n-js';
+
 const SupWrapper = styled(View)`
 
 `
@@ -32,20 +33,24 @@ flexDirection:row;
     alignItems:center;
 `
 
+
 const ProductListHeader = ({
-    goToBasket, productCount, showFilterModal
+    goToBasket, productCount, showFilterModal,
 }) => (
     <SupWrapper>
         {/* <SearchBar goToBasket={goToBasket} /> */}
         <Wrapper >
             <ProductCountText>
-                {productCount} {I18n.t("itemsFound")}
-        </ProductCountText>
+                {productCount} {I18n.t("$AnasayfaBulunanUrunSayisi")}
+            </ProductCountText>
             <View style={{ flex: 1 }}></View>
+
             <FilterTouchable onPress={showFilterModal}>
                 <FilterIcon />
-                <FilterText>{I18n.t("filters")}</FilterText>
+                <FilterText>{I18n.t("$AnasayfaFiltre")}</FilterText>
             </FilterTouchable>
+
+
 
         </Wrapper>
     </SupWrapper>

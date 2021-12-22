@@ -8,6 +8,8 @@ import { inject, observer } from 'mobx-react';
 import favoriteService from '../../../../../services/remote/favorite.service';
 import ProductListRow from '../../../product/product.list/components/product-list-row.component';
 import I18n from 'i18n-js';
+import TabBar from '../../../../components/tabbar.component';
+import SearchBar from '../../../home/components/search-bar.component';
 const FlatListOfProducts = styled(FlatList).attrs({
     contentContainerStyle: {
         paddingBottom: 200
@@ -29,14 +31,17 @@ class UserFavoriteListScreen extends BaseScreen {
         super(props);
         this.state = {
             ...this.state,
-            products: []
+            products: [],
+
+
+            searchText: ""
         };
     }
     /////////////////////////
     //////NAVIGATIONS
     goBack = () => { this.props.navigation.goBack() }
     goToProductDetail = (productId) => { this.props.navigation.navigate("ProductDetail", { productId }) }
-
+    goToBasket = () => { this.props.navigation.jumpTo("basketNavigator") }
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.getFavorites()
@@ -62,10 +67,33 @@ class UserFavoriteListScreen extends BaseScreen {
     }
 
 
+    /////////////////////////
+    ///////SEARCH
+    onChangeText = (val) => { this.setState({ searchText: val }) }
+    goToProductWithSearchValues = () => {
+        if (this.state.searchText.length != 0) this.props.navigation.navigate("ProductList", { type: "variation", variationType: 5, text: this.state.searchText })
+    }
+
+
     render() {
         return (
             <SafeArea>
-                <ScreenHeader title={I18n.t("favorites")} goBack={this.goBack} />
+                {
+                    this.props.route.params &&
+                    <ScreenHeader title={I18n.t("$AnaSayfaFavorilerim")} goBack={this.goBack} />
+                }
+
+                {
+                    this.props.route.params == undefined &&
+                    <SearchBar
+                        goToBasket={this.goToBasket}
+                        searchText={this.state.searchText}
+                        onChangeText={this.onChangeText}
+                        action={this.goToProductWithSearchValues}
+                    />
+
+                }
+
 
                 <PageWrapper>
                     <FlatListOfProducts
@@ -81,6 +109,12 @@ class UserFavoriteListScreen extends BaseScreen {
                     // ListHeaderComponent={<ProductList />}
                     />
                 </PageWrapper>
+
+                {
+                    this.props.route.params == undefined &&
+                    <TabBar navigation={this.props.navigation} navigatorName={"favoritesNavigator"} />
+                }
+
 
 
                 <this.RenderErrorModal />

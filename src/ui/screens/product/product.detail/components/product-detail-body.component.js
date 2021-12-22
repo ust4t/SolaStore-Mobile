@@ -123,7 +123,7 @@ const ProductDetailBody = ({
             <VariationItemWrapper>
 
                 <VariationName>
-                    {I18n.t("selectQuality")} :
+                    {I18n.t("$SiparisAdet")} :
                 </VariationName>
                 <QuantitySelector
                     count={count}
@@ -134,7 +134,7 @@ const ProductDetailBody = ({
             <VariationItemWrapper>
 
                 <VariationName>
-                    {I18n.t("sizes")} :
+                    {I18n.t("$KategoriBeden")} :
                 </VariationName>
                 <Description>
                     {sizes}
@@ -145,7 +145,7 @@ const ProductDetailBody = ({
             <VariationItemWrapper>
 
                 <VariationName>
-                    {I18n.t("chooseColor")} :
+                    {I18n.t("$UrunlerRenkSecenekleri")} :
                 </VariationName>
 
                 {/* <ColorSelector /> */}
@@ -160,7 +160,7 @@ const ProductDetailBody = ({
             <VariationItemWrapper>
 
                 <VariationName>
-                    {I18n.t("description")} :
+                    {I18n.t("$UrunlerAciklama")} :
 </VariationName>
 
             </VariationItemWrapper>

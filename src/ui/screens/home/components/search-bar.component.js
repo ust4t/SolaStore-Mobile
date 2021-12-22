@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, ActivityIndicator, Touchable } from 'react-native';
 import styled from 'styled-components';
 import { searchIcon, basketIcon } from '../../../../util/icons';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -8,9 +8,11 @@ import I18n from 'i18n-js';
 const SupWrapper = styled(View)`
     width:100%;
     flexDirection:row;
-    paddingLeft:${props => props.theme.space[3]};
-    paddingRight:${props => props.theme.space[3]};
-    paddingTop:${props => props.theme.space[3]};
+    backgroundColor:${props => props.theme.color.primary};
+    paddingLeft:${props => props.theme.space[2]};
+    paddingBottom:${props => props.theme.space[2]};
+    paddingRight:${props => props.theme.space[2]};
+    paddingTop:${props => props.theme.space[2]};
 
 `
 const SearchBarView = styled(View)`
@@ -26,7 +28,7 @@ const SearchEditText = styled(TextInput)`
     padding:${props => props.theme.space[1]};
     paddingLeft:${props => props.theme.space[2]};
 `
-const SearchIconWrapper = styled(View)`
+const SearchIconWrapper = styled(TouchableOpacity)`
 borderRadius:${props => props.theme.radius[3]};
 backgroundColor:${props => props.theme.color.secondary};
 justifyContent:center;
@@ -64,19 +66,27 @@ const SearchBar = ({
     goToBasket,
     searchText = "",
     onChangeText,
-    loading
+    action
 }) => (
-    <SupWrapper >
+    <SupWrapper style={{
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        shadowOpacity: 0.39,
+        shadowRadius: 8.30,
+
+        elevation: 13,
+    }}>
         <SearchBarView>
-            <SearchEditText placeholder={I18n.t("search")} value={searchText} onChangeText={onChangeText} />
+            <SearchEditText placeholder={I18n.t("$AnaSayfaArama")} value={searchText} onChangeText={onChangeText} />
 
-            <SearchIconWrapper >
-                {
-                    loading ?
-                        <ActivityLoading /> :
-                        <SearchIcon name={searchIcon} />
+            <SearchIconWrapper onPress={action}>
 
-                }
+                <SearchIcon name={searchIcon} />
+
+
 
             </SearchIconWrapper>
         </SearchBarView>

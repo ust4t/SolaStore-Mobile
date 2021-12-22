@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Linking, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Dimensions, Platform } from 'react-native';
 import styled from 'styled-components';
 import ScreenHeader from '../../components/screen-header.component';
 import { SafeArea, ScrollablePage } from '../../components/shared-styled.components';
 import LottieView from 'lottie-react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { whatsappIcon } from '../../../util/icons';
-import MapView, { PROVIDER_GOOGLE,Marker} from 'react-native-maps';
+import { addressIcon, whatsappIcon } from '../../../util/icons';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import I18n from 'i18n-js';
 const ItemTouchable = styled(TouchableOpacity)`
     flexDirection:row;
@@ -46,6 +46,30 @@ const WpIcon = styled(Icon).attrs({
 })`
 `
 
+const MapIconTouchable = styled(TouchableOpacity)`
+    padding:${props => props.theme.space[2]};
+    position:absolute;
+    bottom:0;
+    width:100%;
+    zIndex:99;
+    elevation:99;
+    backgroundColor:${props => props.theme.color.white};
+    flexDirection:row;
+    alignItems:center;
+    justifyContent:center;
+    
+`
+const MapIcon = styled(Icon).attrs(props => ({
+    size: 30,
+    color: props.theme.color.secondary,
+    name: addressIcon
+}))`
+
+`
+const MapText = styled(Text)`
+    color:${props => props.theme.color.secondary}
+`
+
 class ContactScreen extends Component {
     constructor(props) {
         super(props);
@@ -57,12 +81,30 @@ class ContactScreen extends Component {
     goBack = () => { this.props.navigation.goBack() }
 
     messageToWp = () => { Linking.openURL('whatsapp://send?text=hello&phone=905554000005') }
+    openMaps = () => {
+        const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `41.0079975,28.9582282`;
+        const label = 'Solastore';
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        });
+
+
+        Linking.openURL(url);
+    }
 
     render() {
         return (
             <SafeArea>
-                <ScreenHeader goBack={this.goBack} title={I18n.t("contact")} />
+                <ScreenHeader goBack={this.goBack} title={I18n.t("$AnaSayfaMagaza")} />
                 <PageWrapper>
+                    <MapIconTouchable onPress={this.openMaps}>
+                        <MapIcon />
+                        <MapText>
+                            {I18n.t("$HesabimHaritadaGor")}
+                        </MapText>
+                    </MapIconTouchable>
 
                     {/* <LottiePhone
                         source={require("../../../../assets/medias/phoneLottie.json")}
@@ -72,7 +114,8 @@ class ContactScreen extends Component {
                     <MapView
                         provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                         // style={styles.map}
-                        style={{ width: Dimensions.get("window").width, height: (Dimensions.get("window").height / 2) - 100 }}
+                        // style={{ width: Dimensions.get("window").width, height: (Dimensions.get("window").height / 2) - 100 }}
+                        style={{ width: Dimensions.get("window").width, height: (Dimensions.get("window").height - 100) }}
                         region={{
                             latitude: 41.0079975,
                             longitude: 28.9582282,
@@ -83,11 +126,11 @@ class ContactScreen extends Component {
                     >
                         <Marker
                             coordinate={{ latitude: 41.0079975, longitude: 28.9582282 }}
-                            // image={{ uri: 'custom_pin' }}
+                        // image={{ uri: 'custom_pin' }}
                         />
                     </MapView>
                 </PageWrapper>
-                <PageWrapper>
+                {/* <PageWrapper>
                     <Title>{I18n.t("phoneNumbers")}:</Title>
                     {
                         phones.map((item, index) => {
@@ -99,7 +142,7 @@ class ContactScreen extends Component {
                         <ItemText >{Wp}</ItemText>
                         <WpIcon />
                     </ItemTouchable>
-                </PageWrapper>
+                </PageWrapper> */}
 
 
 

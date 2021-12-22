@@ -49,9 +49,26 @@ class OrderService extends BaseService {
         return this.handleResponse(rsp)
     }
 
+    generateHash = async (oid,amount,okUrl,failUrl,islemtipi,taksit,rnd) => {
+        let rsp = await remoteDataAccessObject.GetRequest(`Helpers/GenerateHash`, null,
+            [
+                { name: "oid", val: oid },
+                { name: "amount", val: amount },
+                { name: "okUrl", val: okUrl },
+                { name: "failUrl", val: failUrl },
+                { name: "islemtipi", val: islemtipi },
+                { name: "taksit", val: taksit },
+                { name: "rnd", val: rnd },
+          
+                
+            ]);
+        return this.handleResponse(rsp)
+    }
     handleUserId = () => {
         return userStore.userID != null ? userStore.userID.toString() : DeviceInfo.getUniqueId()
     }
+
+
 
 
 }

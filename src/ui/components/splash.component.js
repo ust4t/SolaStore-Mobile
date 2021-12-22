@@ -5,6 +5,7 @@ const SupWrappers=styled(View)`
     flex:1;
     alignItems:center;
     justifyContent:center;
+    backgroundColor:${props=>props.theme.color.white};
 `
 const Logo=styled(Image)`
     height:196px;

@@ -1,5 +1,5 @@
 
-import { SafeAreaView, ScrollView, TextInput, View ,Text} from "react-native"
+import { SafeAreaView, ScrollView,  View ,Text,TextInput} from "react-native"
 import styled from "styled-components"
 
 //padding:${(props)=>props.theme.space[3]};

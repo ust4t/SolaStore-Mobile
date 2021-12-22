@@ -5,7 +5,7 @@ import LottieView from 'lottie-react-native';
 import PrimaryButton from '../primary-button.component';
 import ErrorButton from '../error-button.component';
 import SecondaryButton from '../secondary-button.component';
-import { SeperatorFromRightOrLeft } from '../shared-styled.components';
+import { SeperatorFromRightOrLeft, SeperatorFromTopOrBottom } from '../shared-styled.components';
 import I18n from 'i18n-js';
 
 const ModalWrapper = styled(View)`
@@ -16,11 +16,12 @@ const ModalWrapper = styled(View)`
     backgroundColor:${props => props.theme.color.transparentBlack};
     justifyContent:center;
     alignItems:center;
+    padding:${props=>props.theme.space[4]};
 
 `
 const ContentWrapper = styled(View)`
    
-    width:200px;
+    width:100%;
     padding:${props => props.theme.space[2]};
     borderRadius:${props => props.theme.space[3]};
     backgroundColor:${props => props.theme.color.white};
@@ -62,11 +63,13 @@ const PermissionModal = ({
                     autoPlay={true}
                     loop={true}
                 />
+                <SeperatorFromTopOrBottom />
                 <ErrorText >{warningMessage}</ErrorText>
+                <SeperatorFromTopOrBottom />
                 <ButtonsWrapper>
                     <ErrorButton text={acceptMessage} action={onAccepted} />
                     <SeperatorFromRightOrLeft />
-                    <SecondaryButton text={I18n.t("close")} action={hidePermissionModal} />
+                    <SecondaryButton text={I18n.t("$DetayliAramaVazgec")} action={hidePermissionModal} />
                 </ButtonsWrapper>
 
             </ContentWrapper>

@@ -28,19 +28,19 @@ const OrderDetailItem = ({
         <SupWrapper key={index}>
             <SubWrapper>
                 <ValText>
-                    <DescText>{I18n.t("orderNo")}: </DescText>
+                    <DescText>{I18n.t("$SiparisSiparisNo")}: </DescText>
                     {orderID}
                 </ValText>
                 <ValText>
-                    <DescText>{I18n.t("product")}: </DescText>
+                    <DescText>{I18n.t("$SiparisUrunAdi")}: </DescText>
                     {productName}
                 </ValText>
                 <ValText>
-                    <DescText>{I18n.t("price")}: </DescText>
+                    <DescText>{I18n.t("$SiparisTutar")}: </DescText>
                     ${price}
                 </ValText>
                 <ValText>
-                    <DescText>{I18n.t("quantity")}: </DescText>
+                    <DescText>{I18n.t("$SiparisAdet")}: </DescText>
                     {quantity}
                 </ValText>
             </SubWrapper>

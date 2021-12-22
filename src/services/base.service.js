@@ -10,8 +10,7 @@ class BaseService {
 
     }
     handleResponse = async (rsp) => {
-        console.log("base.service line 13")
-        console.log(rsp)
+  
         if (rsp.status == 200) {
 
             try {

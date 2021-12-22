@@ -7,6 +7,7 @@ const SupWrapper = styled(View)`
     padding:${props => props.theme.space[2]};
     flexDirection:row;
     alignItems:center;
+    backgroundColor:${props=>props.theme.color.white};
 
 `
 const ItemTouch = styled(TouchableOpacity)`

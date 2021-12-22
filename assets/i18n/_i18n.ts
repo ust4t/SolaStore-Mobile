@@ -6,6 +6,8 @@ import en from './en';
 import fr from './fr';
 import ru from './ru';
 import ar from './ar';
+
+
 const locales = RNLocalize.getLocales();
 I18n.locale = locales[0].languageTag;
 export const isRtl = locales[0].isRTL;

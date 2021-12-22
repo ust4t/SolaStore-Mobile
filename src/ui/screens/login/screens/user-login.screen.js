@@ -99,7 +99,7 @@ class UserLogin extends BaseScreen {
         let dtoResponse = await this.doRequestAsync(() => userService.isMember(values.mail, values.password))
         if (dtoResponse) {
             if (dtoResponse == "notFound") {
-                this.showErrorModal(I18n.t("infoControl"));
+                this.showErrorModal(I18n.t("$HesabimKullaniciBulunamadi"));
             } else this.props.UserStore.login(dtoResponse)
         }
     }
@@ -112,27 +112,27 @@ class UserLogin extends BaseScreen {
                         <SignUpWrapper>
                             <Touchable onPress={this.goToRegister}>
                                 <SignUpText>
-                                    {I18n.t("signup")}
+                                    {I18n.t("$HesabimKayitOl")}
                                 </SignUpText>
                             </Touchable>
 
                         </SignUpWrapper>
-                        <SignInText>{I18n.t("login")}</SignInText>
+                        <SignInText>{I18n.t("$HesabimGirisYap")}</SignInText>
                         <HeaderMessage>
-                            {I18n.t("welcome")}
+                            {I18n.t("$AnaSayfaHoşgeldiniz")}
                         </HeaderMessage>
                     </Header>
 
                     <Formik
                         onSubmit={this.handleLoginFormAsync}
                         initialValues={{
-                            mail: "",
-                            password: ""
+                            mail: "muammersalkim@hotmail.com",
+                            password: "123321"
                         }}
                         validationSchema={
                             Yup.object().shape({
-                                mail: Yup.string().required(I18n.t("required")),
-                                password: Yup.string().required(I18n.t("required"))
+                                mail: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                password: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz"))
                             })
                         }
 
@@ -141,7 +141,7 @@ class UserLogin extends BaseScreen {
                             <Form>
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("emailOrPhone")}
+                                        placeholder={I18n.t("$HesabimEmailOrPhone")}
                                         value={values.mail}
                                         onChangeText={handleChange("mail")}
                                         onBlur={() => { setFieldTouched("mail") }} />
@@ -152,7 +152,7 @@ class UserLogin extends BaseScreen {
                                 <InputWrapper>
 
                                     <Input
-                                        placeholder={I18n.t("password")}
+                                        placeholder={I18n.t("$HesabimSifre")}
                                         value={values.password}
                                         onChangeText={handleChange("password")}
                                         onBlur={() => { setFieldTouched("password") }}
@@ -180,7 +180,7 @@ class UserLogin extends BaseScreen {
 
                                 <SeperatorFromTopOrBottom /> */}
 
-                                <PrimaryButton text={I18n.t("login")} action={handleSubmit} />
+                                <PrimaryButton text={I18n.t("$HesabimGirisYap")} action={handleSubmit} />
 
                                 {/* <SeperatorFromTopOrBottom />
                                 <NavigationTouch onPress={this.goToSettings}>
@@ -199,7 +199,7 @@ class UserLogin extends BaseScreen {
 
 
 
-                <Tabbar navigation={this.props.navigation} navigatorName={"userNavigator"} />
+
 
                 <this.RenderErrorModal />
             </SafeArea>

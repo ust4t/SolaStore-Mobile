@@ -15,6 +15,10 @@ import basketService from '../../../../../services/remote/basket.service';
 import { showToast } from '../../../../../util/toast-message';
 import I18n from 'i18n-js';
 import CartButton from '../components/cart-button.component';
+import ImageSliderModal from '../components/image-slider.modal';
+import { arrowBack } from '../../../../../util/icons';
+import Icon from 'react-native-vector-icons/Ionicons'
+import SuccessModal from '../../../../components/success-modal';
 const FavoriteButtonWrapper = styled(View)`
     position:absolute;
     top:10px;
@@ -22,9 +26,28 @@ const FavoriteButtonWrapper = styled(View)`
     flexDirection:row;
     alignItems:center;
     alignItems:center;
-    padding:${props=>props.theme.space[1]};
-    backgroundColor:${props=>props.theme.color.transparentWhite};
-    borderRadius:${props=>props.theme.radius[2]};
+    padding:${props => props.theme.space[1]};
+    backgroundColor:${props => props.theme.color.transparentWhite};
+    borderRadius:${props => props.theme.radius[2]};
+`
+const BackButtonWrapper = styled(TouchableOpacity)`
+position:absolute;
+top:10px;
+left:10px;
+flexDirection:row;
+alignItems:center;
+alignItems:center;
+padding:${props => props.theme.space[1]};
+backgroundColor:${props => props.theme.color.transparentWhite};
+borderRadius:${props => props.theme.radius[3]};
+`
+
+const Back = styled(Icon).attrs(props => ({
+    name: arrowBack,
+    size: 30,
+    color: props.theme.color.primary
+}))`
+
 `
 
 
@@ -51,8 +74,8 @@ class ProductDetail extends BaseScreen {
             price: "",
             description: "",
             images: [],
-            sizes:"",
-            oldPrice:"",
+            sizes: "",
+            oldPrice: "",
 
 
             variations: [],
@@ -63,7 +86,13 @@ class ProductDetail extends BaseScreen {
             isFavorite: false,
 
 
-            videoName: null
+            videoName: null,
+
+
+            sliderModalVisible: false,
+
+
+            successModalVisible: false
         };
 
         this.selectedProductVariationId = this.props.route.params.productId
@@ -81,25 +110,30 @@ class ProductDetail extends BaseScreen {
     //////////////////////
     ///////NAVIGATIONS
     goToUserTab = () => { this.props.navigation.jumpTo("userNavigator") }
-    goToVideoPlayer = () => { this.props.navigation.navigate("ProductVideoPlayer", { videoName: this.state.videoName,name:this.state.name}) }
-    goToBasketTab=()=>{this.props.navigation.jumpTo("basketNavigator") }
+    goToVideoPlayer = () => { this.props.navigation.navigate("ProductVideoPlayer", { videoName: this.state.videoName, name: this.state.name }) }
+    goToBasketTab = () => { this.props.navigation.jumpTo("basketNavigator") }
+    goBack = () => { this.props.navigation.goBack() }
     //////////////////////
-    ///////STATE CHANGES
+    ///////STATE CHANGESs
+    showSuccessModal = () => { this.setState({ successModalVisible: true }) }
+    hideSuccessModal = () => { this.setState({ successModalVisible: false }) }
     increse = () => { this.setState({ count: this.state.count += 1 }) }
     decrease = () => {
         if (this.state.count <= 2) {
             this.setState({ count: 1 })
         } else this.setState({ count: this.state.count -= 1 })
     }
+    showSliderModal = () => { this.setState({ sliderModalVisible: true }) }
+    hideSliderModal = () => { this.setState({ sliderModalVisible: false }) }
 
     onVariationSelected = (item) => {
         this.setState({
             name: item.productShortName,
             price: item.price,
-            oldPrice:item.oldPrice,
+            oldPrice: item.oldPrice,
             description: item.productSelectedDetail ? item.productSelectedDetail : "",
             images: item.pictures,
-            sizes:item.sizes,
+            sizes: item.sizes,
             videoName: item.video_1
         })
         this.selectedProductVariationId = item.productID
@@ -108,9 +142,7 @@ class ProductDetail extends BaseScreen {
     ///////////////////
     //////REQUESTS
     getProductDetail = async () => {
-        // if(itemProductId!=null) this.props.route.params.productId=itemProductId
-        // console.log("product-detail.screen line 66")
-        // console.log(this.props.route.params.productId)
+
         if (this.props.route.params.productId) {
             let data = await this.doRequestAsync(() => productService.GetProductById(this.props.route.params.productId))
             if (data && data.length > 0) {
@@ -118,10 +150,10 @@ class ProductDetail extends BaseScreen {
                 this.setState({
                     name: data.productShortName,
                     price: data.price,
-                    oldPrice:data.oldPrice,
+                    oldPrice: data.oldPrice,
                     description: data.productSelectedDetail ? data.productSelectedDetail : "",
                     images: data.pictures,
-                    sizes:data.sizes,
+                    sizes: data.sizes,
                     videoName: data.video_1
 
                 }, async () => {
@@ -134,7 +166,7 @@ class ProductDetail extends BaseScreen {
     getVariations = async (originalData) => {
         if (this.props.route.params.productId) {
             let data = await this.doRequestAsync(() => productService.GetVariationsByProductID(this.props.route.params.productId))
-            console.log(data)
+
             if (data) {
                 this.setState({
                     variations: [originalData, ...data]
@@ -151,7 +183,8 @@ class ProductDetail extends BaseScreen {
     addToBasket = async () => {
         let rsp = await this.doRequestAsync(() => basketService.addToBasket(this.selectedProductVariationId, this.state.count))
         if (rsp) {
-            showToast(I18n.t("addedToChart"));
+            // showToast(I18n.t("$UrunlerSepeteEklendi"));
+            this.showSuccessModal()
         }
     }
 
@@ -159,7 +192,10 @@ class ProductDetail extends BaseScreen {
         return (
             <SafeArea style={{ backgroundColor: color.lightGray }}>
                 <ScrollablePage>
-                    <Slider images={this.state.images} videoName={this.state.videoName} goToVideoPlayer={this.goToVideoPlayer} />
+                    <Slider images={this.state.images}
+                        videoName={this.state.videoName}
+                        goToVideoPlayer={this.goToVideoPlayer}
+                        showSliderModal={this.showSliderModal} />
                     {/* {
                         this.state.videoName &&
                         <TouchableOpacity onPress={this.goToVideoPlayer}>
@@ -178,6 +214,7 @@ class ProductDetail extends BaseScreen {
                         count={this.state.count}
                         increase={this.increse}
                         decrease={this.decrease}
+                        showSliderModal={this.showSliderModal}
                     />
 
 
@@ -185,16 +222,34 @@ class ProductDetail extends BaseScreen {
 
 
                 <ButtonWrapper>
-                    <PrimaryButton text={I18n.t("addToCart")} action={this.addToBasket} />
+                    <PrimaryButton text={I18n.t("$AnaSayfasepeteekle")} action={this.addToBasket} />
                 </ButtonWrapper>
+
+                <BackButtonWrapper onPress={this.goBack}>
+                    <Back />
+                </BackButtonWrapper>
 
 
                 <FavoriteButtonWrapper>
-                <CartButton action={this.goToBasketTab}/>
+                    <CartButton action={this.goToBasketTab} />
                     <FavoriteButton action={this.addToFavorites} isFavorite={this.state.isFavorite} />
-                   
+
                 </FavoriteButtonWrapper>
 
+
+
+                <ImageSliderModal
+                    sliderModalVisible={this.state.sliderModalVisible}
+                    hideSliderModal={this.hideSliderModal}
+                    images={this.state.images}
+                />
+                <SuccessModal
+                    successModalVisibilty={this.state.successModalVisible}
+                    hideSuccessModal={this.hideSuccessModal}
+                // lottieName = "basketLottie",
+                // buttonText = I18n.t("$DetayliAramaTamam"),
+                // successMessage= I18n.t("$UrunlerSepeteEklendi")
+                />
                 <this.RenderErrorModal />
             </SafeArea>
         );

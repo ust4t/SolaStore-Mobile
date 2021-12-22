@@ -3,8 +3,9 @@ import I18n from "i18n-js";
 
 
 
+
 class RemoteDataAccessObject {
-    apiUrl = "http://api.solastore.com.tr";
+    apiUrl = "https://api.solastore.com.tr";
     sourceProof = "ugurturkmenn@gmail.com";
     lang = "TR";
 
@@ -24,11 +25,8 @@ class RemoteDataAccessObject {
 
 
 
-      
+
         if (body != null) {
-            console.log("remote-data-access-obecjt line 29")
-            console.log(params)
-            console.log(body)
             return this.timeout(10000, fetch(url, {
                 method: "POST",
                 headers: {
@@ -64,7 +62,7 @@ class RemoteDataAccessObject {
 
 
         console.log(url)
-        return this.timeout(10000, fetch(url, {
+        return this.timeout(20000, fetch(url, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
@@ -77,7 +75,7 @@ class RemoteDataAccessObject {
     timeout(ms, promise) {
         return new Promise(function (resolve, reject) {
             setTimeout(function () {
-                reject(new Error("İstek zaman aşımına uğradı!"))
+                reject(new Error("404 :("))
             }, ms)
             promise.then(resolve, reject)
         })

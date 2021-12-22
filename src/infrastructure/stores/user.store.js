@@ -9,35 +9,42 @@ class UserStore {
     userName = null
     userSurname = null
     userEmail = null
-    userPhone=null
+    userPhone = null
+    orderId = null
+    languageChanged=false
 
-    updateNameAndSurname=(userName,userSurname)=>{
-        this.userName=userName;
-        this.userSurname=userSurname;
+    updateNameAndSurname = (userName, userSurname) => {
+        this.userName = userName;
+        this.userSurname = userSurname;
     }
-    updatePhone=(userPhone)=>{
-        this.userPhone=userPhone;
+    updatePhone = (userPhone) => {
+        this.userPhone = userPhone;
     }
-  
+
 
     login = (userData) => {
-        console.log("user.store line 22")
-        console.log(userData)
+
         userLocalService.storeUserData(userData)
         this.userID = userData.userID
         this.userName = userData.userName
         this.userSurname = userData.userSurname
         this.userEmail = userData.userEmail
-        this.userPhone=userData.userPhone
+        this.userPhone = userData.userPhone
 
     }
-    logout = () => {
+    logout = (clearUserInfoBoolean=true) => {
         this.userID = null
         this.userName = null
         this.userSurname = null
         this.userEmail = null
-        this.userPhone=null
-        userLocalService.storeUserData(null);
+        this.userPhone = null
+        if (clearUserInfoBoolean) {
+            userLocalService.storeUserData(null);
+        }
+
+    }
+    changeLanguage=()=>{
+        this.languageChanged=!this.languageChanged
     }
 
 
@@ -47,10 +54,12 @@ class UserStore {
             userName: observable,
             userSurname: observable,
             userEmail: observable,
+            languageChanged:observable,
             login: action,
             logout: action,
-            updateNameAndSurname:action,
-            updatePhone:action
+            updateNameAndSurname: action,
+            updatePhone: action,
+            changeLanguage:action
         })
     }
 }

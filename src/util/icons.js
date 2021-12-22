@@ -2,8 +2,8 @@ import { Platform } from "react-native"
 
 
 const cartIcon=Platform.select({
-    ios:"cart-outline",
-    android:"cart-outline"
+    ios:"md-cart-outline",
+    android:"md-cart-outline"
 })
 
 
@@ -257,11 +257,17 @@ const PlayIcon=Platform.select({
     ios:"ios-play-circle-outline",
     android:"md-play-circle-outline"
 })
+
+const CallIcon=Platform.select({
+    ios:"ios-call-outline",
+    android:"md-call-outline"
+})
+
 export  {
     cartIcon,starIcon,cancelIcon,addIcon,removeIcon,homeIcon,searchIcon,giftIcon,personIcon,caretIcon,watchIcon,cashIcon,carIcon,
     ordersIcon,caretForward,readerIcon,cardIcon,addressIcon,infoIcon,basketIcon,starSharIcon,trashIcon,locateIcon,businessIcon,
     lockIcon,arrowBack,locationIcon,checkmarkIcon,walletIcon,heartIcon,appsIcon,heartOutlineIcon,forwardChevron,downChevron,logOutIdon
     ,elipsisHorizontalIcon,trashBinOutline,alertIcon,filterIcon,ellipsisVertical,optionsIcon,notificationIcon,
-    eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon
+    eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon,CallIcon
 
 }

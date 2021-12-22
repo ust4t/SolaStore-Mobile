@@ -2,6 +2,7 @@ import React, { Component, PureComponent } from 'react';
 import { inject, observer } from 'mobx-react';
 import { resultStatus } from '../../util/enums/result-status';
 import ErrorModal from '../components/modals/error-modal';
+import I18n from 'i18n-js';
 
 
 class BaseScreen extends PureComponent {
@@ -25,9 +26,7 @@ class BaseScreen extends PureComponent {
             if (showLoadingModal) this.props.BusyStore.increase()
             let response = await requestFunc()
 
-            console.log("base.screen line 28")
-            console.log(response)
-            console.log(response.resultStatus)
+         
            
 
             if (response.resultStatus == resultStatus.success) {
@@ -35,13 +34,12 @@ class BaseScreen extends PureComponent {
             } else if (response.resultStatus == resultStatus.noContent) {
                 return []
              } else if (response.resultStatus == resultStatus.notFound) {
-                console.log("not founddddddddddd cevabı")
                 return "notFound"
              }
             else throw new Error(response.errorMessage)
         } catch (error) {
             console.log(error)
-            if (this._isMounted) this.showErrorModal(error.message ? error.message : "Bir Hata İle Karşılaştık :(");
+            if (this._isMounted) this.showErrorModal(error.message ? error.message : I18n.t("$UyarilarBirHataOlustu"));
 
         } finally {
             (this._isMounted && showLoadingModal) && this.props.BusyStore.decrease();

@@ -21,9 +21,11 @@ marginTop:${props => props.theme.space[1]};
 
 
 `
+// width:75px;
+//     height:112px;
 const CategoryIcon = styled(Image)`
-width:75px;
-    height:112px;
+width:85px;
+    height:${85 / 150 * 225}px;
     borderRadius:${props => props.theme.radius[2]};
     
 `
@@ -35,11 +37,11 @@ const CategoryListRow = ({
 }) => {
     const { selectedCategoryName, squareCategoryPictureGuidName, categoryID } = item;
     return (
-        <Wrapper key={index} onPress={() => goToProductList(categoryID)} style={{
-            
+        <Wrapper key={index} onPress={() => goToProductList(item)} style={{
+
         }}>
             <IconWrapper>
-                <CategoryIcon source={{ uri: imageUrl+squareCategoryPictureGuidName }} />
+                <CategoryIcon source={{ uri: imageUrl + squareCategoryPictureGuidName }} resizeMode="stretch" />
             </IconWrapper>
             <CategoryTitle>
                 {selectedCategoryName}

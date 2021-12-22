@@ -1,11 +1,15 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { basketIcon, homeIcon, notificationIcon, personIcon, searchIcon } from '../../util/icons';
+import { basketIcon, heartIcon, homeIcon, notificationIcon, ordersIcon, personIcon, searchIcon, starIcon } from '../../util/icons';
 import { color } from '../../infrastructure/theme/color';
+import I18n from 'i18n-js';
 const SupWrapper = styled(View)`
-padding:${props => props.theme.space[3]};
+
+paddingBottom:${props => props.theme.space[2]};
+paddingLeft:5px;
+paddingRight:5px;
 position:absolute;
 width:100%;
 bottom:0;
@@ -23,12 +27,17 @@ justifyContent:space-around;
 
 `
 const IconWrapper = styled(TouchableOpacity)`
-
+    alignItems:center;
+    flex:1;
 `
 const TabbarICon = styled(Icon).attrs({
-    size: 30
+    size: 25
 })`
 
+`
+const TabText = styled(Text)`
+    fontSize:${props => props.theme.text.extraSmall};
+    textAlign:center;
 `
 const Tabbar = ({
     navigation,
@@ -47,17 +56,80 @@ const Tabbar = ({
             elevation: 5,
         }}>
             <IconWrapper onPress={() => navigation.jumpTo("homeNavigator")}>
-                <TabbarICon name={homeIcon} color={navigatorName == "homeNavigator" ? color.primary : color.lightGray} />
+                <TabbarICon name={homeIcon} color={navigatorName == "homeNavigator" ? color.primary : "gray"} />
+                <TabText
+                    style={{
+                        color: navigatorName == "homeNavigator" ? color.primary : "gray"
+                    }}
+                >
+                    {I18n.t("$AnaSayfaAnaSayfa")}
+                </TabText>
             </IconWrapper>
-            <IconWrapper onPress={() => navigation.jumpTo("basketNavigator")} navigatorName={navigatorName}>
-                <TabbarICon name={basketIcon} color={navigatorName == "basketNavigator" ? color.primary : color.lightGray} />
+            <IconWrapper onPress={() => navigation.jumpTo("categoriesNavigator")}>
+                <TabbarICon name={ordersIcon} color={navigatorName == "categoriesNavigator" ? color.primary : "gray"} />
+                <TabText
+                    style={{
+                        color: navigatorName == "categoriesNavigator" ? color.primary : "gray"
+                    }}
+                >
+                    {I18n.t("$AnaSayfaKategoriler")}
+                </TabText>
             </IconWrapper>
-            <IconWrapper onPress={() => navigation.jumpTo("searchNavigator")} navigatorName={navigatorName}>
-                <TabbarICon name={searchIcon} color={navigatorName == "searchNavigator" ? color.primary : color.lightGray} />
+            <IconWrapper onPress={() => navigation.jumpTo("favoritesNavigator")} navigatorName={navigatorName}>
+                <TabbarICon name={heartIcon} color={navigatorName == "favoritesNavigator" ? color.primary : "gray"} />
+                <TabText
+                    style={{
+                        color: navigatorName == "favoritesNavigator" ? color.primary : "gray"
+                    }}
+                >
+                    {I18n.t("$AnaSayfaFavorilerim")}
+                </TabText>
             </IconWrapper>
+            {/* <IconWrapper onPress={() => navigation.jumpTo("basketNavigator")} navigatorName={navigatorName}>
+                <TabbarICon name={basketIcon} color={navigatorName == "basketNavigator" ? color.primary : "gray"} />
+                <TabText
+                    style={{
+                        color: navigatorName == "basketNavigator" ? color.primary : "gray"
+                    }}
+                >
+                    {I18n.t("$AnaSayfaSepet")}
+                </TabText>
+            </IconWrapper> */}
+            {/* <IconWrapper onPress={() => navigation.jumpTo("searchNavigator")} navigatorName={navigatorName}>
+                <TabbarICon name={searchIcon} color={navigatorName == "searchNavigator" ? color.primary : "gray"} />
+                <TabText
+                    style={{
+                        color: navigatorName == "searchNavigator" ? color.primary : "gray"
+                    }}
+                >
+                     {I18n.t("$AnaSayfaARA")}
+                </TabText>
+            </IconWrapper> */}
+
+            <IconWrapper onPress={() => navigation.jumpTo("newProductNavigator")} navigatorName={navigatorName}>
+                <TabbarICon name={starIcon} color={navigatorName == "newProductNavigator" ? color.primary : "gray"} />
+                <TabText
+                    style={{
+                        color: navigatorName == "newProductNavigator" ? color.primary : "gray"
+                    }}
+                >
+                    {I18n.t("$AnaSayfaYeniÜrünler")}
+                </TabText>
+            </IconWrapper>
+
+
             <IconWrapper onPress={() => navigation.jumpTo("userNavigator")} navigatorName={navigatorName}>
-                <TabbarICon name={personIcon} color={navigatorName == "userNavigator" ? color.primary : color.lightGray} />
+                <TabbarICon name={personIcon} color={navigatorName == "userNavigator" ? color.primary : "gray"} />
+                <TabText
+                    style={{
+                        color: navigatorName == "userNavigator" ? color.primary : "gray"
+                    }}
+                >
+                    {I18n.t("$AnaSayfaProfilim")}
+                </TabText>
             </IconWrapper>
+
+
 
         </SubWrapper>
     </SupWrapper>

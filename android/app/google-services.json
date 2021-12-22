@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1006484601184",
+    "project_id": "solastoremobil-4bc9d",
+    "storage_bucket": "solastoremobil-4bc9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006484601184:android:52979325c8beb444cf0605",
+        "android_client_info": {
+          "package_name": "com.solastore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006484601184-fe7344qhfma1nej7e8fealoqb0ceko2t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtR8BQiSYezwVK82TxhDOt3FPgGAZ-C-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006484601184-fe7344qhfma1nej7e8fealoqb0ceko2t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

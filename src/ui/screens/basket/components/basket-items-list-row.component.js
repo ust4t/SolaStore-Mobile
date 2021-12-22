@@ -115,7 +115,7 @@ const BasketItem = ({
                 </QuantitySelectorWrapper>
 
                 <SubTotalWrapper>
-                    <ItemName>{I18n.t("subTotal")} :     </ItemName>
+                    <ItemName>{I18n.t("$SiparisTutar")} :     </ItemName>
                     <SubTotalText>$ {`${price * quantity} ${currency}`}</SubTotalText>
                 </SubTotalWrapper>
             </Footer>

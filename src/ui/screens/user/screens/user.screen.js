@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { ErrorText, SafeArea, ScrollablePage } from '../../../components/shared-styled.components';
-import { addressIcon, basketIcon, heartIcon, homeIcon, whatsappIcon, ordersIcon, personIcon, settingsIcon, walletIcon, lockIcon } from '../../../../util/icons';
+import { addressIcon, basketIcon, heartIcon, homeIcon, whatsappIcon, ordersIcon, personIcon, settingsIcon, walletIcon, lockIcon, cartIcon, CallIcon } from '../../../../util/icons';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Tabbar from '../../../components/tabbar.component';
@@ -82,22 +82,32 @@ class UserScreen extends Component {
 
     /////////////////////
     ////NAVIGATION
-    goToFavorites = () => { this.props.navigation.navigate("UserFavoriteListScreen") }
+    goToFavorites = () => { this.props.navigation.navigate("UserFavoriteListScreen", { force: "" }) }
     goToOrders = () => { this.props.navigation.navigate("OrderListScreen") }
     goToProfile = () => { this.props.navigation.navigate("ProfileScreen") }
-    goToBasket = () => { this.props.navigation.navigate("basketNavigator") }
+    goToBasket = () => { this.props.navigation.jumpTo("basketNavigator") }
     goToContact = () => { this.props.navigation.navigate("ContactScreen") }
     goToSettings = () => { this.props.navigation.navigate("SettingScreen") }
     goNewPassword = () => { this.props.navigation.navigate("NewPasswordScreen") }
+
+    messageToWp = () => { Linking.openURL('whatsapp://send?text=hello&phone=905554000005') }
+    callNumber = () => { Linking.openURL('tel:+9002124584500') }
+
+
+
     render() {
         const ProfileItems = [
-            { text: I18n.t("myAccount"), icon: personIcon, action: this.goToProfile },
-            { text:  I18n.t("myCart"), icon: basketIcon, action: this.goToBasket },
-            { text:  I18n.t("myOrders"), icon: ordersIcon, action: this.goToOrders },
-            { text:  I18n.t("favorites"), icon: heartIcon, action: this.goToFavorites },
-            { text:  I18n.t("settings"), icon: settingsIcon, action: this.goToSettings },
-            { text: I18n.t("psChange"), icon: lockIcon, action: this.goNewPassword },
-            { text:  I18n.t("contact"), icon: whatsappIcon, action: this.goToContact },
+            { text: I18n.t("$AnaSayfaProfilim"), icon: personIcon, action: this.goToProfile },
+            { text: I18n.t("$AnaSayfaSepet"), icon: basketIcon, action: this.goToBasket },
+            { text: I18n.t("$AnaSayfaSiparişlerim"), icon: ordersIcon, action: this.goToOrders },
+            { text: I18n.t("$AnaSayfaFavorilerim"), icon: heartIcon, action: this.goToFavorites },
+            // { text: I18n.t("$AnaSayfaAyarlar"), icon: settingsIcon, action: this.goToSettings },
+            { text: I18n.t("$HesabimSifreDegisikligi"), icon: lockIcon, action: this.goNewPassword },
+            // { text:  I18n.t("contact"), icon: whatsappIcon, action: this.goToContact },
+            { text: I18n.t("$AnaSayfaMagaza"), icon: cartIcon, action: this.goToContact },
+            { text: I18n.t("$AnaSayfaMusteriHizmetleri"), icon: CallIcon, action: this.callNumber },
+            { text: I18n.t("$AnaSayfaWhatsapp"), icon: whatsappIcon, action: this.messageToWp },
+          
 
         ]
         return (
@@ -120,8 +130,8 @@ class UserScreen extends Component {
 
                             <TouchableOpacity onPress={this.logOut}>
                                 <ErrorText>
-                                    {I18n.t("logout")}
-                            </ErrorText>
+                                    {I18n.t("$HesabimCikisYap")}
+                                </ErrorText>
                             </TouchableOpacity>
                         </HeaderWrapper>
                         {

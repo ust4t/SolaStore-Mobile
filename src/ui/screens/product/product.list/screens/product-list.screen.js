@@ -3,7 +3,6 @@ import { View, Text, FlatList, InteractionManager } from 'react-native';
 import { SafeArea } from '../../../../components/shared-styled.components';
 import styled from 'styled-components';
 import ProductListRow from '../components/product-list-row.component';
-import SearchBar from '../../../home/components/search-bar.component';
 import { inject, observer } from 'mobx-react';
 import ProductListHeader from '../components/product-list-header.component';
 import { Products } from '../../../../../util/fake-data';
@@ -12,7 +11,18 @@ import productService from '../../../../../services/remote/product.service';
 import FilterModal from '../components/filter-modal';
 import brandService from '../../../../../services/remote/brand.service';
 import categoryService from '../../../../../services/remote/category.service';
-const FlatListOfProducts = styled(FlatList)`
+import ScreenHeader from '../../../../components/screen-header.component';
+import I18n from 'i18n-js';
+import ProductListFilterModal from '../components/product-list-filter.modal';
+import MultipleSelectListModal from '../../../../components/modals/multiple-select-list.modal';
+import Tabbar from '../../../../components/tabbar.component';
+import SearchBar from '../../../home/components/search-bar.component';
+import SelectListModal from '../../../../components/modals/selectlist-modal';
+const FlatListOfProducts = styled(FlatList).attrs(props => ({
+    contentContainerStyle: {
+        paddingBottom: 200
+    }
+}))`
   
 `
 
@@ -36,47 +46,109 @@ class ProductList extends BaseScreen {
             filterModalVisible: false,
 
             brands: [],
-            subCategories: [],
+            // subCategories: [],
+
+            // selectedCategories: [],
+            selectedBrands: [],
+            // categoriesModalVisible: false,
+            brandsModalVisible: false,
 
             minPrice: 0,
-            maxPrice: 0,
+            maxPrice: 999,
 
 
-            forceRefresh: false
+            forceRefresh: false,
+
+
+            searchText: "",
+
+
+            sortModalVisible: false,
+            selectedSortOption: "-"
 
         };
+
+        this.oldList = [];
     }
     /////////////////////////////
     ////////MODAL
     showFilterModal = () => { this.setState({ filterModalVisible: true }) }
     hideFilterModal = () => { this.setState({ filterModalVisible: false }) }
+    showSortModal = () => { this.setState({ sortModalVisible: true }) }
+    hideSortModal = () => { this.setState({ sortModalVisible: false }) }
+
+    // showCategoriesModal = () => {
+    //     this.setState({
+    //         categoriesModalVisible: true
+    //     })
+    // }
+    // hideCategoriesModal = () => {
+    //     this.setState({
+    //         categoriesModalVisible: false
+    //     })
+    // }
+    showBrandsModal = () => {
+        this.setState({
+            brandsModalVisible: true
+        })
+    }
+    hideBrandsModal = () => {
+        this.setState({
+            brandsModalVisible: false
+        })
+    }
+
+
 
     componentDidMount() {
+
         InteractionManager.runAfterInteractions(() => {
-            this.getAllByCategoryID()
             this.getBrands()
-            this.getSubCategories()
+            if (this.props.route.params) {
+                if (this.props.route.params.type === "brands") {
+                    this.getAllByBrandId()
+
+                } else if (this.props.route.params.type === "category") {
+                    this.getAllByCategoryID()
+                }
+                else if (this.props.route.params.type === "variation") {
+                    if (this.props.route.params.variationType == 1) {
+                        this.getNews()
+                    } else if (this.props.route.params.variationType == 2) {
+                        this.getBestSellers()
+                    }
+                    else if (this.props.route.params.variationType == 3) {
+                        this.getDiscounted()
+                    }
+                    else if (this.props.route.params.variationType == 4) {
+                        this.getAllWithAdvancedSearch()
+                    }
+                    else if (this.props.route.params.variationType == 5) {
+                        this.search()
+                    }
+
+                }
+            } else {
+                this.getNews()
+            }
+
+
         })
     }
     /////////////////////////////
     ////////REQUESTS 
+    defaultRequestProcess = (products) => {
+        this.oldList = products;
+        this.setState({
+            products: products,
+            productCount: products.length,
+        })
+    }
     getAllByCategoryID = async () => {
         if (this.props.route.params.categoryID) {
             let data = await this.doRequestAsync(() => productService.GetAllByCategoryID(this.props.route.params.categoryID))
             if (data) {
-                let maxPrice = 0;
-                let minPrice = 900;
-                data.map((item, index) => {
-                    if (item.price > maxPrice) maxPrice = item.price;
-                    if (item.price < minPrice) minPrice = item.price;
-                })
-
-                this.setState({
-                    products: data,
-                    productCount: data.length,
-                    maxPrice,
-                    minPrice
-                })
+                this.defaultRequestProcess(data)
             }
         }
     }
@@ -84,36 +156,115 @@ class ProductList extends BaseScreen {
     getBrands = async () => {
         let data = await this.doRequestAsync(brandService.GetAllBrands)
         if (data) {
-            data.map((item, index) => {
-                item.isSelected = false
-            })
             this.setState({
                 brands: data
             })
         }
     }
-    getSubCategories = async () => {
-        let data = await this.doRequestAsync(() => categoryService.GetSubCategoryList(this.props.route.params.categoryID))
+
+
+    getAllByBrandId = async () => {
+        if (this.props.route.params.categoryID) {
+            let data = await this.doRequestAsync(() => productService.GetSelectedBrandProducts(this.props.route.params.categoryID))
+            if (data) {
+                this.defaultRequestProcess(data)
+            }
+        }
+    }
+
+    getDiscounted = async () => {
+        let dtoRepsonse = await this.doRequestAsync(productService.GetSaleProducts)
+        if (dtoRepsonse) {
+            this.defaultRequestProcess(dtoRepsonse)
+        }
+    }
+
+    getBestSellers = async () => {
+        let dtoRepsonse = await this.doRequestAsync(productService.GetBestSellerProducts)
+        if (dtoRepsonse) {
+            this.defaultRequestProcess(dtoRepsonse)
+        }
+    }
+
+    getNews = async () => {
+        let dtoRepsonse = await this.doRequestAsync(productService.getNewProducts)
+        if (dtoRepsonse) {
+            this.defaultRequestProcess(dtoRepsonse)
+        }
+    }
+
+    getAllWithAdvancedSearch = async () => {
+        let categoryString = ""
+        let brandString = ""
+        this.props.route.params.selectedCategories.map((item) => {
+            if (categoryString == "") categoryString += `${item.categoryID}`
+            else categoryString += `,${item.categoryID}`
+        })
+        this.props.route.params.selectedBrands.map((item) => {
+            if (brandString == "") brandString += `${item.brandID}`
+            else brandString += `,${item.brandID}`
+        })
+
+        let data = await this.doRequestAsync(() => productService.advancedSearchProducts(
+            categoryString,
+            brandString,
+            this.props.route.params.priceRange ?
+                this.props.route.params.priceRange.substr(0, this.props.route.params.priceRange.indexOf("-")) :
+                0,
+            this.props.route.params.priceRange ?
+                this.props.route.params.priceRange.substr(this.props.route.params.priceRange.indexOf("-") + 1, 2) :
+                999
+        ))
         if (data) {
-            data.map((item, index) => {
-                item.isSelected = false
-            })
-            this.setState({
-                subCategories: data
-            })
+            this.defaultRequestProcess(data)
+        }
+    }
+    search = async () => {
+        let response = await this.doRequestAsync(() => productService.searchProducts(this.props.route.params.text))
+        if (response) {
+            this.defaultRequestProcess(response)
         }
     }
     /////////////////////////////
     ////////NAVIGATION 
     goToProductDetail = (productId) => { this.props.navigation.navigate("ProductDetail", { productId }) }
     goToBasket = () => { this.props.navigation.jumpTo("basketNavigator") }
+    goBack = () => { this.props.navigation.goBack() }
 
+
+
+    /////////////////////////
+    ///////SEARCH
+    onChangeText = (val) => { this.setState({ searchText: val }) }
+    goToProductWithSearchValues = () => {
+        if (this.state.searchText.length != 0) this.props.navigation.navigate("ProductListSearch", { type: "variation", variationType: 5, text: this.state.searchText })
+    }
 
 
 
     render() {
+
         return (
             <SafeArea>
+                {
+                    this.props.route.params &&
+                    <ScreenHeader
+                        title={this.props.route.params.pageTitle ? this.props.route.params.pageTitle : I18n.t("$AnasayfaUrunListesi")}
+                        goBack={this.goBack} />
+
+                }
+
+                {
+                    this.props.route.params == undefined &&
+                    <SearchBar
+                        goToBasket={this.goToBasket}
+                        searchText={this.state.searchText}
+                        onChangeText={this.onChangeText}
+                        action={this.goToProductWithSearchValues}
+                    />
+
+                }
+
                 <PageWrapper>
                     <FlatListOfProducts
                         showsVerticalScrollIndicator={false}
@@ -123,29 +274,57 @@ class ProductList extends BaseScreen {
                         ListHeaderComponent={<ProductListHeader
                             goToBasket={this.goToBasket}
                             productCount={this.state.productCount}
-                            showFilterModal={this.showFilterModal} />}
+                            showFilterModal={this.showFilterModal}
+                        />}
                     />
                 </PageWrapper>
 
-                <FilterModal
+
+                <ProductListFilterModal
                     filterModalVisible={this.state.filterModalVisible}
                     hideFilterModal={this.hideFilterModal}
-                    brands={this.state.brands}
-                    subCategories={this.state.subCategories}
-                    onCategorySelected={this.onCategorySelected}
-                    forceRefresh={this.state.forceRefresh}
-                    onBrandSelected={this.onBrandSelected}
+
+                    showBrandsModal={this.showBrandsModal}
+
+                    selectedBrands={this.state.selectedBrands}
                     minPrice={this.state.minPrice}
                     maxPrice={this.state.maxPrice}
                     onMaxPriceChanged={this.onMaxPriceChanged}
                     onMinPriceChanged={this.onMinPriceChanged}
-                    onMaxPriceEdited={this.onMaxPriceEdited}
-                    onMinPriceEdited={this.onMinPriceEdited}
                     createParameters={this.createParameters}
                     clearFilter={this.clearFilter}
+                    selectedSortOption={this.state.selectedSortOption}
+                    showSortModal={this.showSortModal}
+                />
+
+                <SelectListModal
+                    selectListModalVisible={this.state.sortModalVisible}
+                    hideSelectListModal={this.hideSortModal}
+                    onSelected={this.onSortSelected}
+                    selectItems={[
+                        I18n.t("$UrunlerFiyatiEnYuksekOlan"),
+                        I18n.t("$UrunlerFiyatiEnDusukOlan"),
+                        I18n.t("$UrunlerAdanZye"),
+                        I18n.t("$UrunlerZdenAya"),
+                    ]}
+
+                />
+
+                <MultipleSelectListModal
+                    selectListModalVisible={this.state.brandsModalVisible}
+                    hideSelectListModal={this.hideBrandsModal}
+                    onSelected={this.onBrandSelected}
+                    selectItems={this.state.brands}
+                    selectedItems={this.state.selectedBrands}
+                    propertyName="brandName"
 
                 />
                 <this.RenderErrorModal />
+
+                {
+                    this.props.route.params == undefined &&
+                    <Tabbar navigation={this.props.navigation} navigatorName={"newProductNavigator"} />
+                }
 
             </SafeArea>
         );
@@ -153,38 +332,21 @@ class ProductList extends BaseScreen {
 
     /////////////////////////////
     /////////FILTER OPERATIONS
-    onCategorySelected = (subCategoryId) => {
-        const subCategories = this.state.subCategories;
-        subCategories.map((item, index) => {
-            if (item.categoryID == subCategoryId) {
-                item.isSelected = !item.isSelected
-            }
-        })
-        this.setState({ subCategories, forceRefresh: !this.state.forceRefresh })
+    onSortSelected = (val) => { this.setState({ selectedSortOption: val }, () => this.hideSortModal()) }
+
+    onBrandSelected = (item) => {
+        if (this.state.selectedBrands.includes(item)) {
+            this.setState({
+                selectedBrands: this.state.selectedBrands.filter(x => x != item)
+            })
+        } else {
+            this.setState({
+                selectedBrands: [item, ...this.state.selectedBrands]
+            })
+        }
     }
 
 
-    onBrandSelected = (brandID) => {
-        const brands = this.state.brands;
-        brands.map((item, index) => {
-            if (item.brandID == brandID) {
-                item.isSelected = !item.isSelected
-            }
-        })
-        this.setState({ brands, forceRefresh: !this.state.forceRefresh })
-    }
-    onMaxPriceEdited = (e) => {
-        // const val=e.nativeEvent.text;
-        // if (val < this.state.minPrice) this.setState({ maxPrice: this.state.minPrice })
-        // else if (val > this.state.maxPrice) this.setState({ maxPrice: this.state.maxPrice })
-        // else this.setState({ maxPrice: val })
-    }
-    onMinPriceEdited = (e) => {
-        // const val=e.nativeEvent.text;
-        // if (val < this.state.minPrice) this.setState({ minPrice: this.state.minPrice })
-        // else if (val > this.state.maxPrice) this.setState({ maxPrice: this.state.minPrice })
-        // else this.setState({ minPrice: val })
-    }
     onMaxPriceChanged = (val) => {
         this.setState({ maxPrice: val })
 
@@ -195,39 +357,68 @@ class ProductList extends BaseScreen {
     }
 
     createParameters = async () => {
-        let CatIDList = "";
-        let BrandIDList = "";
-        const MinPrice = this.state.minPrice;
-        const MaxPrice = this.state.maxPrice;
-        this.state.subCategories.map((item, index) => {
-            if (item.isSelected) {
-                if (CatIDList.length == "") CatIDList += item.categoryID
-                else CatIDList += "," + item.categoryID
+        let newList = this.oldList;
+
+        if (this.state.selectedSortOption != "-") {
+            if (this.state.selectedSortOption == I18n.t("$UrunlerFiyatiEnYuksekOlan")) {
+                newList.sort(this.dynamicSort("price")).reverse()
+            } else if (this.state.selectedSortOption == I18n.t("$UrunlerFiyatiEnDusukOlan")) {
+                newList.sort(this.dynamicSort("price"))
+            } else if (this.state.selectedSortOption == I18n.t("$UrunlerAdanZye")) {
+                newList.sort(this.dynamicSort("productShortName"))
+            } else {
+                newList.sort(this.dynamicSort("productShortName")).reverse()
             }
-        })
-        this.state.brands.map((item, index) => {
-            if (item.isSelected) {
-                if (BrandIDList == "") BrandIDList += item.brandID
-                else BrandIDList += "," + item.brandID
-            }
-        })
-        console.log(CatIDList)
-        console.log(BrandIDList)
-        this.hideFilterModal()
-        let data = await this.doRequestAsync(() => productService.advancedSearchProducts(CatIDList, BrandIDList, MinPrice, MaxPrice));
-        if (data) {
-            this.setState({
-                products: data,
-                productCount: data.length,
-            })
         }
+
+        if (this.state.selectedBrands.length != 0) {
+            const selectedBrnds = [];
+            this.state.selectedBrands.map((item) => {
+                selectedBrnds.push(item.brandID)
+            })
+
+            newList = newList.filter(x => selectedBrnds.includes(x.brandID))
+
+
+        }
+        newList = newList.filter(x => x.price > this.state.minPrice && x.price < this.state.maxPrice)
+
+
+
+
+
+        this.setState({
+            products: newList,
+            productCount: newList.length,
+
+        }, () => {
+            this.hideFilterModal()
+        })
     }
     clearFilter = () => {
         this.hideFilterModal()
-        this.getAllByCategoryID()
-        this.getBrands()
-        this.getSubCategories()
-
+        this.setState({
+            selectedBrands: [],
+            minPrice: 0,
+            maxPrice: 999,
+            selectedSortOption: "-",
+        }, () => {
+            this.defaultRequestProcess(this.oldList)
+        })
+    }
+    dynamicSort(property) {
+        var sortOrder = 1;
+        if (property[0] === "-") {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
+        return function (a, b) {
+            /* next line works with strings and numbers, 
+             * and you may want to customize it to your needs
+             */
+            var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            return result * sortOrder;
+        }
     }
 }
 

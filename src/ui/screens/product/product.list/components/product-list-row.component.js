@@ -15,7 +15,7 @@ const SubWrapper = styled(TouchableOpacity)`
 
 const ProductImage = styled(Image)`
 width:100%;
-height:${props=>497*(((Dimensions.get('window').width / 2)-(parseInt(props.theme.space[3].substring(0, 2))+2*parseInt(props.theme.space[2].substring(0, 2))))/331)};
+height:${props=>497*(((Dimensions.get('window').width / 2)-(parseInt(props.theme.space[3].substring(0, 2))+2*parseInt(props.theme.space[2].substring(0, 2))))/331)}px;
 
 
 borderRadius:${props => props.theme.radius[2]};
@@ -36,7 +36,7 @@ justifyContent:center;
 `
 const DiscountedPriceText = styled(Text)`
 color:${props => props.theme.color.black};
-fontSize:${props => props.theme.text.extraSmall};
+fontSize:${props => props.theme.text.small};
 textDecorationLine:line-through;
 marginLeft:${props => props.theme.space[1]};
 opacity:0.4;

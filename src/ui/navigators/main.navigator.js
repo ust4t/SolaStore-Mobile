@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, InteractionManager, I18nManager } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import HomeNavigator from './home.navigator';
 import UserNavigator from './user.navigator';
@@ -20,80 +20,108 @@ import en from '../../../assets/i18n/en';
 
 import languageService from '../../services/remote/language.service';
 import { resultStatus } from '../../util/enums/result-status';
-import I18n from 'i18n-js';
+
 import userLocalService from '../../services/local/user-local.service';
 import Splash from '../components/splash.component';
+import CategoriesNavigator from './categories.navigator';
+import { SafeArea } from '../components/shared-styled.components';
+import FavoritesNavigator from './favorites.navigator';
+import NewProductNavigator from './new-products.navigator';
+import OrderDetailNavigator from './order-detail.navigator';
+import { intercept, observe } from 'mobx';
+import I18n from '../../../assets/i18n/_i18n';
 enableScreens(true);
 const Tab = createBottomTabNavigator();
-const hideBottomList = [];
 
 
-@inject("BusyStore")
+
+
+@inject("BusyStore", "UserStore")
 @observer
 class MainNavigator extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            languagesLoading:true
+            languagesLoading: true
         };
     }
 
-    componentDidMount(){
-        this.getSelectedLanguage()
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.getSelectedLanguage()
+            // observe(this.props.UserStore.userId,()=>{
+
+            // })
+            // intercept(this.props.UserStore,"userID",change=>{
+            //     console.log(change)
+
+            //     return change
+            // })
+            observe(this.props.UserStore, "languageChanged", (e) => {
+                this.getSelectedLanguage()
+            })
+            //this.getAll()
+        })
+
     }
 
     getSelectedLanguage = async () => {
+        this.setState({ languagesLoading: true })
         const rsp = await userLocalService.getLanguagePref();
         if (rsp) {
             I18n.locale = rsp;
         }
         this.getAll()
-        
+
     }
 
-    getAll=async (language)=>{
-        let rsp=await languageService.GetAll()
-       
-        if(rsp.resultStatus==resultStatus.success){
-           
-            rsp=rsp.data;
-           
-            console.log("------------------")
-            console.log(I18n.locale)
+    getAll = async (language) => {
+        let rsp = await languageService.GetAll()
 
-            if(I18n.locale=="tr-TR"){
-                rsp.map((item,index)=>{
-                    tr[item.defaultValue.replace(".","")]=item.selectedValue
+        if (rsp.resultStatus == resultStatus.success) {
+
+            rsp = rsp.data;
+     
+
+            if (I18n.locale == "tr-TR") {
+                rsp.map((item, index) => {
+                    tr[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
-            }else if(I18n.locale=="en-EN"){
-                rsp.map((item,index)=>{
-                    en[item.defaultValue.replace(".","")]=item.selectedValue
+            } else if (I18n.locale == "en-EN") {
+                rsp.map((item, index) => {
+                    en[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
-            }else if(I18n.locale=="ru-RU"){
-                rsp.map((item,index)=>{
-                    ru[item.defaultValue.replace(".","")]=item.selectedValue
+            } else if (I18n.locale == "ru-RU") {
+                rsp.map((item, index) => {
+                    ru[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
-            }else if(I18n.locale=="ar-AR"){
-                rsp.map((item,index)=>{
-                    ar[item.defaultValue.replace(".","")]=item.selectedValue
+            } else if (I18n.locale == "ar-AR") {
+                rsp.map((item, index) => {
+                    ar[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
-            }else if(I18n.locale=="fr-FR"){
-                rsp.map((item,index)=>{
-                    fr[item.defaultValue.replace(".","")]=item.selectedValue
+            } else if (I18n.locale == "fr-FR") {
+                rsp.map((item, index) => {
+                    fr[item.defaultValue.replace(".", "")] = item.selectedValue
+                })
+            } else {
+                rsp.map((item, index) => {
+                    I18n.locale == "tr-TR"
+                    tr[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
             }
 
         }
         this.setState({
-            languagesLoading:false
+            languagesLoading: false
         })
     }
 
     render() {
-        if(this.state.languagesLoading){
+        if (this.state.languagesLoading) {
             return <Splash />
         }
         return (
+
             <NavigationContainer>
                 <Tab.Navigator
                     screenOptions={({ route }) => ({
@@ -127,21 +155,42 @@ class MainNavigator extends Component {
                         tabBarShowLabel: false
                     })}>
                     <Tab.Screen name="homeNavigator" component={HomeNavigator} />
+                    <Tab.Screen name="categoriesNavigator" component={CategoriesNavigator} />
                     <Tab.Screen name="userNavigator" component={UserNavigator} />
-                    <Tab.Screen name="searchNavigator" component={SearchNavigator} />
-                    <Tab.Screen name="basketNavigator" component={BasketNavigator} 
-                    options={({route})=>(
-                        {
-                            unmountOnBlur:true
-                        }
-                    )} />
+                    <Tab.Screen name="newProductNavigator" component={NewProductNavigator} />
+                    <Tab.Screen name="orderDetailNavigator" component={OrderDetailNavigator}
+                        options={({ route }) => (
+                            {
+                                unmountOnBlur: true
+                            }
+                        )} />
+                    <Tab.Screen name="favoritesNavigator" component={FavoritesNavigator}
+                        options={({ route }) => (
+                            {
+                                unmountOnBlur: true
+                            }
+                        )} />
+                    {/* <Tab.Screen name="searchNavigator" component={SearchNavigator}
+                            options={({ route }) => (
+                                {
+                                    unmountOnBlur: true
+                                }
+                            )} /> */}
+                    <Tab.Screen name="basketNavigator" component={BasketNavigator}
+                        options={({ route }) => (
+                            {
+                                unmountOnBlur: true
+                            }
+                        )} />
                 </Tab.Navigator>
                 {
                     this.props.BusyStore.requestCount > 0 &&
-                   <LoadingModal />
+                    <LoadingModal />
                 }
-            
+
             </NavigationContainer>
+
+
         );
     }
 }

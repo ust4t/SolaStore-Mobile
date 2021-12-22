@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ScrollView, View, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { imageUrl, maxImageUrl } from '../../../../../util/constants';
 
 import Icon from 'react-native-vector-icons/Ionicons'
-import {PlayIcon} from '../../../../../util/icons';
+import { PlayIcon } from '../../../../../util/icons';
 const DeviceWidth = Dimensions.get('window').width;
 const Wrapper = styled(View)`
     width:100%;
@@ -45,10 +45,11 @@ const ThumbnailWrapper = styled(View)`
     justifyContent:center;
     flexDirection:row;
     position:absolute;
-    bottom:20;
+    bottom:5px;
 `
-const Tn = styled(View)`
+const Tn = styled(TouchableOpacity)`
     padding:${props => props.theme.space[1]};
+    opacity:0.8;
 `
 const Thumbnail = styled(View)`
 backgroundColor:${props => props.tnColor == props.index ? props.theme.color.primary : props.theme.color.white};
@@ -56,31 +57,54 @@ width:8px;
 height:8px;
 borderRadius:4px;
 `
+const TnImage = styled(Image)`
+    width:30px;
+    height:45px;
+    borderWidth:1px;
+    borderColor:${props => props.tnColor == props.index ? props.theme.color.primary : props.theme.color.white};
+`
 const deviceWidth = Dimensions.get('window').width
 const ProductDetailSlider = ({
     images = [],
     videoName = null,
-    goToVideoPlayer
+    goToVideoPlayer,
+    showSliderModal
 
 
 }) => {
     const [activePage, setActivePage] = useState(0);
+    const scrollViewRef = useRef(null);
+
+    const toNextPage = (index) => {
+        if (scrollViewRef.current !== null) {
+
+            scrollViewRef.current.scrollTo({
+                x: deviceWidth * (index ),
+                animated: true,
+            });
+        }
+    };
     return (
         <Wrapper>
             <Slider
                 showsHorizontalScrollIndicator={false}
+                ref={scrollViewRef}
                 onScroll={(event) => {
                     setActivePage(Math.round(parseFloat(event.nativeEvent.contentOffset.x / deviceWidth)))
                 }} >
                 {
                     images.map((item, index) => {
                         return (
-                            <SliderImage source={{ uri: maxImageUrl + item.guidName }} key={index} resizeMode="contain" />
+                            <VideoTocuhable onPress={showSliderModal} key={index}>
+                                <SliderImage source={{ uri: maxImageUrl + item.guidName }} resizeMode="contain"
+                                />
+                            </VideoTocuhable>
+
                         )
                     })
                 }
                 {
-                    videoName != null &&
+                    videoName != null && images[0] &&
                     <VideoTocuhable onPress={goToVideoPlayer}>
                         <VideoPlayerIcon />
                         <SliderImage source={{ uri: maxImageUrl + images[0].guidName }} resizeMode="contain" />
@@ -92,20 +116,27 @@ const ProductDetailSlider = ({
                 {
                     images.map((item, index) => {
                         return (
-                            <Tn key={index}>
-                                <Thumbnail tnColor={activePage} index={index}>
+                            <Tn key={index}
+                             onPress={() => toNextPage(index)}
+                            >
+                                {/* <Thumbnail tnColor={activePage} index={index}>
 
-                                </Thumbnail>
+                                </Thumbnail> */}
+                                <TnImage
+                                    tnColor={activePage} index={index} source={{ uri: imageUrl + item.guidName }} resizeMode="stretch" />
                             </Tn>
                         )
                     })
                 }
                 {
-                    videoName != null &&
-                    <Tn >
-                        <Thumbnail tnColor={activePage} index={images.length}>
+                    videoName != null && images[0] &&
+                    <Tn 
+                    onPress={() => toNextPage(images.length)}>
+                        {/* <Thumbnail tnColor={activePage} index={images.length}> */}
+                        <TnImage
+                            tnColor={activePage} index={images.length} source={{ uri: maxImageUrl + images[0].guidName }} resizeMode="stretch" />
 
-                        </Thumbnail>
+                        {/* </Thumbnail> */}
                     </Tn>
 
                 }

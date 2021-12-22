@@ -35,8 +35,7 @@ class NewPasswordScreen extends BaseScreen {
     handleSubmit = async (values) => {
         let rsp = await this.doRequestAsync(() => userService.updatePassword(values.passwordNew, values.email, values.password))
         if (rsp) {
-            console.log("new-password-screen line 38")
-            console.log(rsp)
+    
             if (rsp === "notFound") {
                 this.showErrorModal(I18n.t("missingInfo"))
             } else {

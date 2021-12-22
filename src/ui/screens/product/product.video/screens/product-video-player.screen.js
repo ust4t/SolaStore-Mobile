@@ -1,11 +1,27 @@
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeArea } from '../../../../components/shared-styled.components';
 import Video from 'react-native-video';
 import { videoUrl } from '../../../../../util/constants';
-import ScreenHeader from '../../../../components/screen-header.component';
-import LoadingModal from '../../../../components/modals/loading.modal';
+import styled from 'styled-components';
+import Icon from 'react-native-vector-icons/Ionicons'
+import { cancelIcon } from '../../../../../util/icons';
+const CloseButton = styled(TouchableOpacity)`
+padding:${props => props.theme.space[2]};
+position:absolute;
+top:${props => props.theme.space[2]};
+right:${props => props.theme.space[2]};
+elevation:99;
+zIndex:99;
+`
 
+const CloseIcon = styled(Icon).attrs(props => ({
+    name: cancelIcon,
+    color: props.theme.color.error,
+    size:40
+}))`
+
+`
 class ProductVideoPlayer extends Component {
     constructor(props) {
         super(props);
@@ -29,11 +45,15 @@ class ProductVideoPlayer extends Component {
     render() {
         return (
             <SafeArea>
+                <CloseButton onPress={this.goBack}>
+                    <CloseIcon />
+                </CloseButton>
                 {/* <ScreenHeader title={this.props.route.params.name} goBack={this.goBack} /> */}
                 <Video source={{ uri: `${videoUrl}${this.props.route.params.videoName}` }}   // Can be a URL or a local file.
                     // ref={(ref) => {
                     //     this.player = ref
-                    // }}                                      // Store reference
+                    // }}   
+                                                       // Store reference
                     onLoadStart={this.showLoading}
                     onLoad={this.hideLoading}               // Callback when remote video is buffering
                     // onError={this.videoError}               // Callback when video cannot be loaded

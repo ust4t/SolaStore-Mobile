@@ -9,10 +9,10 @@ class ProductService extends BaseService {
         super()
         this.controllerName = "Product";
     }
-    GetAllByCategoryID = async () => {
-        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetAllByCategoryID`, null);
-        return this.handleResponse(rsp)
-    }
+    // GetAllByCategoryID = async () => {
+    //     let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetAllByCategoryID`, null);
+    //     return this.handleResponse(rsp)
+    // }
 
     GetSaleProducts = async () => {
         let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetSaleProducts`, null);
@@ -56,8 +56,28 @@ class ProductService extends BaseService {
         let rsp = await remoteDataAccessObject.GetRequest(`Helpers/AdvancedSearchProductList`, null, [
             { name: "CatIDList", val: categories },
             { name: "BrandIDList", val: brands },
-            { name: "MinPrice", val: minPrice },
-            { name: "MaxPrice", val: maxPrice }
+            { name: "MinPrice", val: parseInt(minPrice) },
+            { name: "MaxPrice", val: parseInt(minPrice) }
+        ]);
+        return this.handleResponse(rsp)
+    }
+
+    GetSelectedBrandProducts = async (brandId) => {
+        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetSelectedBrandProducts`, null, [
+            { name: "BrandID", val: brandId }
+        ]);
+        return this.handleResponse(rsp)
+    }
+
+    getRecentAdded = async () => {
+        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetRecentAddedProducts`, null, [
+         
+        ]);
+        return this.handleResponse(rsp)
+    }
+    getNewProducts = async () => {
+        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetNewProducts`, null, [
+          
         ]);
         return this.handleResponse(rsp)
     }

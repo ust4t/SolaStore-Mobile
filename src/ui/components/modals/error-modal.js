@@ -51,7 +51,10 @@ const ErrorModal = ({
                 <SeperatorFromTopOrBottom />
                 <ErrorText >{errorMessage}</ErrorText>
                 <SeperatorFromTopOrBottom />
-                <ErrorButton text={I18n.t("close")} action={hideErrorModal} />
+
+                <ErrorButton text={I18n.t("$DetayliAramaTamam")} action={hideErrorModal} flex="none"/>
+
+
             </ContentWrapper>
 
 

@@ -25,23 +25,23 @@ const OrderListRow = ({
     const { orderID, totalAmount, addingDate, salesRepresantID, paymentType } = item;
     return (
         <SupWrapper key={index}>
-            <SubWrapper onPress={() => goToDetail(orderID,totalAmount)}>
+            <SubWrapper onPress={() => goToDetail(orderID, totalAmount)}>
                 <ValText>
-                    <DescText>{I18n.t("orderNo")}: </DescText>
+                    <DescText>{I18n.t("$SiparisSiparisNo")}: </DescText>
                     {orderID}
                 </ValText>
                 <ValText>
-                    <DescText>{I18n.t("orderTotal")}: </DescText>
+                    <DescText>{I18n.t("$SiparisTutar")}: </DescText>
                     ${totalAmount}
                 </ValText>
                 <ValText>
-                    <DescText>{I18n.t("orderDate")}: </DescText>
+                    <DescText>{I18n.t("$SiparisSiparisTarihi")}: </DescText>
                     {addingDate.substring(0, 10)}
                 </ValText>
-                <ValText>
+                {/* <ValText>
                     <DescText>{I18n.t("repId")}: </DescText>
                     {salesRepresantID}
-                </ValText>
+                </ValText> */}
             </SubWrapper>
         </SupWrapper>
     );

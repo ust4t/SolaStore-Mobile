@@ -8,7 +8,11 @@ import BaseScreen from '../../../../shared/base.screen';
 import OrderListRow from '../components/order-list-row.component';
 import { inject, observer } from 'mobx-react';
 import I18n from 'i18n-js';
-const OrdersFlatList = styled(FlatList)`
+const OrdersFlatList = styled(FlatList).attrs(props => ({
+    contentContainerStyle: {
+        paddingBottom:200
+    }
+}))`
 
 `
 
@@ -26,10 +30,10 @@ class OrderListScreen extends BaseScreen {
     ///////////////////
     //////NAVIGATIONS
     goBack = () => { this.props.navigation.goBack() }
-    goToDetail=(orderId,totalAmount)=>{this.props.navigation.navigate("OrderDetail",{orderId,totalAmount})}
+    goToDetail = (orderId, totalAmount) => { this.props.navigation.navigate("OrderDetail", { orderId, totalAmount }) }
 
-    componentDidMount(){
-        InteractionManager.runAfterInteractions(()=>{
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
             this.getOrder()
         })
     }
@@ -48,8 +52,8 @@ class OrderListScreen extends BaseScreen {
                 <OrdersFlatList
                     data={this.state.orders}
                     renderItem={({ item, index }) =>
-                     <OrderListRow item={item} index={index}
-                     goToDetail={this.goToDetail} />}
+                        <OrderListRow item={item} index={index}
+                            goToDetail={this.goToDetail} />}
                 />
 
 

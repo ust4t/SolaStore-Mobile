@@ -8,7 +8,8 @@ const Touchable = styled(TouchableOpacity)`
     padding:${props => props.theme.space[2]};
     justifyContent:center;
     alignItems:center;
-    flex:1;
+    
+    
    
 
 `
@@ -17,10 +18,14 @@ const TouchableText = styled(Text)`
     fontWeight:bold;
 `
 const ErrorButton = ({
-    text = "Tamam", action
+    text = "Tamam", action,
+    flex = "1"
 }) => (
-    <Touchable onPress={action}>
-        <TouchableText>
+    <Touchable onPress={action}
+        style={{
+            flex: flex == "1" ? 1 : 0 
+        }} >
+        <TouchableText numberOfLines={1} ellipsizeMode="tail">
             {text}
         </TouchableText>
 

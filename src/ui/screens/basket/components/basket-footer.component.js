@@ -3,13 +3,14 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import styled from 'styled-components';
 import PrimaryButton from '../../../components/primary-button.component';
-import { SeperatorFromTopOrBottom } from '../../../components/shared-styled.components';
+import { ErrorText, SeperatorFromTopOrBottom } from '../../../components/shared-styled.components';
 
 const SupWrapper = styled(View)`
     backgroundColor:${props => props.theme.color.white};
     padding:${props => props.theme.space[2]};
     paddingLeft:${props => props.theme.space[4]};
     paddingRight:${props => props.theme.space[4]};
+
     width:100%;
     bottom:0;
     position:${props => props.position}
@@ -33,7 +34,7 @@ const BasketFooter = ({
     totalPrice,
     action,
     label = I18n.t("checkOut"),
-    text = I18n.t("subTotal"),
+    text = I18n.t("$AnaSayfaToplam"),
     position = "absolute"
 }) => (
     <SupWrapper position={position}>
@@ -47,6 +48,17 @@ const BasketFooter = ({
         </SubTotalWrapper>
         <SeperatorFromTopOrBottom />
         <PrimaryButton text={label} action={action} />
+
+        {
+            position !== "absolute" &&
+            <View style={{ width: "100%", alignItems: "center" }}>
+                <ErrorText>
+                    {I18n.t("$UyarilarGuvenMesaji")}
+                </ErrorText>
+            </View>
+
+        }
+
     </SupWrapper>
 );
 

@@ -39,8 +39,7 @@ class ProfileScreen extends BaseScreen {
                 values.email,
                 values.password
             ))
-            console.log("profile.screen line 44")
-            console.log(resp)
+
             if (resp == "notFound") {
                 this.showErrorModal(I18n.t("missingInfo"))
                 // this.goBack()
@@ -77,7 +76,7 @@ class ProfileScreen extends BaseScreen {
     render() {
         return (
             <SafeArea>
-                <ScreenHeader title={I18n.t("myAccount")} goBack={this.goBack} />
+                <ScreenHeader title={I18n.t("$AnaSayfaProfilim")} goBack={this.goBack} />
 
                 <ScrollablePage>
 
@@ -92,11 +91,11 @@ class ProfileScreen extends BaseScreen {
                         }}
                         validationSchema={
                             Yup.object().shape({
-                                name: Yup.string().required(I18n.t("required")),
-                                surname: Yup.string().required(I18n.t("required")),
-                                phone: Yup.string().required(I18n.t("required")),
-                                email: Yup.string().required(I18n.t("required")),
-                                password: Yup.string().required(I18n.t("required")),
+                                name: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                surname: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                phone: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                email: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                password: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
                             })
                         }
 
@@ -105,7 +104,7 @@ class ProfileScreen extends BaseScreen {
                             <Form>
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("name")}
+                                        placeholder={I18n.t("$HesabimAdi")}
                                         value={values.name}
                                         onChangeText={handleChange("name")}
                                         onBlur={() => { setFieldTouched("name") }} />
@@ -116,7 +115,7 @@ class ProfileScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("surname")}
+                                        placeholder={I18n.t("$HesabimSoyadi")}
                                         value={values.surname}
                                         onChangeText={handleChange("surname")}
                                         onBlur={() => { setFieldTouched("surname") }}
@@ -128,7 +127,7 @@ class ProfileScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("phone")}
+                                        placeholder={I18n.t("$HesabimTelefon")}
                                         value={values.phone}
                                         onChangeText={handleChange("phone")}
                                         onBlur={() => { setFieldTouched("phone") }}
@@ -141,7 +140,7 @@ class ProfileScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("email")}
+                                        placeholder={I18n.t("$HesabimEpostaAdresi")}
                                         value={values.email}
                                         onChangeText={handleChange("email")}
                                         onBlur={() => { setFieldTouched("email") }}
@@ -153,7 +152,7 @@ class ProfileScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("password")}
+                                        placeholder={I18n.t("$HesabimSifre")}
                                         value={values.password}
                                         onChangeText={handleChange("password")}
                                         onBlur={() => { setFieldTouched("password") }}
@@ -166,7 +165,7 @@ class ProfileScreen extends BaseScreen {
 
 
 
-                                <PrimaryButton text={I18n.t("update")} action={handleSubmit} />
+                                <PrimaryButton text={I18n.t("$HesabimGuncelle")} action={handleSubmit} />
                             </Form>
                         )}
                     </Formik>

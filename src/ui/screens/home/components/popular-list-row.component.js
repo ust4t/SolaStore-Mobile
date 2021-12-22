@@ -68,7 +68,7 @@ const PopularProductRow = ({
     goToProductDetail
 }) => {
     const { productShortName, price, oldPrice, productID, pictures } = item
-    console.log(imageUrl + pictures[0])
+
     return (
         <SupWrapper key={index}>
             <SubWrapper onPress={() => goToProductDetail(productID)}>
