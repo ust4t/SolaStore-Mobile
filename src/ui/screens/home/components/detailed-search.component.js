@@ -148,6 +148,22 @@ const DetailedSearch = ({
 
                 </ModalOpenerView>
                 <SeperatorFromTopOrBottom />
+
+                <ModalOpenerView onPress={showPricesModal}>
+                    <OpenerLeft>
+                        <ModalOpenerTextHeader>{I18n.t("$AnaSayfaFiyat")}</ModalOpenerTextHeader>
+                        <ModalOpenerText ellipsizeMode="tail" numberOfLines={1}>
+
+                            {selectedRange ? selectedRange : "-"}
+
+                        </ModalOpenerText>
+                    </OpenerLeft>
+
+                    <ChevronIcon />
+
+                </ModalOpenerView>
+                <SeperatorFromTopOrBottom />
+                {/*                 
                 <PriceTouchable onPress={showPricesModal}>
                     <Label>
                         {selectedRange ? selectedRange : I18n.t("$AnaSayfaFiyat")}
@@ -155,18 +171,18 @@ const DetailedSearch = ({
                     <SeperatorFromRightOrLeft />
                     <ChevronIcon color="white" />
                 </PriceTouchable>
-                <SeperatorFromTopOrBottom />
+                <SeperatorFromTopOrBottom /> */}
 
-               
-                    {/* <SecondaryButton text={I18n.t("$AnaSayfaARA")} action={goToProductListWithSearchParams} /> */}
 
-                    <Touchable onPress={goToProductListWithSearchParams}>
-                        <TouchableText>
-                            {I18n.t("$AnaSayfaARA")}
-                        </TouchableText>
+                {/* <SecondaryButton text={I18n.t("$AnaSayfaARA")} action={goToProductListWithSearchParams} /> */}
 
-                    </Touchable>
-            
+                <Touchable onPress={goToProductListWithSearchParams}>
+                    <TouchableText>
+                        {I18n.t("$AnaSayfaARA")}
+                    </TouchableText>
+
+                </Touchable>
+
 
 
 

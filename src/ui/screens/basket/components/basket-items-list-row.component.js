@@ -85,7 +85,7 @@ const BasketItem = ({
     decrease,
     goToProductDetail
 }) => {
-    const { productShortName, price, currency, quantity, pictureOneGuidName, productID } = item;
+    const { productShortName, price, currency, quantity, pictureOneGuidName, productID, masterProductID } = item;
     return (
         <SupWrapper key={index} >
             <Header >
@@ -94,7 +94,9 @@ const BasketItem = ({
                 </RemoveTouchable>
 
             </Header>
-            <SubWrapper onPress={() => goToProductDetail(productID)}>
+            <SubWrapper onPress={() => goToProductDetail(
+                productID
+            )}>
                 <ItemImage source={{ uri: midImageUrl + pictureOneGuidName }} resizeMode="contain" />
                 <ItemDescriptionWrapper>
                     <ItemName>{productShortName}</ItemName>

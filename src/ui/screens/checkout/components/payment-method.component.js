@@ -20,7 +20,7 @@ const SubWrapper = styled(TouchableOpacity)`
 `
 const PaymentMethodText = styled(Text)`
 fontWeight:bold;
-fontSize:${props=>props.theme.text.subtitle};
+fontSize:${props => props.theme.text.subtitle};
 `
 const PaymentTouchable = styled(View)`
 flexDirection:row;
@@ -51,6 +51,7 @@ const InputWrapper = styled(View)`
     alignItems:center;
     justifyContent:center;
     padding:${props => props.theme.space[0]};
+    paddingLeft:${props => props.theme.space[1]};
 `
 const Input = styled(TextInput)`
     flex:1;
@@ -64,7 +65,7 @@ const ItemTouchable = styled(TouchableOpacity)`
     paddingLeft:${props => props.theme.space[2]};
 `
 const ItemText = styled(Text)`
-marginLeft:${props=>props.theme.space[2]};
+marginLeft:${props => props.theme.space[2]};
 `
 const ItemIcon = styled(Icon).attrs(props => ({
     name: checkmarkIcon,
@@ -106,6 +107,7 @@ const PaymentMethodComponent = ({
 
     selectedPaymentMethodName,
     onPaymentMethodSelected,
+    specifiedWidth
 }) => {
     const options = [{ name: I18n.t("$SiparisCariHesapIle"), value: "Order" }, { name: I18n.t("$SiparisKrediKartiIle"), value: "CC" }];
     return (
@@ -127,6 +129,7 @@ const PaymentMethodComponent = ({
                     placeholder={I18n.t("$HesabimTelefon")}
                     value={phone}
                     onChangeText={onPhoneChanged}
+                    keyboardType='numeric'
                 />
             </InputWrapper>
 
@@ -145,7 +148,7 @@ const PaymentMethodComponent = ({
                 options.map((item, index) => {
                     return (
                         <ItemTouchable key={index} onPress={() => onPaymentMethodSelected(item)}>
-                          
+
                             <RadioButtonWrapper>
                                 <RadioButton isSelected={selectedPaymentMethodName == item.name}>
 
@@ -178,9 +181,10 @@ const PaymentMethodComponent = ({
                 <SalesRepsFlatList
 
                     data={salesReps}
-                    numColumns={3}
+                    numColumns={4}
                     // ListHeaderComponent={<SalesRepsHeader />}
-                    renderItem={({ item, index }) => <RepRow item={item} index={index} selectedRepId={selectedRepId} onRepSelected={onRepSelected} />}
+                    renderItem={({ item, index }) => <RepRow item={item} index={index} selectedRepId={selectedRepId} onRepSelected={onRepSelected}
+                        specifiedWidth={specifiedWidth} />}
                 />
             </SalesRepListView>
 

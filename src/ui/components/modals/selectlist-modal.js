@@ -16,29 +16,32 @@ const ModalWrapper = styled(View)`
 const ContentWrapper = styled(View)`
 width:100%;
 height:100%;
-borderTopLeftRadius:${props => props.theme.space[3]};
-borderTopRightRadius:${props => props.theme.space[3]};
-    backgroundColor:${props => props.theme.color.white};
+    borderTopLeftRadius:${props => props.theme.space[3]};
+    borderTopRightRadius:${props => props.theme.space[3]};
+    backgroundColor:${props => props.theme.color.background};
+  
     justifyContent:center;
     alignItems:center;
-    paddingTop:${props => props.theme.space[2]};
+    
 
 `
 const ItemView = styled(View)`
-padding:${props=>props.theme.space[1]};
+paddingBottom:${props => props.theme.space[1]};
+borderRadius:${props => props.theme.radius[1]};
 
 `
 const ItemTouchable = styled(TouchableOpacity)`
-    flexDirection:row;
-    flex:1;
-    justifyContent:space-between;
-    
-
-    marginTop:${props => props.theme.space[1]};
-    borderBottomWidth:0.2px;
+flexDirection:row;
+flex:1;
+alignItems:center;
+borderRadius:${props => props.theme.radius[1]};
+padding:${props => props.theme.space[2]};
+backgroundColor:${props => props.theme.color.white};
 `
 const ItemText = styled(Text)`
-
+marginLeft:${props => props.theme.space[2]};
+fontWeight:bold;
+flex:1;
 
 `
 const ModalScroll = styled(ScrollView)
@@ -58,7 +61,7 @@ const ModalScroll = styled(ScrollView)
 const ItemIcon = styled(Icon).attrs(props => ({
     name: forwardChevron,
     size: 25,
-    color: props.theme.color.secondary
+    color: props.theme.color.darkGreen
 }))`
 `
 const SelectListModal = ({
@@ -78,14 +81,25 @@ const SelectListModal = ({
                 <ModalHeader hideModal={hideSelectListModal} />
                 <ModalScroll
                     contentContainerStyle={{
-                        padding: 20
+                        padding: 10
                     }}
                 >
                     {
                         selectItems.map((item, index) => {
                             return (
                                 <ItemView key={index}>
-                                    <ItemTouchable onPress={() => onSelected(item)}>
+                                    <ItemTouchable onPress={() => onSelected(item)}
+                                        style={{
+                                            shadowColor: "#000",
+                                            shadowOffset: {
+                                                width: 0,
+                                                height: 1,
+                                            },
+                                            shadowOpacity: 0.18,
+                                            shadowRadius: 1.00,
+
+                                            elevation: 1,
+                                        }}>
                                         <ItemText>
                                             {
                                                 propertyName == null ?

@@ -9,6 +9,7 @@ import { useState } from 'react/cjs/react.production.min';
 import { SeperatorFromTopOrBottom } from '../../../../components/shared-styled.components';
 import ProductVariation from './product-variation.component';
 import I18n from 'i18n-js';
+import PaymentImage from './payment-images.component';
 
 const SupWrapper = styled(View)`
  
@@ -17,7 +18,7 @@ const SupWrapper = styled(View)`
     borderTopRightRadius:${props => props.theme.radius[4]};
     backgroundColor:${props => props.theme.color.white};
     flex:1;
-    paddingBottom:200px;
+    paddingBottom:100px;
 `
 const HeaderWrapper = styled(View)`
     flexDirection:row;
@@ -168,6 +169,8 @@ const ProductDetailBody = ({
             <Description>
                 {description}
             </Description>
+
+            <PaymentImage />
 
 
 

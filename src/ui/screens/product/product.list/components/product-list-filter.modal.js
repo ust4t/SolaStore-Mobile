@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import ModalHeader from '../../../../components/modal-header.component';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { cancelIcon } from '../../../../../util/icons';
-import { SeperatorFromRightOrLeft } from '../../../../components/shared-styled.components';
+import { Line, SeperatorFromRightOrLeft, SeperatorFromTopOrBottom } from '../../../../components/shared-styled.components';
 import PrimaryButton from '../../../../components/primary-button.component';
 import SecondaryButton from '../../../../components/secondary-button.component';
 const deviceWidth = Dimensions.get("window").width;
@@ -14,28 +14,26 @@ const ModalWrapper = styled(View)`
     width:${deviceWidth}px;
     height:100%;
     backgroundColor:${props => props.theme.color.transparentBlack};
-    justifyContent:center;
-    alignItems:center;
+   
 `
 const ContentWrapper = styled(View)`
-width:100%;
-height:100%;
-
-    backgroundColor:${props => props.theme.color.white};
-
-    padding:${props => props.theme.space[2]};
+flex:1;
+backgroundColor:${props => props.theme.color.background};
+padding:${props => props.theme.space[2]};
 
 `
 
 const Touchable = styled(TouchableOpacity)`
-padding:${props => props.theme.space[1]};
-borderBottomWidth:0.3px;
-borderColor:${props => props.theme.color.black};
+borderRadius:${props => props.theme.radius[1]};
+padding:${props => props.theme.space[2]};
+backgroundColor:${props => props.theme.color.white};
+marginTop:${props => props.theme.space[1]};
 `
 const Viewable = styled(View)`
-padding:${props => props.theme.space[1]};
-borderBottomWidth:0.3px;
-borderColor:${props => props.theme.color.black};
+borderRadius:${props => props.theme.radius[1]};
+padding:${props => props.theme.space[2]};
+backgroundColor:${props => props.theme.color.white};
+marginTop:${props => props.theme.space[1]};
 `
 const TouchableTitle = styled(Text)`
     fontWeight:bold;
@@ -46,12 +44,14 @@ const TouchableText = styled(Text)`
 `
 const HeaderView = styled(View)`
     width:100%;
-    padding:${props => props.theme.space[1]};
+    padding:${props => props.theme.space[2]};
     flexDirection:row;
     alignItems:center;
+    backgroundColor:${props => props.theme.color.white};
 `
 const HeaderText = styled(Text)`
-
+fontWeight:bold;
+    fontSize:${props => props.theme.text.subtitle};
 `
 
 const CloseButtonTouch = styled(TouchableOpacity)`
@@ -99,6 +99,8 @@ const Label = styled(Text)`
 const Footer = styled(View)`
     flexDirection:row;
 
+    padding:${props => props.theme.space[1]};
+
 `
 const ProductListFilterModal = ({
     filterModalVisible,
@@ -144,17 +146,28 @@ const ProductListFilterModal = ({
             onRequestClose={hideFilterModal}>
 
             <ModalWrapper>
+                <HeaderView style={{
+                    shadowColor: "#000",
+                    shadowOffset: {
+                        width: 0,
+                        height: 1,
+                    },
+                    shadowOpacity: 0.18,
+                    shadowRadius: 1.00,
 
+                    elevation: 1,
+                }}>
+                    <CloseButtonTouch onPress={hideFilterModal}>
+                        <CloseIc />
+                    </CloseButtonTouch>
+                    <HeaderText>
+                        {I18n.t("$AnasayfaFiltre")}
+                    </HeaderText>
+                </HeaderView>
                 <ContentWrapper>
                     {/* <ModalHeader hideModal={hideFilterModal} /> */}
-                    <HeaderView>
-                        <CloseButtonTouch onPress={hideFilterModal}>
-                            <CloseIc />
-                        </CloseButtonTouch>
-                        <HeaderText>
-                            {I18n.t("$AnasayfaFiltre")}
-                        </HeaderText>
-                    </HeaderView>
+
+
 
 
                     {/* <Touchable onPress={showCategoriesModal}>
@@ -171,6 +184,17 @@ const ProductListFilterModal = ({
                     </Touchable> */}
                     <Touchable
                         onPress={showSortModal}
+                        style={{
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 1,
+                            },
+                            shadowOpacity: 0.18,
+                            shadowRadius: 1.00,
+
+                            elevation: 1,
+                        }}
                     >
                         <TouchableTitle>
                             {I18n.t("$UrunlerSırala")}
@@ -180,7 +204,18 @@ const ProductListFilterModal = ({
                         </TouchableText>
                     </Touchable>
 
-                    <Touchable onPress={showBrandsModal}>
+                    <Touchable onPress={showBrandsModal}
+                        style={{
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 1,
+                            },
+                            shadowOpacity: 0.18,
+                            shadowRadius: 1.00,
+
+                            elevation: 1,
+                        }}>
                         <TouchableTitle>
                             {I18n.t("$DetayliAramaMarkalar")}
                         </TouchableTitle>
@@ -192,7 +227,18 @@ const ProductListFilterModal = ({
                     </Touchable>
 
 
-                    <Viewable>
+                    <Viewable
+                        style={{
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 1,
+                            },
+                            shadowOpacity: 0.18,
+                            shadowRadius: 1.00,
+
+                            elevation: 1,
+                        }}>
 
                         <TouchableTitle>
                             {I18n.t("$UrunlerFiyatAraligi")}

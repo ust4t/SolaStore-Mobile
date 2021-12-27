@@ -15,8 +15,8 @@ export const color = {
     succes:"#2bba0e",
 
 
-    darkGreen:"#4775ff",
-    lightGreen:"#9bb0f2"
+    darkGreen:"#abc4ff",
+    lightGreen:"#e2eafc"
 
 
 

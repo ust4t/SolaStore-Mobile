@@ -5,6 +5,7 @@ import { imageUrl, maxImageUrl } from '../../../../../util/constants';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import { PlayIcon } from '../../../../../util/icons';
+import FastImage from 'react-native-fast-image';
 const DeviceWidth = Dimensions.get('window').width;
 const Wrapper = styled(View)`
     width:100%;
@@ -35,7 +36,7 @@ const VideoPlayerIcon = styled(Icon).attrs(props => (
 
 `
 
-const SliderImage = styled(Image)`
+const SliderImage = styled(FastImage)`
 width:${props => DeviceWidth}px;
     height:400px;
     backgroundColor:${props => props.theme.color.lightGray};
@@ -79,7 +80,7 @@ const ProductDetailSlider = ({
         if (scrollViewRef.current !== null) {
 
             scrollViewRef.current.scrollTo({
-                x: deviceWidth * (index ),
+                x: deviceWidth * (index),
                 animated: true,
             });
         }
@@ -107,7 +108,7 @@ const ProductDetailSlider = ({
                     videoName != null && images[0] &&
                     <VideoTocuhable onPress={goToVideoPlayer}>
                         <VideoPlayerIcon />
-                        <SliderImage source={{ uri: maxImageUrl + images[0].guidName }} resizeMode="contain" />
+                        <SliderImage source={{ uri: maxImageUrl + images[0].guidName}} resizeMode="contain" />
                     </VideoTocuhable>
 
                 }
@@ -117,24 +118,24 @@ const ProductDetailSlider = ({
                     images.map((item, index) => {
                         return (
                             <Tn key={index}
-                             onPress={() => toNextPage(index)}
+                                onPress={() => toNextPage(index)}
                             >
                                 {/* <Thumbnail tnColor={activePage} index={index}>
 
                                 </Thumbnail> */}
                                 <TnImage
-                                    tnColor={activePage} index={index} source={{ uri: imageUrl + item.guidName }} resizeMode="stretch" />
+                                    tnColor={activePage} index={index} source={{ uri: imageUrl + item.guidName }} resizeMode="contain" />
                             </Tn>
                         )
                     })
                 }
                 {
                     videoName != null && images[0] &&
-                    <Tn 
-                    onPress={() => toNextPage(images.length)}>
+                    <Tn
+                        onPress={() => toNextPage(images.length)}>
                         {/* <Thumbnail tnColor={activePage} index={images.length}> */}
                         <TnImage
-                            tnColor={activePage} index={images.length} source={{ uri: maxImageUrl + images[0].guidName }} resizeMode="stretch" />
+                            tnColor={activePage} index={images.length} source={{ uri: maxImageUrl + images[0].guidName}} resizeMode="contain" />
 
                         {/* </Thumbnail> */}
                     </Tn>

@@ -1,6 +1,6 @@
 import I18n from 'i18n-js';
 import React from 'react';
-import { Modal, Text, View,TouchableOpacity } from 'react-native';
+import { Modal, Text, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 import PrimaryButton from './primary-button.component';
@@ -65,12 +65,18 @@ const SuccessModal = ({
             <ModalWrapper>
                 <ModalContentWrapper>
 
-                    <LottieAnim
-                        source={require("../../../assets/medias/basketLottie.json")}
-                        //source={require(lottiePath)}
-                        autoPlay={true}
-                        loop={true}
-                    />
+                    {
+                        successModalVisibilty &&
+                        <LottieAnim
+                            source={require("../../../assets/medias/basketLottie.json")}
+                            autoPlay={true}
+                            loop={true}
+                            speed={1.7}
+                           
+
+                        />
+                    }
+
                     <SuccessMessageText>
                         {successMessage}
                     </SuccessMessageText>

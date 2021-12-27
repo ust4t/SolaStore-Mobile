@@ -35,11 +35,11 @@ class NewPasswordScreen extends BaseScreen {
     handleSubmit = async (values) => {
         let rsp = await this.doRequestAsync(() => userService.updatePassword(values.passwordNew, values.email, values.password))
         if (rsp) {
-    
+
             if (rsp === "notFound") {
-                this.showErrorModal(I18n.t("missingInfo"))
+                this.showErrorModal(I18n.t("$UyarilarEpostaVeyaSifreHatali"))
             } else {
-                showToast(I18n.t("passwordChanged"));
+                showToast(I18n.t("$HesabimSifreDegistirildi"));
                 await this.handleLoginFormAsync({
                     mail: values.email,
                     values: values.passwordNew
@@ -53,7 +53,7 @@ class NewPasswordScreen extends BaseScreen {
         let dtoResponse = await this.doRequestAsync(() => userService.isMember(values.mail, values.password))
         if (dtoResponse) {
             if (dtoResponse == "notFound") {
-                this.showErrorModal(I18n.t("infoControl"));
+                this.showErrorModal(I18n.t("$UyarilarEpostaVeyaSifreHatali"));
             } else this.props.UserStore.login(dtoResponse)
         }
     }
@@ -61,7 +61,7 @@ class NewPasswordScreen extends BaseScreen {
     render() {
         return (
             <SafeArea>
-                <ScreenHeader goBack={this.goBack} title={I18n.t("psChange")} />
+                <ScreenHeader goBack={this.goBack} title={I18n.t("$HesabimSifreDegisikligi")} />
                 <ScrollablePage>
                     <Formik
                         onSubmit={this.handleSubmit}
@@ -72,9 +72,9 @@ class NewPasswordScreen extends BaseScreen {
                         }}
                         validationSchema={
                             Yup.object().shape({
-                                email: Yup.string().required(I18n.t("required")),
-                                password: Yup.string().required(I18n.t("required")),
-                                passwordNew: Yup.string().required(I18n.t("required")),
+                                email: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                password: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
+                                passwordNew: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
                             })
                         }
 
@@ -84,7 +84,7 @@ class NewPasswordScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("email")}
+                                        placeholder={I18n.t("$HesabimEpostaAdresi")}
                                         value={values.email}
                                         onChangeText={handleChange("email")}
                                         onBlur={() => { setFieldTouched("email") }} />
@@ -95,7 +95,7 @@ class NewPasswordScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("password")}
+                                        placeholder={I18n.t("$HesabimSifre")}
                                         value={values.password}
                                         onChangeText={handleChange("password")}
                                         onBlur={() => { setFieldTouched("password") }}
@@ -109,7 +109,7 @@ class NewPasswordScreen extends BaseScreen {
 
                                 <InputWrapper>
                                     <Input
-                                        placeholder={I18n.t("newPassword")}
+                                        placeholder={I18n.t("$HesabimYeniSifre")}
                                         value={values.passwordNew}
                                         onChangeText={handleChange("passwordNew")}
                                         onBlur={() => { setFieldTouched("passwordNew") }}
@@ -125,7 +125,7 @@ class NewPasswordScreen extends BaseScreen {
 
 
 
-                                <PrimaryButton text={I18n.t("update")} action={handleSubmit} />
+                                <PrimaryButton text={I18n.t("$Hesabim.Guncelle")} action={handleSubmit} />
                             </Form>
                         )}
                     </Formik>

@@ -12,6 +12,8 @@ import basketService from '../../../../services/remote/basket.service';
 import { showToast } from '../../../../util/toast-message';
 import Tabbar from '../../../components/tabbar.component';
 import I18n from 'i18n-js';
+import EmptyBasket from '../components/empty-basket.component';
+import favoriteService from '../../../../services/remote/favorite.service';
 const BasketItemsFlatList = styled(FlatList).attrs({
     contentContainerStyle: {
         paddingBottom: 200,
@@ -32,7 +34,8 @@ class BasketScreen extends BaseScreen {
 
 
             permissionModalVisible: false,
-            totalPrice: ""
+            totalPrice: "",
+            favorites: []
 
 
         };
@@ -65,6 +68,7 @@ class BasketScreen extends BaseScreen {
     componentWillUnmount() { this.props.navigation.removeListener(this.unsubscribe) }
 
     getBasket = async () => {
+        this.props.BusyStore.increase()
         let data = await this.doRequestAsync(basketService.getBasketItems)
         if (data) {
             let total = 0;
@@ -74,15 +78,40 @@ class BasketScreen extends BaseScreen {
             this.setState({
                 products: data,
                 totalPrice: total
+            }, async () => {
+                if (total == "0") {
+                    await this.getFavorites()
+                }
+            })
+        }
+        this.props.BusyStore.decrease()
+    }
+    getFavorites = async () => {
+        let resp = await this.doRequestAsync(favoriteService.GetUserFavoritesList);
+        if (resp) {
+   
+            this.setState({
+                favorites: resp
             })
         }
     }
+    addToBasket = async (productId) => {
+        this.props.BusyStore.increase()
+        let rsp = await this.doRequestAsync(() => basketService.addToBasket(productId, 1))
+        if (rsp) {
+            await this.getBasket()
+        }
+        this.props.BusyStore.decrease()
+    }
+
     deleteItemAsync = async () => {
+        this.props.BusyStore.increase()
         let data = await this.doRequestAsync(() => basketService.removeFromBasket(this.itemToBeDeleted))
         if (data) {
             this.hidePermissionModal()
-            this.getBasket()
+            await this.getBasket()
         }
+        this.props.BusyStore.decrease()
     }
     increase = async (productID) => {
         this.props.BusyStore.increase()
@@ -106,20 +135,31 @@ class BasketScreen extends BaseScreen {
             <SafeArea>
                 <ScreenHeader title={I18n.t("$AnaSayfaSepet")} goBack={this.goBack} />
 
-                <BasketItemsFlatList
-                    data={this.state.products}
-                    ListHeaderComponent={
-                        <BasketFooter totalPrice={this.state.totalPrice} action={this.goToCheckout}
-                            position="relative" />
-                    }
-                    renderItem={({ item, index }) => <BasketItem
-                        item={item}
-                        index={index}
-                        showPermissionModal={this.showPermissionModal}
-                        increase={this.increase}
-                        decrease={this.decrease}
-                        goToProductDetail={this.goToProductDetail} />}
-                />
+
+                {
+                    this.state.totalPrice == "0" ?
+                        <EmptyBasket favoritesList={this.state.favorites} goBack={this.goBack} addToBasket={this.addToBasket} />
+                        :
+                        this.state.totalPrice != "" &&
+                        <>
+                            <BasketItemsFlatList
+                                data={this.state.products}
+                                ListHeaderComponent={
+                                    <BasketFooter totalPrice={this.state.totalPrice} action={this.goToCheckout}
+                                        position="relative" />
+                                }
+                                renderItem={({ item, index }) => <BasketItem
+                                    item={item}
+                                    index={index}
+                                    showPermissionModal={this.showPermissionModal}
+                                    increase={this.increase}
+                                    decrease={this.decrease}
+                                    goToProductDetail={this.goToProductDetail} />}
+                            />
+                        </>
+                }
+
+
 
 
 

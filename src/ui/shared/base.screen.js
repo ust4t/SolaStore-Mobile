@@ -38,7 +38,7 @@ class BaseScreen extends PureComponent {
              }
             else throw new Error(response.errorMessage)
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             if (this._isMounted) this.showErrorModal(error.message ? error.message : I18n.t("$UyarilarBirHataOlustu"));
 
         } finally {

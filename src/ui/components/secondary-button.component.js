@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const Touchable = styled(TouchableOpacity)`
     backgroundColor:${props => props.theme.color.white};
     borderRadius:${props => props.theme.radius[4]};
-    padding:${props=>props.theme.space[2]};
+    padding:${props=>props.theme.space[props.paddingCount]};
     justifyContent:center;
     alignItems:center;
     borderWidth:1px;
@@ -18,9 +18,9 @@ const TouchableText = styled(Text)`
     fontWeight:bold;
 `
 const SecondaryButton = ({
-    text="Tamam",action
+    text="Tamam",action,paddingCount=2
 }) => (
-    <Touchable onPress={action}>
+    <Touchable onPress={action} paddingCount={paddingCount}>
         <TouchableText>
             {text}
         </TouchableText>

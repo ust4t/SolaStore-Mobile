@@ -11,9 +11,9 @@ class FavoriteService extends BaseService {
         this.controllerName = "User";
     }
 
-    GetUserFavoritesList = async () => {
+    GetUserFavoritesList = async (userId) => {
         let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/GetUserFavoritesList`, null, [
-            { name: "UserID", val: this.handleUserId() }
+            { name: "UserID", val: userId ? userId : this.handleUserId() }
         ]);
         return this.handleResponse(rsp)
     }
@@ -27,7 +27,7 @@ class FavoriteService extends BaseService {
     }
 
     DeleteFavoriteProduct = async (productId) => {
-        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/DeleteFavoriteProduct`,null, [
+        let rsp = await remoteDataAccessObject.GetRequest(`${this.controllerName}/DeleteFavoriteProduct`, null, [
             { name: "UserID", val: this.handleUserId() },
             { name: "ProductID", val: productId }
         ]);

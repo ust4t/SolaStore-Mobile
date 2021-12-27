@@ -25,7 +25,17 @@ const OrderDetailItem = ({
     const { orderID, quantity, price, productName } = item
 
     return (
-        <SupWrapper key={index}>
+        <SupWrapper key={index} style={{
+            shadowColor: "#000",
+            shadowOffset: {
+                width: 0,
+                height: 1,
+            },
+            shadowOpacity: 0.18,
+            shadowRadius: 1.00,
+
+            elevation: 1,
+        }}>
             <SubWrapper>
                 <ValText>
                     <DescText>{I18n.t("$SiparisSiparisNo")}: </DescText>

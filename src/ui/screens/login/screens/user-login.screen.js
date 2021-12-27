@@ -12,6 +12,7 @@ import { eyeIcon, eyeOffIcon } from '../../../../util/icons';
 import BaseScreen from '../../../shared/base.screen';
 import userService from '../../../../services/remote/user.service';
 import I18n from 'i18n-js';
+import favoriteService from '../../../../services/remote/favorite.service';
 const Header = styled(View)`
     backgroundColor:${props => props.theme.color.secondary};
     borderBottomEndRadius:${props => props.theme.radius[3]};
@@ -96,11 +97,25 @@ class UserLogin extends BaseScreen {
     changePasswordVisibility = () => { this.setState({ passwordIsVisible: !this.state.passwordIsVisible }) }
 
     handleLoginFormAsync = async (values) => {
+        this.props.BusyStore.increase()
         let dtoResponse = await this.doRequestAsync(() => userService.isMember(values.mail, values.password))
         if (dtoResponse) {
             if (dtoResponse == "notFound") {
                 this.showErrorModal(I18n.t("$HesabimKullaniciBulunamadi"));
-            } else this.props.UserStore.login(dtoResponse)
+            } else {
+                await this.getAndSetFavorites(dtoResponse.userID)
+                this.props.BusyStore.decrease()
+                this.props.UserStore.login(dtoResponse)
+            }
+        }
+
+    }
+
+
+    getAndSetFavorites = async (userId) => {
+        let dtoResponse = await this.doRequestAsync(() => favoriteService.GetUserFavoritesList(userId))
+        if (dtoResponse) {
+            this.props.UserStore.setFavorites(dtoResponse)
         }
     }
 
@@ -126,8 +141,10 @@ class UserLogin extends BaseScreen {
                     <Formik
                         onSubmit={this.handleLoginFormAsync}
                         initialValues={{
-                            mail: "muammersalkim@hotmail.com",
-                            password: "123321"
+                            // mail: "muammersalkim@hotmail.com",
+                            // password: "123321",
+                            mail: "",
+                            password: ""
                         }}
                         validationSchema={
                             Yup.object().shape({

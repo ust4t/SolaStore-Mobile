@@ -5,7 +5,12 @@ import styled from 'styled-components';
 import { heartIcon, heartOutlineIcon } from '../../../../../util/icons';
 
 const Touchable = styled(TouchableOpacity)`
-    padding:${props => props.theme.space[2]};
+    
+    position:absolute;
+    top:${props => props.theme.space[props.spaceCount]};
+    right:${props => props.theme.space[props.spaceCount]};
+    zIndex:99;
+    elevation:99;
 `
 const FavoiteIcon = styled(Icon).attrs(props => ({
     name: heartOutlineIcon,
@@ -23,18 +28,22 @@ const AddedIcon = styled(Icon).attrs(props => ({
 
 const FavoriteButton = ({
     action,
-    isFavorite
-}) => (
-    <Touchable onPress={action}>
-        {
-            isFavorite ?
-                <AddedIcon />
-                :
-                <FavoiteIcon />
-        }
-       
-    </Touchable>
+    isFavorite,
+    spaceCount = 2
+}) => {
+    // console.log("favorite btn rerender")
+    return (
+        <Touchable onPress={action} spaceCount={spaceCount}>
+            {
+                isFavorite ?
+                    <AddedIcon />
+                    :
+                    <FavoiteIcon />
+            }
 
-);
+        </Touchable>
 
-export default FavoriteButton;
+    );
+}
+
+export default React.memo(FavoriteButton);

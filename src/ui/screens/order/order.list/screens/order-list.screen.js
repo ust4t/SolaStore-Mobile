@@ -47,7 +47,7 @@ class OrderListScreen extends BaseScreen {
     render() {
         return (
             <SafeArea>
-                <ScreenHeader title={I18n.t("myOrders")} goBack={this.goBack} />
+                <ScreenHeader title={I18n.t("$AnaSayfaSiparişlerim")} goBack={this.goBack} />
 
                 <OrdersFlatList
                     data={this.state.orders}

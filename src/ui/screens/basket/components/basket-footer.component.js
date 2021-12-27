@@ -33,7 +33,7 @@ fontSize:${props => props.theme.text.h2};
 const BasketFooter = ({
     totalPrice,
     action,
-    label = I18n.t("checkOut"),
+    label = I18n.t("$OdemeOdeme"),
     text = I18n.t("$AnaSayfaToplam"),
     position = "absolute"
 }) => (

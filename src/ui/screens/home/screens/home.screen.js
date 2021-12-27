@@ -33,6 +33,7 @@ import advertisingService from '../../../../services/remote/advertising.service'
 import DtoResponse from '../../../../util/dto-response';
 import SpecificCategories from '../components/specific-categories.screen';
 import HomeBrands from '../components/home-brands.component';
+import favoriteService from '../../../../services/remote/favorite.service';
 
 
 const prices = [
@@ -50,7 +51,7 @@ const prices = [
 ]
 const PageScrollable = styled(ScrollView).attrs(({
     contentContainerStyle: {
-        paddingBottom: 200
+        paddingBottom: 100
     }
 }))`
 
@@ -176,10 +177,18 @@ class HomeScreen extends BaseScreen {
             this.getAllCategories()
             this.getBrands()
             this.getAdvertisingSlider()
+            
             // this.getDiscountedProducts()
             // this.getBestSellers()
 
         })
+    }
+
+    getAndSetFavorites = async () => {
+        let dtoResponse = await this.doRequestAsync(favoriteService.GetUserFavoritesList)
+        if (dtoResponse) {
+            this.props.UserStore.setFavorites(dtoResponse)
+        }
     }
 
     loginControl = async () => {
@@ -188,6 +197,7 @@ class HomeScreen extends BaseScreen {
             let resp = await this.doRequestAsync(() => userService.isMember(userInfos.userEmail, userInfos.userPassword))
             if (resp) this.props.UserStore.login(resp)
         }
+        this.getAndSetFavorites()
     }
 
     getSelectedLanguage = async () => {
@@ -287,7 +297,7 @@ class HomeScreen extends BaseScreen {
         })
 
         this.setState({ categories: all }, () => {
-            
+
         })
         this.props.BusyStore.decrease()
     }

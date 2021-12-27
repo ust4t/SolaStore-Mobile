@@ -263,11 +263,17 @@ const CallIcon=Platform.select({
     android:"md-call-outline"
 })
 
+const swapIcon=Platform.select({
+    ios:"ios-swap-vertical",
+    android:"md-swap-vertical"
+})
+
+
 export  {
     cartIcon,starIcon,cancelIcon,addIcon,removeIcon,homeIcon,searchIcon,giftIcon,personIcon,caretIcon,watchIcon,cashIcon,carIcon,
     ordersIcon,caretForward,readerIcon,cardIcon,addressIcon,infoIcon,basketIcon,starSharIcon,trashIcon,locateIcon,businessIcon,
     lockIcon,arrowBack,locationIcon,checkmarkIcon,walletIcon,heartIcon,appsIcon,heartOutlineIcon,forwardChevron,downChevron,logOutIdon
     ,elipsisHorizontalIcon,trashBinOutline,alertIcon,filterIcon,ellipsisVertical,optionsIcon,notificationIcon,
-    eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon,CallIcon
+    eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon,CallIcon,swapIcon
 
 }

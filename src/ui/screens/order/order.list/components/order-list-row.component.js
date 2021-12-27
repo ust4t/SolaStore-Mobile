@@ -24,8 +24,19 @@ const OrderListRow = ({
 }) => {
     const { orderID, totalAmount, addingDate, salesRepresantID, paymentType } = item;
     return (
-        <SupWrapper key={index}>
-            <SubWrapper onPress={() => goToDetail(orderID, totalAmount)}>
+        <SupWrapper key={index}   style={{
+            shadowColor: "#000",
+            shadowOffset: {
+                width: 0,
+                height: 1,
+            },
+            shadowOpacity: 0.18,
+            shadowRadius: 1.00,
+
+            elevation: 1,
+        }}>
+            <SubWrapper onPress={() => goToDetail(orderID, totalAmount)} 
+            >
                 <ValText>
                     <DescText>{I18n.t("$SiparisSiparisNo")}: </DescText>
                     {orderID}

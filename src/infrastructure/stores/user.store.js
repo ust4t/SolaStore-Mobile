@@ -11,7 +11,8 @@ class UserStore {
     userEmail = null
     userPhone = null
     orderId = null
-    languageChanged=false
+    languageChanged = false
+
 
     updateNameAndSurname = (userName, userSurname) => {
         this.userName = userName;
@@ -32,7 +33,7 @@ class UserStore {
         this.userPhone = userData.userPhone
 
     }
-    logout = (clearUserInfoBoolean=true) => {
+    logout = (clearUserInfoBoolean = true) => {
         this.userID = null
         this.userName = null
         this.userSurname = null
@@ -43,8 +44,24 @@ class UserStore {
         }
 
     }
-    changeLanguage=()=>{
-        this.languageChanged=!this.languageChanged
+    changeLanguage = () => {
+        this.languageChanged = !this.languageChanged
+    }
+
+    //////////////
+    /////FAVORİTES OPERATION
+    favorites = []
+    setFavorites = (favorites) => {
+        this.favorites = favorites;
+    }
+    addToFavorites = (item) => {
+        this.favorites.push(item)
+    }
+    deleteFromFavorite = (item) => {
+        this.favorites = this.favorites.filter(i => i != item)
+    }
+    deleteFromFavoriteWithId = (itemId) => {
+        this.favorites = this.favorites.filter(i => i.productID != itemId)
     }
 
 
@@ -54,12 +71,17 @@ class UserStore {
             userName: observable,
             userSurname: observable,
             userEmail: observable,
-            languageChanged:observable,
+            languageChanged: observable,
+            favorites: observable,
             login: action,
             logout: action,
             updateNameAndSurname: action,
             updatePhone: action,
-            changeLanguage:action
+            changeLanguage: action,
+            setFavorites: action,
+            addToFavorites: action,
+            deleteFromFavorite: action,
+            deleteFromFavoriteWithId:action
         })
     }
 }

@@ -21,8 +21,8 @@ alignItems:center;
 `
 const ImageOfItem = styled(Image)`
 
-width:80px;
-height:${props => props.type == 1 ? "120px" : "80px"};
+width:${props => props.type == 1 ? "80px" : "100px"};
+height:${props => props.type == 1 ? "120px" : "72px"};
 
 borderRadius:${props => props.theme.radius[2]};
 `

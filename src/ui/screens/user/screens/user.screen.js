@@ -6,7 +6,10 @@ import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Tabbar from '../../../components/tabbar.component';
 import { inject, observer } from 'mobx-react';
-import I18n from 'i18n-js';
+import I18n, { toHumanSize } from 'i18n-js';
+import DeviceInfo from 'react-native-device-info';
+import BaseScreen from '../../../shared/base.screen';
+import favoriteService from '../../../../services/remote/favorite.service';
 
 const Wrapper = styled(View)`
 flex:1;
@@ -70,15 +73,25 @@ const PersonIcon = styled(Icon).attrs(props => ({
 
 
 `
-@inject("UserStore")
+@inject("UserStore", "BusyStore")
 @observer
-class UserScreen extends Component {
+class UserScreen extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
+            ...this.state
         };
     }
-    logOut = () => { this.props.UserStore.logout() }
+    logout = () => {
+        this.getAndSetFavorites()
+    }
+    getAndSetFavorites = async () => {
+        let dtoResponse = await this.doRequestAsync(() => favoriteService.GetUserFavoritesList(DeviceInfo.getUniqueId()))
+        if (dtoResponse) {
+            this.props.UserStore.setFavorites(dtoResponse)
+        }
+        this.props.UserStore.logout()
+    }
 
     /////////////////////
     ////NAVIGATION
@@ -107,7 +120,7 @@ class UserScreen extends Component {
             { text: I18n.t("$AnaSayfaMagaza"), icon: cartIcon, action: this.goToContact },
             { text: I18n.t("$AnaSayfaMusteriHizmetleri"), icon: CallIcon, action: this.callNumber },
             { text: I18n.t("$AnaSayfaWhatsapp"), icon: whatsappIcon, action: this.messageToWp },
-          
+
 
         ]
         return (
@@ -128,7 +141,7 @@ class UserScreen extends Component {
                                 {this.props.UserStore.userEmail}
                             </UserMailText>
 
-                            <TouchableOpacity onPress={this.logOut}>
+                            <TouchableOpacity onPress={this.logout}>
                                 <ErrorText>
                                     {I18n.t("$HesabimCikisYap")}
                                 </ErrorText>
@@ -163,7 +176,7 @@ class UserScreen extends Component {
 
 
 
-
+                <this.RenderErrorModal />
 
                 <Tabbar navigation={this.props.navigation} navigatorName={"userNavigator"} />
             </SafeArea>

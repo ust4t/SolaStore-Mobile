@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { View, Text, InteractionManager } from 'react-native';
+import { View, Text, InteractionManager, BackHandler } from 'react-native';
 import { SafeArea } from '../../../../components/shared-styled.components';
 import { inject, observer } from 'mobx-react';
 import { WebView } from 'react-native-webview';
@@ -8,6 +8,7 @@ import ScreenHeader from '../../../../components/screen-header.component';
 import I18n from 'i18n-js';
 import BaseScreen from '../../../../shared/base.screen';
 import orderService from '../../../../../services/remote/order.service';
+import PermissionModal from '../../../../components/modals/permission-modal.component';
 
 
 @inject("UserStore", "BusyStore")
@@ -16,32 +17,47 @@ class PaymentCC extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
+            ...this.state,
             content: null,
-            case: 0
+            case: 0,
+            permissionModalVisible: false
         };
         this.webRef = createRef()
         this.hash = "";
-        this.okUrl = "https://www.solastore.com.tr/Home"
-        this.failUrl = "https://www.solastore.com.tr/Home/CCError",
-            this.rnd = "asdas",
-            this.islemtipi = "Auth"
-        this.oid = "1"
-        this.taksit = "1"
-        this.amount = this.props.route.params.total.toString()
+        this.okUrl = "https://www.solastore.com.tr/Home";
+        this.failUrl = "https://www.solastore.com.tr/Home/CCError";
+        this.rnd = new Date().toJSON();
+        this.islemtipi = "Auth";
+        this.oid = this.props.route.params.orderId;
+        this.taksit = "";
+        this.amount = this.props.route.params.total.toString();
 
     }
 
+    //////////////////////
+    //////MODAL
+    showPermissionModal = () => { this.setState({ permissionModalVisible: true }) }
+    hidePermissionModal = () => { this.setState({ permissionModalVisible: false }) }
+    onAccepted = () => { this.jumpToOrderDetail() }
+
+
+
+    //////////////////////
+    //////NAVIGATION
+    jumpToOrderDetail = () => { this.props.navigation.jumpTo("orderDetailNavigator") }
+
     handleUrlChange = async (params) => {
         const { url } = params;
-        console.log(url)
+ 
         if (!url) return false;
-        if (url.includes('/success')) {
-            alert("ödeme tamamlandı")
+        if (url == this.okUrl) {
+            this.jumpToOrderDetail()
+        
             return false
         }
-        if (url.includes('/fail')) {
-            alert("ödeme alınamadı")
-
+        if (url == this.failUrl) {
+            this.setState({ case: 1 })
+            this.showErrorModal(I18n.t("$SiparisHataliKrediKartiBilgileri"))
             return false
         }
         else {
@@ -50,13 +66,23 @@ class PaymentCC extends BaseScreen {
     }
 
     componentDidMount() {
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => {
+                this.showPermissionModal()
+                return true;
+            }
+        )
         InteractionManager.runAfterInteractions(async () => {
             this.getHash()
+
         })
+    }
+    componentWillUnmount() {
+        this.backHandler.remove();
     }
 
     getHash = async () => {
-
         let dtoResponse = await this.doRequestAsync(() => orderService.generateHash(
             this.oid,
             this.amount,
@@ -65,11 +91,8 @@ class PaymentCC extends BaseScreen {
             this.islemtipi,
             this.taksit,
             this.rnd
-
         ))
         if (dtoResponse) {
-
-            console.log(dtoResponse)
             this.hash = dtoResponse.hash;
             this.setState({
                 case: 1
@@ -78,6 +101,7 @@ class PaymentCC extends BaseScreen {
     }
 
     handleSubmit = (values) => {
+      
         this.postTo3dGate(
             {
                 pan: values.no.replaceAll("-", ""),
@@ -88,24 +112,6 @@ class PaymentCC extends BaseScreen {
     }
     postTo3dGate = async (values) => {
         this.props.BusyStore.increase()
-        // var details = {
-        //     'clientId': '190200000',
-        //     'storetype': '3d_pay',
-        //     'hash': 'XYKqt6E5gM7j3ZaI5YBxtM3mWYI=',
-        //     'islemtipi': 'Auth',
-        //     'amount': '10',
-        //     'currency': '949',
-        //     'oid': '1',
-        //     'okUrl': 'https://www.teststore.com/success.php',
-        //     'failUrl': 'https://www.teststore.com/fail.php',
-        //     'lang': 'tr',
-        //     'rnd': 'asdf',
-        //     // 'pan': '5401341234567891',
-        //     // 'Ecom_Payment_Card_ExpDate_Year': '26',
-        //     // 'Ecom_Payment_Card_ExpDate_Month': '12',
-        //     ...values
-
-        // };
         var details = {
             'clientId': '190200000',
             'storetype': '3d_pay',
@@ -124,7 +130,7 @@ class PaymentCC extends BaseScreen {
             ...values
 
         };
-        console.log(details)
+       
         var formBody = [];
         for (var property in details) {
             var encodedKey = encodeURIComponent(property);
@@ -140,9 +146,7 @@ class PaymentCC extends BaseScreen {
             },
             body: formBody
         })
-        console.log(rsp)
         rsp = await rsp.text()
-        console.log(rsp)
         this.setState({
             content: rsp,
             case: 2
@@ -152,7 +156,7 @@ class PaymentCC extends BaseScreen {
 
     ///////////////////////
     ///////NAVIGATION
-    goBack = () => { this.props.navigation.goBack() }
+    goBack = () => { this.showPermissionModal() }
 
     render() {
 
@@ -172,9 +176,22 @@ class PaymentCC extends BaseScreen {
                         scalesPageToFit={false}
                         onNavigationStateChange={this.handleUrlChange}
                         javaScriptEnabled={true}
+
                         source={{ html: this.state.content }}
                     />
                 }
+
+
+                <PermissionModal
+                    permissionModalVisible={this.state.permissionModalVisible}
+                    hidePermissionModal={this.hidePermissionModal}
+                    acceptMessage={I18n.t("$DetayliAramaTamam")}
+                    onAccepted={this.onAccepted}
+                    warningMessage={I18n.t("$SiparisOdemeYapilmadi")}
+                />
+
+
+                <this.RenderErrorModal />
 
 
 

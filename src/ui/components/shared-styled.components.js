@@ -19,7 +19,8 @@ const InputWrapper=styled(View)`
     flexDirection:row;
     alignItems:center;
     justifyContent:center;
-    padding:${props=>props.theme.space[2]};
+    paddingLeft:${props=>props.theme.space[2]};
+    paddingRight:${props=>props.theme.space[2]};
     
 `
 const Input=styled(TextInput)`
@@ -34,10 +35,15 @@ const SeperatorFromRightOrLeft=styled(View)`
 `
 const ErrorText=styled(Text)`
     color:${props=>props.theme.color.error};
+    textAlign:center;
 `
     
 
-
+const Line = styled(View)`
+    width:100%;
+    borderWidth:1;
+    borderColor:${props => props.theme.color.lightGray};
+`
 export {
     SafeArea,
     ScrollablePage,
@@ -45,5 +51,6 @@ export {
     Input,
     SeperatorFromTopOrBottom,
     ErrorText,
-    SeperatorFromRightOrLeft
+    SeperatorFromRightOrLeft,
+    Line
 }

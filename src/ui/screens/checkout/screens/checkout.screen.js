@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, InteractionManager } from 'react-native';
+import { View, Text, FlatList, InteractionManager, Dimensions } from 'react-native';
 import BaseScreen from '../../../shared/base.screen';
 import { inject, observer } from 'mobx-react';
 import { SafeArea, ScrollablePage } from '../../../components/shared-styled.components';
@@ -13,6 +13,13 @@ import Footer from '../../basket/components/basket-footer.component';
 import { showToast } from '../../../../util/toast-message';
 import I18n from 'i18n-js';
 import { TabActions } from '@react-navigation/routers';
+import { space } from '../../../../infrastructure/theme/space';
+
+const specifiedWidth = ((Dimensions.get("window").width) - (space[1].substr(0, 1) * 8) - (space[2].substr(0, 2) * 2))/4
+console.log(Dimensions.get("window").width)
+console.log(specifiedWidth)
+
+
 
 const CheckoutItemsFlatList = styled(FlatList).attrs({
     showsHorizontalScrollIndicator: false,
@@ -46,7 +53,7 @@ class CheckoutScreen extends BaseScreen {
 
 
             name: this.props.UserStore.userName != null ? this.props.UserStore.userName + " " + this.props.UserStore.userSurname : "",
-            phone: this.props.UserStore.userPhone,
+            phone: this.props.UserStore.userPhone != null ? this.props.UserStore.userPhone : ""
 
 
 
@@ -73,9 +80,12 @@ class CheckoutScreen extends BaseScreen {
     goBack = () => { this.props.navigation.goBack() }
     jumpHome = () => { this.props.navigation.jumpTo("homeNavigator") }
     goToUserTab = () => { this.props.navigation.jumpTo("userNavigator") }
-    goToPaymentCC = () => { this.props.navigation.navigate("PaymentCC",{
-        total:this.state.totalPrice
-    }) }
+    goToPaymentCC = (orderId) => {
+        this.props.navigation.navigate("PaymentCC", {
+            total: this.state.totalPrice,
+            orderId
+        })
+    }
     goToPayment = async () => {
 
 
@@ -86,22 +96,25 @@ class CheckoutScreen extends BaseScreen {
             this.showErrorModal(I18n.t("$UyarilarLutfenTemsilciSeciniz"))
             return;
         }
-        if (this.state.selectedPaymentMethodValue == "Order") {
-            let dtoResponse = await this.doRequestAsync(() => orderService.createOrder(
-                this.state.name,
-                this.state.phone,
-                this.state.selectedRepId,
-                this.state.selectedPaymentMethodValue
-            ))
-         
-            if (dtoResponse) {
-                this.props.UserStore.orderId=dtoResponse;
+
+        let dtoResponse = await this.doRequestAsync(() => orderService.createOrder(
+            this.state.name,
+            this.state.phone,
+            this.state.selectedRepId,
+            this.state.selectedPaymentMethodValue
+        ))
+
+        if (dtoResponse) {
+            this.props.UserStore.orderId = dtoResponse;
+            if (this.state.selectedPaymentMethodValue == "Order") {
                 this.props.navigation.jumpTo("orderDetailNavigator")
             }
+            if (this.state.selectedPaymentMethodValue == "CC") {
+                this.goToPaymentCC(dtoResponse)
+            }
+
         }
-        if (this.state.selectedPaymentMethodValue == "CC") {
-            this.goToPaymentCC()
-        }
+
     }
 
     componentDidMount() {
@@ -146,6 +159,7 @@ class CheckoutScreen extends BaseScreen {
 
                 <CheckoutItemsFlatList
                     ListHeaderComponent={<PaymentMethod
+                        specifiedWidth={specifiedWidth}
                         salesReps={this.state.reps}
                         showSelectListModal={this.showSelectListModal}
                         selectedPaymentMethodName={this.state.selectedPaymentMethodName}

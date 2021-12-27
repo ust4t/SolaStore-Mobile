@@ -7,8 +7,9 @@ const SupWrapper = styled(TouchableOpacity)`
     padding:${props => props.theme.space[1]};
 `
 const RepImage = styled(Image)`
-    width:80px;
-    height:80px;
+    width:${props=>props.specifiedWidth};
+    height:${props=>props.specifiedWidth};
+
     backgroundColor:${props => props.theme.color.lightGray};
     borderWidth:${props => props.selectedRepId == props.id ? "2px" : "0px"};
     borderColor:${props => props.theme.color.primary};
@@ -19,12 +20,12 @@ const RepName = styled(Text)`
 
 
 const SalesRepsListRow = ({
-    item, index, selectedRepId, onRepSelected
+    item, index, selectedRepId, onRepSelected,specifiedWidth
 }) => {
     const { name, surname, pictureGuidName, id } = item;
     return (
         <SupWrapper key={index} onPress={() => onRepSelected(id)}>
-            <RepImage source={{ uri: `${repUrl}${pictureGuidName}` }} selectedRepId={selectedRepId} id={id} />
+            <RepImage  source={{ uri: `${repUrl}${pictureGuidName}` }} selectedRepId={selectedRepId} id={id} specifiedWidth={specifiedWidth} />
             <RepName>
                 {name}
             </RepName>

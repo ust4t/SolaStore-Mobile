@@ -61,7 +61,7 @@ class RemoteDataAccessObject {
 
 
 
-        console.log(url)
+        // console.log(url)
         return this.timeout(20000, fetch(url, {
             method: "GET",
             headers: {

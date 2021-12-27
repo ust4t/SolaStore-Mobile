@@ -41,12 +41,12 @@ class ProfileScreen extends BaseScreen {
             ))
 
             if (resp == "notFound") {
-                this.showErrorModal(I18n.t("missingInfo"))
+                this.showErrorModal(I18n.t("$UyarilarEpostaVeyaSifreHatali"))
                 // this.goBack()
                 this.props.BusyStore.decrease()
                 return;
             } else {
-                showToast(I18n.t("infoUpdated"));
+                showToast(I18n.t("$HesabimBilgilerGuncellendi"));
                 this.props.UserStore.updateNameAndSurname(values.name, values.surname)
 
             }
@@ -59,7 +59,7 @@ class ProfileScreen extends BaseScreen {
             ))
             if (rsp === "notFound") {
             } else {
-                showToast(I18n.t("infoUpdated"));
+                showToast(I18n.t("$HesabimBilgilerGuncellendi"));
                 this.props.UserStore.updatePhone(values.phone)
 
             }

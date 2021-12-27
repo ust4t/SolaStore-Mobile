@@ -19,6 +19,8 @@ import ImageSliderModal from '../components/image-slider.modal';
 import { arrowBack } from '../../../../../util/icons';
 import Icon from 'react-native-vector-icons/Ionicons'
 import SuccessModal from '../../../../components/success-modal';
+import SecondaryButton from '../../../../components/secondary-button.component';
+
 const FavoriteButtonWrapper = styled(View)`
     position:absolute;
     top:10px;
@@ -29,6 +31,7 @@ const FavoriteButtonWrapper = styled(View)`
     padding:${props => props.theme.space[1]};
     backgroundColor:${props => props.theme.color.transparentWhite};
     borderRadius:${props => props.theme.radius[2]};
+
 `
 const BackButtonWrapper = styled(TouchableOpacity)`
 position:absolute;
@@ -57,7 +60,13 @@ const ButtonWrapper = styled(View)`
     bottom:0;
     padding:${props => props.theme.space[2]};
     backgroundColor:${props => props.theme.color.white};
+    flexDirection:row;
+    alignItems:center;
 `
+
+
+
+
 @inject("BusyStore", "UserStore")
 @observer
 class ProductDetail extends BaseScreen {
@@ -83,7 +92,7 @@ class ProductDetail extends BaseScreen {
             count: 1,
 
 
-            isFavorite: false,
+            isFavorite: this.props.UserStore.favorites.find(a => a.productID == this.props.route.params.productId) ? true : false,
 
 
             videoName: null,
@@ -96,6 +105,9 @@ class ProductDetail extends BaseScreen {
         };
 
         this.selectedProductVariationId = this.props.route.params.productId
+        this.detailItem = null
+    
+
 
     }
 
@@ -134,9 +146,9 @@ class ProductDetail extends BaseScreen {
             description: item.productSelectedDetail ? item.productSelectedDetail : "",
             images: item.pictures,
             sizes: item.sizes,
-            videoName: item.video_1
+            videoName: item.video_1,
         })
-        this.selectedProductVariationId = item.productID
+        // this.selectedProductVariationId = item.productID
     }
 
     ///////////////////
@@ -147,6 +159,8 @@ class ProductDetail extends BaseScreen {
             let data = await this.doRequestAsync(() => productService.GetProductById(this.props.route.params.productId))
             if (data && data.length > 0) {
                 data = data[0];
+                //////////////Favoriye ekleme için gerekli
+                this.item = data;
                 this.setState({
                     name: data.productShortName,
                     price: data.price,
@@ -175,10 +189,20 @@ class ProductDetail extends BaseScreen {
         }
     }
     addToFavorites = async () => {
-        let resp = await this.doRequestAsync(() => favoriteService.AddFavoriteProduct(this.props.route.params.productId))
-        if (resp.status == 200) {
-            this.setState({ isFavorite: true })
+        if (this.state.isFavorite) {
+            let resp = await this.doRequestAsync(() => favoriteService.DeleteFavoriteProduct(this.props.route.params.productId))
+            if (resp.status == 200) {
+                this.setState({ isFavorite: !this.state.isFavorite })
+                this.props.UserStore.deleteFromFavoriteWithId(this.props.route.params.productId)
+            }
+        } else {
+            let resp = await this.doRequestAsync(() => favoriteService.AddFavoriteProduct(this.props.route.params.productId))
+            if (resp.status == 200) {
+                this.setState({ isFavorite: !this.state.isFavorite })
+                this.props.UserStore.addToFavorites(this.item)
+            }
         }
+
     }
     addToBasket = async () => {
         let rsp = await this.doRequestAsync(() => basketService.addToBasket(this.selectedProductVariationId, this.state.count))
@@ -222,7 +246,10 @@ class ProductDetail extends BaseScreen {
 
 
                 <ButtonWrapper>
-                    <PrimaryButton text={I18n.t("$AnaSayfasepeteekle")} action={this.addToBasket} />
+                    <PrimaryButton text={I18n.t("$AnaSayfasepeteekle")} action={this.addToBasket} paddingCount={2} />
+                    <SeperatorFromRightOrLeft />
+                    <SecondaryButton text={I18n.t("$AnaSayfaSepetGoster")} action={this.goToBasketTab} paddingCount={2} />
+
                 </ButtonWrapper>
 
                 <BackButtonWrapper onPress={this.goBack}>
@@ -230,26 +257,24 @@ class ProductDetail extends BaseScreen {
                 </BackButtonWrapper>
 
 
-                <FavoriteButtonWrapper>
-                    <CartButton action={this.goToBasketTab} />
-                    <FavoriteButton action={this.addToFavorites} isFavorite={this.state.isFavorite} />
+                <FavoriteButton action={this.addToFavorites} isFavorite={this.state.isFavorite} spaceCount={3}/>
 
-                </FavoriteButtonWrapper>
-
-
-
+                {
+                    this.state.successModalVisible &&
+                    <SuccessModal
+                        successModalVisibilty={this.state.successModalVisible}
+                        hideSuccessModal={this.hideSuccessModal}
+                    // lottieName = "basketLottie",
+                    // buttonText = I18n.t("$DetayliAramaTamam"),
+                    // successMessage= I18n.t("$UrunlerSepeteEklendi")
+                    />
+                }
                 <ImageSliderModal
                     sliderModalVisible={this.state.sliderModalVisible}
                     hideSliderModal={this.hideSliderModal}
                     images={this.state.images}
                 />
-                <SuccessModal
-                    successModalVisibilty={this.state.successModalVisible}
-                    hideSuccessModal={this.hideSuccessModal}
-                // lottieName = "basketLottie",
-                // buttonText = I18n.t("$DetayliAramaTamam"),
-                // successMessage= I18n.t("$UrunlerSepeteEklendi")
-                />
+
                 <this.RenderErrorModal />
             </SafeArea>
         );

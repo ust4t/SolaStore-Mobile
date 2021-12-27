@@ -30,6 +30,7 @@ import NewProductNavigator from './new-products.navigator';
 import OrderDetailNavigator from './order-detail.navigator';
 import { intercept, observe } from 'mobx';
 import I18n from '../../../assets/i18n/_i18n';
+import OnBoardScreen from '../screens/onboarding/screens/on-board.screen';
 enableScreens(true);
 const Tab = createBottomTabNavigator();
 
@@ -42,13 +43,14 @@ class MainNavigator extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            languagesLoading: true
+            languagesLoading: true,
+            firstTime: false
         };
     }
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.getSelectedLanguage()
+            this.getFirstTimeValue()
             // observe(this.props.UserStore.userId,()=>{
 
             // })
@@ -58,30 +60,37 @@ class MainNavigator extends Component {
             //     return change
             // })
             observe(this.props.UserStore, "languageChanged", (e) => {
-                this.getSelectedLanguage()
+                this.getSelectedLanguage(true)
             })
             //this.getAll()
         })
 
     }
 
-    getSelectedLanguage = async () => {
+    getFirstTimeValue = async () => {
+        this.setState({ languagesLoading: true })
+        let firstVal = await userLocalService.getFirstTimeValu()
+        this.getSelectedLanguage(true)
+
+    }
+
+    getSelectedLanguage = async (firstVal) => {
         this.setState({ languagesLoading: true })
         const rsp = await userLocalService.getLanguagePref();
         if (rsp) {
             I18n.locale = rsp;
         }
-        this.getAll()
+        this.getAll(firstVal)
 
     }
 
-    getAll = async (language) => {
+    getAll = async (firstVal) => {
         let rsp = await languageService.GetAll()
 
         if (rsp.resultStatus == resultStatus.success) {
 
             rsp = rsp.data;
-     
+
 
             if (I18n.locale == "tr-TR") {
                 rsp.map((item, index) => {
@@ -111,14 +120,29 @@ class MainNavigator extends Component {
             }
 
         }
+        if (firstVal) {
+            this.setState({ firstTime: false })
+        } else {
+            this.setState({ firstTime: true })
+        }
         this.setState({
             languagesLoading: false
+        })
+    }
+
+    finish = () => {
+        userLocalService.storeFirstTime("true");
+        this.setState({
+            firstTime: false
         })
     }
 
     render() {
         if (this.state.languagesLoading) {
             return <Splash />
+        }
+        if (this.state.firstTime) {
+            return <OnBoardScreen finish={this.finish} />
         }
         return (
 

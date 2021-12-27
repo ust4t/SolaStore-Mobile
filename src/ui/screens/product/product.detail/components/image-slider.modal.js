@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { maxImageUrl } from '../../../../../util/constants';
 import { cancelIcon } from '../../../../../util/icons';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import FastImage from 'react-native-fast-image';
 
 
 const CloseButton = styled(TouchableOpacity)`
@@ -49,7 +50,7 @@ backgroundColor:${props => props.theme.color.lightGray};
 `
 
 
-const SliderImage = styled(Image)`
+const SliderImage = styled(FastImage)`
 width:${props => DeviceWidth}px;
     height:100%;
     backgroundColor:${props => props.theme.color.lightGray};

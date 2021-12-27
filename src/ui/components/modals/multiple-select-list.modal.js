@@ -19,26 +19,30 @@ width:100%;
 height:100%;
     borderTopLeftRadius:${props => props.theme.space[3]};
     borderTopRightRadius:${props => props.theme.space[3]};
-    backgroundColor:${props => props.theme.color.white};
+    backgroundColor:${props => props.theme.color.background};
+  
     justifyContent:center;
     alignItems:center;
-    paddingTop:${props => props.theme.space[2]};
+  
 
 `
 const ItemView = styled(View)`
-    padding:${props=>props.theme.space[1]};
+    paddingBottom:${props => props.theme.space[1]};
+    borderRadius:${props => props.theme.radius[1]};
 
 `
 const ItemTouchable = styled(TouchableOpacity)`
     flexDirection:row;
     flex:1;
 
-    
-    padding:${props=>props.theme.space[1]};
-    borderBottomWidth:0.2px;
+    borderRadius:${props => props.theme.radius[1]};
+    padding:${props => props.theme.space[2]};
+    backgroundColor:${props => props.theme.color.white};
 `
 const ItemText = styled(Text)`
-marginLeft:${props=>props.theme.space[2]};
+marginLeft:${props => props.theme.space[2]};
+fontWeight:bold;
+
 
 `
 const ModalScroll = styled(ScrollView)
@@ -99,16 +103,29 @@ const MultipleSelectListModal = ({
                     <ModalHeader hideModal={hideSelectListModal} />
                     <ModalScroll
                         contentContainerStyle={{
-                            padding: 20
+                             padding: 10
                         }}
                     >
                         {
                             selectItems.map((item, index) => {
                                 return (
-                                    <ItemView key={index}>
-                                        <ItemTouchable onPress={() => onSelected(item)}
-                                            isSelected={selectedItems.includes(item)}
+                                    <ItemView key={index} style={{
 
+                                    }}>
+                                        <ItemTouchable onPress={() => onSelected(item)}
+                                            //inludes yerine bir liste içinde isselected false ya da true sonra indexof ile bakılabilir
+                                            isSelected={selectedItems.includes(item)}
+                                            style={{
+                                                shadowColor: "#000",
+                                                shadowOffset: {
+                                                    width: 0,
+                                                    height: 1,
+                                                },
+                                                shadowOpacity: 0.18,
+                                                shadowRadius: 1.00,
+
+                                                elevation: 1,
+                                            }}
                                         >
                                             <RadioButtonWrapper>
                                                 <RadioButton isSelected={selectedItems.includes(item)}>

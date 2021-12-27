@@ -87,7 +87,7 @@ class RegisterScreen extends BaseScreen {
             values.password
         ))
         if (data) {
-            showToast(I18n.t("createdNewUser"));
+            showToast(I18n.t("$HesabimYeniKullaniciOlusturuldu"));
             this.props.BusyStore.decrease() //logine dönünce modal açık kalıyor
             this.goToLogin()
 

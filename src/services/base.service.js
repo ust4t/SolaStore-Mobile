@@ -1,3 +1,4 @@
+import I18n from "i18n-js";
 import DtoResponse from "../util/dto-response";
 import { resultStatus } from "../util/enums/result-status";
 
@@ -10,7 +11,7 @@ class BaseService {
 
     }
     handleResponse = async (rsp) => {
-  
+
         if (rsp.status == 200) {
 
             try {
@@ -36,7 +37,7 @@ class BaseService {
             return new DtoResponse(resultStatus.notFound, null, "notFound")
         }
 
-        return new DtoResponse(resultStatus.error, null, "Servise erişelemiyor!");
+        return new DtoResponse(resultStatus.error, null, I18n.t("$UyarilarServiseErisilemiyor"));
     }
 
 

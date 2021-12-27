@@ -36,6 +36,23 @@ class UserLocalService {
         }
     }
 
+    getFirstTimeValu = async () => {
+        try {
+            const lang = await AsyncStorage.getItem("firstTime");
+            return lang;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    storeFirstTime = async (firstTime) => {
+        try {
+            await AsyncStorage.setItem("firstTime", firstTime)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
 }
 export default new UserLocalService();
