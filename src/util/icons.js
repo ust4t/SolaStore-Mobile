@@ -269,11 +269,30 @@ const swapIcon=Platform.select({
 })
 
 
+const personAddIcon=Platform.select({
+    ios:"ios-person-add-outline",
+    android:"md-person-add-outline"
+})
+
+
+const backCircleIcon=Platform.select({
+    ios:"ios-arrow-back-circle",
+    android:"md-arrow-back-circle"
+})
+
+const forwardCircleIcon=Platform.select({
+    ios:"ios-arrow-forward-circle",
+    android:"md-arrow-forward-circle"
+})
+
+
+
 export  {
     cartIcon,starIcon,cancelIcon,addIcon,removeIcon,homeIcon,searchIcon,giftIcon,personIcon,caretIcon,watchIcon,cashIcon,carIcon,
     ordersIcon,caretForward,readerIcon,cardIcon,addressIcon,infoIcon,basketIcon,starSharIcon,trashIcon,locateIcon,businessIcon,
     lockIcon,arrowBack,locationIcon,checkmarkIcon,walletIcon,heartIcon,appsIcon,heartOutlineIcon,forwardChevron,downChevron,logOutIdon
     ,elipsisHorizontalIcon,trashBinOutline,alertIcon,filterIcon,ellipsisVertical,optionsIcon,notificationIcon,
-    eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon,CallIcon,swapIcon
+    eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon,CallIcon,swapIcon,personAddIcon,
+    backCircleIcon,forwardCircleIcon
 
 }

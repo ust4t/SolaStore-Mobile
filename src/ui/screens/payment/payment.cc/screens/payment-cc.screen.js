@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { View, Text, InteractionManager, BackHandler } from 'react-native';
+import { View, Text, InteractionManager, BackHandler, ActivityIndicator } from 'react-native';
 import { SafeArea } from '../../../../components/shared-styled.components';
 import { inject, observer } from 'mobx-react';
 import { WebView } from 'react-native-webview';
@@ -9,7 +9,24 @@ import I18n from 'i18n-js';
 import BaseScreen from '../../../../shared/base.screen';
 import orderService from '../../../../../services/remote/order.service';
 import PermissionModal from '../../../../components/modals/permission-modal.component';
+import styled from 'styled-components';
 
+const IndicatorWrapper = styled(View)`
+position:absolute;
+width:100%;
+height:100%;
+alignItems:center;
+justifyContent:center;
+zIndex:-99;
+`
+const MyIndicator = styled(ActivityIndicator).attrs(props => ({
+    size: 30,
+    color: props.theme.color.primary
+}))`
+
+
+
+`
 
 @inject("UserStore", "BusyStore")
 @observer
@@ -20,12 +37,13 @@ class PaymentCC extends BaseScreen {
             ...this.state,
             content: null,
             case: 0,
-            permissionModalVisible: false
+            permissionModalVisible: false,
+            indicatorVisible: false
         };
         this.webRef = createRef()
         this.hash = "";
-        this.okUrl = "https://www.solastore.com.tr/Home";
-        this.failUrl = "https://www.solastore.com.tr/Home/CCError";
+        this.okUrl = "Home/CCSuccess";
+        this.failUrl = "Home/CCFail";
         this.rnd = new Date().toJSON();
         this.islemtipi = "Auth";
         this.oid = this.props.route.params.orderId;
@@ -38,7 +56,11 @@ class PaymentCC extends BaseScreen {
     //////MODAL
     showPermissionModal = () => { this.setState({ permissionModalVisible: true }) }
     hidePermissionModal = () => { this.setState({ permissionModalVisible: false }) }
-    onAccepted = () => { this.jumpToOrderDetail() }
+    onAccepted = () => {
+        this.props.UserStore.orderId = -1 * this.props.UserStore.orderId;
+        this.props.UserStore.orderMessage = I18n.t("$OdemeOdemeYapilmadi")
+        this.jumpToOrderDetail()
+    }
 
 
 
@@ -47,22 +69,44 @@ class PaymentCC extends BaseScreen {
     jumpToOrderDetail = () => { this.props.navigation.jumpTo("orderDetailNavigator") }
 
     handleUrlChange = async (params) => {
+
         const { url } = params;
- 
+        // console.log("\n" + url + "\n")
+        // console.log(this.webRef.current)
+        // if (this.webRef.current.props.source.html == "") this.setState({ indicatorVisible: true })
+        // else this.setState({ indicatorVisible: false })
         if (!url) return false;
-        if (url == this.okUrl) {
-            this.jumpToOrderDetail()
-        
+        if (url.includes('https://www.solastore.com.tr/Home/Thanks')) {
+            this.props.UserStore.orderMessage = I18n.t("$UyarilarSiparisinizAlinmistir")
+            this.setState({
+                case: 3
+            }, () => {
+                this.jumpToOrderDetail()
+            })
+            // let rsp = await this.doRequestAsync(() => orderService.completeOrder(this.oid))
+            // console.log(rsp)
+            // if (rsp) {
+            //     this.jumpToOrderDetail()
+            // }
+
             return false
         }
-        if (url == this.failUrl) {
-            this.setState({ case: 1 })
-            this.showErrorModal(I18n.t("$SiparisHataliKrediKartiBilgileri"))
+        if (url.includes('https://www.solastore.com.tr/Home/CCError')) {
+            this.props.UserStore.orderId = -1 * this.props.UserStore.orderId;
+            this.props.UserStore.orderMessage = I18n.t("$OdemeOdemeYapilmadi")
+            this.setState({
+                case: 3
+            }, () => {
+                this.jumpToOrderDetail()
+            })
+            // this.setState({ case: 1 })
+            // this.showErrorModal(I18n.t("$SiparisHataliKrediKartiBilgileri"))
             return false
         }
-        else {
-            return true
-        }
+        // else {
+
+        // }
+        return true
     }
 
     componentDidMount() {
@@ -101,10 +145,9 @@ class PaymentCC extends BaseScreen {
     }
 
     handleSubmit = (values) => {
-      
         this.postTo3dGate(
             {
-                pan: values.no.replaceAll("-", ""),
+                pan: values.no.replace(/-/g, ""),
                 Ecom_Payment_Card_ExpDate_Year: values.year.substring(3, 5),
                 Ecom_Payment_Card_ExpDate_Month: values.year.substring(0, 2),
             }
@@ -113,14 +156,14 @@ class PaymentCC extends BaseScreen {
     postTo3dGate = async (values) => {
         this.props.BusyStore.increase()
         var details = {
-            'clientId': '190200000',
+            'clientId': '190320263',
             'storetype': '3d_pay',
             'hash': this.hash,
             'islemtipi': this.islemtipi,
             'amount': this.amount,
             'currency': '840',
-            'okUrl': this.okUrl,
-            'failUrl': this.failUrl,
+            'okUrl': 'https://www.solastore.com.tr/' + this.okUrl,
+            'failUrl': 'https://www.solastore.com.tr/' + this.failUrl,
             'lang': I18n.locale.substring(0, 2),
             'oid': this.oid,
             'rnd': this.rnd,
@@ -130,7 +173,7 @@ class PaymentCC extends BaseScreen {
             ...values
 
         };
-       
+
         var formBody = [];
         for (var property in details) {
             var encodedKey = encodeURIComponent(property);
@@ -139,7 +182,7 @@ class PaymentCC extends BaseScreen {
         }
         formBody = formBody.join("&");
 
-        var rsp = await fetch('https://entegrasyon.asseco-see.com.tr/fim/est3Dgate', {
+        var rsp = await fetch('https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -148,9 +191,16 @@ class PaymentCC extends BaseScreen {
         })
         rsp = await rsp.text()
         this.setState({
-            content: rsp,
             case: 2
+        }, () => {
+            this.setState({
+                content: rsp
+            })
         })
+        // this.setState({
+        //     content: rsp,
+        //     case: 2
+        // })
         this.props.BusyStore.decrease()
     }
 
@@ -171,15 +221,24 @@ class PaymentCC extends BaseScreen {
                     this.state.case == 2 && this.state.content &&
                     <WebView
                         ref={this.webRef}
-                        style={{ flex: 1, resizeMode: 'cover', }}
+                        style={{ flex: 1, resizeMode: 'cover' }}
                         originWhitelist={['*']}
                         scalesPageToFit={false}
                         onNavigationStateChange={this.handleUrlChange}
-                        javaScriptEnabled={true}
-
+                        javaScriptEnabled
+                        domStorageEnabled
+                        startInLoadingState
+                        mixedContentMode="always"
                         source={{ html: this.state.content }}
+
                     />
                 }
+                {/* {
+                    this.state.case == 2 && this.state.indicatorVisible &&
+                    < IndicatorWrapper >
+                        <MyIndicator />
+                    </IndicatorWrapper>
+                } */}
 
 
                 <PermissionModal
@@ -187,7 +246,7 @@ class PaymentCC extends BaseScreen {
                     hidePermissionModal={this.hidePermissionModal}
                     acceptMessage={I18n.t("$DetayliAramaTamam")}
                     onAccepted={this.onAccepted}
-                    warningMessage={I18n.t("$SiparisOdemeYapilmadi")}
+                    warningMessage={I18n.t("$UyariOdemeYapilmadi")}
                 />
 
 
@@ -197,7 +256,7 @@ class PaymentCC extends BaseScreen {
 
 
 
-            </SafeArea>
+            </SafeArea >
         );
     }
 }

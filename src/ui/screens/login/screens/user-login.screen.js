@@ -8,7 +8,7 @@ import * as Yup from 'yup'
 import { inject, observer } from 'mobx-react';
 import PrimaryButton from '../../../components/primary-button.component';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { eyeIcon, eyeOffIcon } from '../../../../util/icons';
+import { arrowBack, eyeIcon, eyeOffIcon } from '../../../../util/icons';
 import BaseScreen from '../../../shared/base.screen';
 import userService from '../../../../services/remote/user.service';
 import I18n from 'i18n-js';
@@ -26,8 +26,15 @@ marginTop:${props => props.theme.space[4]};
 `
 const SignUpWrapper = styled(View)`
     width:100%;
-    alignItems:flex-end;
+    flexDirection:row;
+    justifyContent:space-between;
+    alignItems:center;
 `
+const BackBtn = styled(Icon).attrs(props => ({
+    name: arrowBack,
+    color: props.theme.color.white,
+    size: 20
+}))``
 const SignUpText = styled(Text)`
 
 color:${props => props.theme.color.white};
@@ -93,6 +100,7 @@ class UserLogin extends BaseScreen {
     goToRegister = () => { this.props.navigation.navigate("RegisterScreen") }
     goToSettings = () => { this.props.navigation.navigate("SettingScreen") }
     goToContact = () => { this.props.navigation.navigate("ContactScreen") }
+    goBack = () => { this.props.navigation.goBack() }
 
     changePasswordVisibility = () => { this.setState({ passwordIsVisible: !this.state.passwordIsVisible }) }
 
@@ -102,6 +110,7 @@ class UserLogin extends BaseScreen {
         if (dtoResponse) {
             if (dtoResponse == "notFound") {
                 this.showErrorModal(I18n.t("$HesabimKullaniciBulunamadi"));
+                this.props.BusyStore.decrease()
             } else {
                 await this.getAndSetFavorites(dtoResponse.userID)
                 this.props.BusyStore.decrease()
@@ -125,6 +134,7 @@ class UserLogin extends BaseScreen {
                 <ScrollablePage>
                     <Header >
                         <SignUpWrapper>
+                            <BackBtn onPress={this.goBack} />
                             <Touchable onPress={this.goToRegister}>
                                 <SignUpText>
                                     {I18n.t("$HesabimKayitOl")}

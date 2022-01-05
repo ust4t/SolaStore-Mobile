@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import styled from 'styled-components';
-import { cartIcon, personIcon, CallIcon, whatsappIcon, heartIcon, basketIcon } from '../../../../../util/icons';
+import { cartIcon, personIcon, CallIcon, whatsappIcon, heartIcon, basketIcon, personAddIcon } from '../../../../../util/icons';
 import { SafeArea, ScrollablePage } from '../../../../components/shared-styled.components';
 import TabBar from '../../../../components/tabbar.component';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -55,13 +55,16 @@ class UserMenu extends Component {
     callNumber = () => { Linking.openURL('tel:+9002124584500') }
     goToContact = () => { this.props.navigation.navigate("ContactScreen") }
     goToCart = () => { this.props.navigation.jumpTo("basketNavigator") }
+    goToRegister = () => { this.props.navigation.navigate("RegisterScreen") }
 
 
     render() {
         const ProfileItems = [
             { text: I18n.t("$AnaSayfaGiriş"), icon: personIcon, action: this.goToLogin },
+            { text: I18n.t("$HesabimKayitOl"), icon: personAddIcon, action: this.goToRegister },
             { text: I18n.t("$AnaSayfaFavorilerim"), icon: heartIcon, action: this.goToFavorites },
             { text: I18n.t("$AnaSayfaSepet"), icon: basketIcon, action: this.goToCart },
+           
 
         ]
         const AdditionalItems = [

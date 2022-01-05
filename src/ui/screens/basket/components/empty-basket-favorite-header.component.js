@@ -41,9 +41,13 @@ const Title = styled(Text)`
     
 `
 const EmptyBasketHeader = ({
-    goBack
+    goBack,
+    totalFavoritesCount
 }) => (
     <Supwrapper>
+         <SeperatorFromTopOrBottom />
+         <SeperatorFromTopOrBottom />
+         <SeperatorFromTopOrBottom />
         <IconWrapper>
             <BIcon />
         </IconWrapper>
@@ -55,14 +59,19 @@ const EmptyBasketHeader = ({
 
         <PrimaryButton text={I18n.t("$SiparisAlisveriseDevamEt")} action={goBack} flexOrWidth={2} />
         <SeperatorFromTopOrBottom />
+        <SeperatorFromTopOrBottom />
+        <SeperatorFromTopOrBottom />
 
-        <Title
-            style={{
-                textShadowColor: "gray",
-                textShadowOffset: { width: -1, height: 1 },
-                textShadowRadius: 2
-            }}
-        > {I18n.t("$AnaSayfaFavorilerim")}</Title>
+        {totalFavoritesCount != 0 &&
+            <Title
+                style={{
+                    textShadowColor: "gray",
+                    textShadowOffset: { width: -1, height: 1 },
+                    textShadowRadius: 2
+                }}
+            > {I18n.t("$AnaSayfaFavorilerim")}</Title>
+        }
+
 
 
     </Supwrapper>

@@ -58,7 +58,7 @@ class BasketScreen extends BaseScreen {
         } else this.props.navigation.navigate("CheckoutScreen")
 
     }
-    goToProductDetail = (productId) => { this.props.navigation.navigate("ProductDetail", { productId }) }
+    goToProductDetail = (productId,secondaryId) => { this.props.navigation.navigate("ProductDetail", { productId, backRouteName: "basketScreen",secondaryId }) }
 
     componentDidMount() {
         this.unsubscribe = this.props.navigation.addListener("focus", (e) => {
@@ -89,7 +89,7 @@ class BasketScreen extends BaseScreen {
     getFavorites = async () => {
         let resp = await this.doRequestAsync(favoriteService.GetUserFavoritesList);
         if (resp) {
-   
+
             this.setState({
                 favorites: resp
             })
@@ -137,10 +137,11 @@ class BasketScreen extends BaseScreen {
 
 
                 {
-                    this.state.totalPrice == "0" ?
-                        <EmptyBasket favoritesList={this.state.favorites} goBack={this.goBack} addToBasket={this.addToBasket} />
+                    this.state.totalPrice == "0"  ?
+                        <EmptyBasket favoritesList={this.state.favorites} goBack={this.goBack} addToBasket={this.addToBasket}
+                            goToProductDetail={this.goToProductDetail} />
                         :
-                        this.state.totalPrice != "" &&
+                        this.state.totalPrice != ""  &&
                         <>
                             <BasketItemsFlatList
                                 data={this.state.products}

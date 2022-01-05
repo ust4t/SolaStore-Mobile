@@ -46,6 +46,13 @@ const OrderInfoText = styled(Text)`
 
 
 `
+const UncompletedOrderInfoText = styled(Text)`
+textAlign:center;
+width:100%;
+fontSize:${props => props.theme.text.subtitle};
+
+color:${props => props.theme.color.error};
+`
 const OrderInfoHeader = styled(View)`
     alignItems:center;
     width:100%;
@@ -56,7 +63,7 @@ const OrderInfoHeader = styled(View)`
 const Touchable = styled(TouchableOpacity)`
     backgroundColor:${props => props.theme.color.white};
     borderRadius:${props => props.theme.radius[4]};
-    padding:${props=>props.theme.space[2]};
+    padding:${props => props.theme.space[2]};
     justifyContent:center;
     alignItems:center;
     borderWidth:1px;
@@ -101,7 +108,7 @@ class OrderDetail extends BaseScreen {
     getDetail = async () => {
 
         let rsp = await this.doRequestAsync(() => orderService.getOrderDetail(
-            this.props.UserStore.orderId != null ? this.props.UserStore.orderId :
+            this.props.UserStore.orderId != null ? Math.abs(this.props.UserStore.orderId) :
                 this.props.route.params.orderId
         ))
         if (rsp) {
@@ -121,7 +128,11 @@ class OrderDetail extends BaseScreen {
                 {
                     this.props.UserStore.orderId != null &&
                     <OrderInfoHeader>
-                        <OrderInfoText>{I18n.t("$UyarilarSiparisinizAlinmistir")}</OrderInfoText>
+                        {this.props.UserStore.orderId < 0 ?
+                            <UncompletedOrderInfoText>{this.props.UserStore.orderMessage}</UncompletedOrderInfoText> :
+                            <OrderInfoText>{this.props.UserStore.orderMessage} {I18n.t("$SiparisSiparisNo")}:{this.props.UserStore.orderId}</OrderInfoText>
+                        }
+
                         <SeperatorFromTopOrBottom />
                         <Touchable onPress={this.goBack}>
                             <TouchableText>
@@ -129,7 +140,7 @@ class OrderDetail extends BaseScreen {
                             </TouchableText>
 
                         </Touchable>
-            
+
                     </OrderInfoHeader>
                 }
                 <ItemsFlatList

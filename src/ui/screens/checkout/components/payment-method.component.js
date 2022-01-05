@@ -62,7 +62,11 @@ const ItemTouchable = styled(TouchableOpacity)`
     
 
     marginTop:${props => props.theme.space[2]};
-    paddingLeft:${props => props.theme.space[2]};
+    padding:${props => props.theme.space[2]};
+    borderWidth:1px;
+    borderColor:${props=>props.theme.color.lightGray};
+    borderRadius:${props=>props.theme.space[2]};
+
 `
 const ItemText = styled(Text)`
 marginLeft:${props => props.theme.space[2]};

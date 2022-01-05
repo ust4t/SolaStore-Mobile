@@ -8,7 +8,7 @@ import * as Yup from 'yup'
 import { inject, observer } from 'mobx-react';
 import PrimaryButton from '../../../components/primary-button.component';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { eyeOffIcon } from '../../../../util/icons';
+import { arrowBack, eyeOffIcon } from '../../../../util/icons';
 import BaseScreen from '../../../shared/base.screen';
 import userService from '../../../../services/remote/user.service';
 import { showToast } from '../../../../util/toast-message';
@@ -25,8 +25,15 @@ fontSize:${props => props.theme.text.subtitle};
 `
 const SignUpWrapper = styled(View)`
     width:100%;
-    alignItems:flex-end;
+    flexDirection:row;
+    justifyContent:space-between;
+    alignItems:center;
 `
+const BackBtn = styled(Icon).attrs(props => ({
+    name: arrowBack,
+    color: props.theme.color.white,
+    size: 20
+}))``
 const SignUpText = styled(Text)`
 marginTop:${props => props.theme.space[4]};
     color:${props => props.theme.color.white};
@@ -74,7 +81,8 @@ class RegisterScreen extends BaseScreen {
 
     ///////////////////////////
     ////NVAIGATIONS
-    goToLogin = () => { this.props.navigation.goBack() }
+    goToLogin = () => { this.props.navigation.navigate("UserLogin") }
+    goBack = () => { this.props.navigation.goBack() }
 
 
     handleLoginFormAsync = async (values) => {
@@ -100,6 +108,7 @@ class RegisterScreen extends BaseScreen {
                 <ScrollablePage>
                     <Header >
                         <SignUpWrapper>
+                        <BackBtn onPress={this.goBack}/>
                             <Touchable onPress={this.goToLogin}>
                                 <SignInText>
                                     {I18n.t("$HesabimGirisYap")}
@@ -129,7 +138,7 @@ class RegisterScreen extends BaseScreen {
                                 phone: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
                                 email: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
                                 password: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
-                                passwordConfirm: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz"))
+                                passwordConfirm: Yup.string().oneOf([Yup.ref("password")],I18n.t("$UyarilarSifrelerinAyniOlmasiGerekir")).required(I18n.t("$UyarilarBuAlanBosBirakilamaz"))
                             })
                         }
                         onSubmit={this.handleLoginFormAsync}>

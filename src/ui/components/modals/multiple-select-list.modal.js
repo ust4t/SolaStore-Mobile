@@ -91,7 +91,7 @@ const MultipleSelectListModal = ({
     propertyName = null,
 
 }) => {
-
+  
     return (
         <Modal
             visible={selectListModalVisible}

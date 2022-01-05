@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 const SupWrapper = styled(TouchableOpacity)`
     alignItems:center;
-    borderWidth:${props => props.selectedRepId == 9999 ? "1px" : 0};
-    borderColor:${props => props.theme.color.primary};
+    borderWidth:1px;
+    borderColor:${props =>props.selectedRepId == 9999 ? props.theme.color.primary:props.theme.color.lightGray};
 `
 const HeaderText = styled(Text)`
   

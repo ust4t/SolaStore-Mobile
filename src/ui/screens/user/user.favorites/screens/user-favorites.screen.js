@@ -11,6 +11,7 @@ import I18n from 'i18n-js';
 import TabBar from '../../../../components/tabbar.component';
 import SearchBar from '../../../home/components/search-bar.component';
 import { space } from '../../../../../infrastructure/theme/space';
+import EmptyFavorite from '../components/empty-favorite.component';
 
 const deviceWidth = Dimensions.get('window').width
 const CalculatedImageSize = `${497 * (((deviceWidth / 2) - (parseInt(space[3].substring(0, 2)) + 2 * parseInt(space[2].substring(0, 2)))) / 331)}`
@@ -48,8 +49,9 @@ class UserFavoriteListScreen extends BaseScreen {
     /////////////////////////
     //////NAVIGATIONS
     goBack = () => { this.props.navigation.goBack() }
-    goToProductDetail = (productId) => { this.props.navigation.navigate("ProductDetail", { productId }) }
+    goToProductDetail = (productId,secondaryId) => { this.props.navigation.navigate("ProductDetail", { productId,secondaryId }) }
     goToBasket = () => { this.props.navigation.jumpTo("basketNavigator") }
+    goToHomeTab=()=>{this.props.navigation.jumpTo("homeNavigator")}
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             // this.getFavorites()
@@ -118,7 +120,11 @@ class UserFavoriteListScreen extends BaseScreen {
 
 
                 <PageWrapper>
-                    <FlatListOfProducts
+                    {
+                        this.props.UserStore.favorites.length == 0 ?
+                        <EmptyFavorite goToHomeTab={this.goToHomeTab}/>
+                        :
+                        <FlatListOfProducts
                         showsVerticalScrollIndicator={false}
                         numColumns={2}
                         decelerationRate={0.7}
@@ -139,8 +145,10 @@ class UserFavoriteListScreen extends BaseScreen {
                             CalculatedWrapperSize={CalculatedWrapperSize}
                             CalculatedSupWrapperHeight={CalculatedSupWrapperHeight}
                         />}
-                    // ListHeaderComponent={<ProductList />}
+            
                     />
+                    }
+
                 </PageWrapper>
 
                 {

@@ -8,6 +8,7 @@ import { midImageUrl } from '../../../../../util/constants';
 import { SeperatorFromRightOrLeft } from '../../../../components/shared-styled.components';
 import FavoriteButton from '../../product.detail/components/favorite-button.component';
 import { observer } from 'mobx-react';
+import I18n from 'i18n-js';
 
 const SupWrapper = styled(View)`
     width:${props => props.CalculatedWrapperSize ?
@@ -69,16 +70,26 @@ const DiscountWrapper = styled(View)`
     position:absolute;
     top:${props => props.theme.space[1]};
     left:${props => props.theme.space[1]};
-    padding:${props => props.theme.space[1]};
+    padding:2px;
     backgroundColor:${props => props.theme.color.error};
     borderRadius:${props => props.theme.radius[1]};
-    opacity:0.5;
+
+`
+const NewTextWrapper = styled(View)`
+position:absolute;
+top:${props => props.theme.space[1]};
+left:${props => props.theme.space[1]};
+padding:2px;
+backgroundColor:#A6C76C;
+borderRadius:${props => props.theme.radius[1]};
 
 `
 const DiscountText = styled(Text)`
     color:${props => props.theme.color.white};
     fontSize:${props => props.theme.text.small};
+
 `
+
 
 const HeartDislikeIcon = styled(Icon).attrs(props => (
     {
@@ -108,15 +119,24 @@ const ProductListRow = ({
     CalculatedWrapperSize,
     CalculatedSupWrapperHeight,
     addToFavorites,
-    UserStore
+    UserStore,
+
+
 }) => {
     const { productShortName,
         price,
-        oldPrice,
         pictures,
         productID,
-        isFavorite = false } = item;
-
+        singlePrice,
+        isNew = false,
+        sizes,
+        masterProductID
+    } = item;
+    let { oldPrice } = item
+    
+    if (oldPrice != 0 && sizes) {
+        oldPrice = oldPrice / (sizes.split("-").length)
+    }
     const FavoriteViewer = observer(({ userStore }) => {
         return <FavoriteButton action={() => addToFavorites(item)}
             isFavorite={
@@ -132,7 +152,10 @@ const ProductListRow = ({
         <SupWrapper key={productID}
             CalculatedWrapperSize={CalculatedWrapperSize}
             CalculatedSupWrapperHeight={CalculatedSupWrapperHeight}>
-            <SubWrapper onPress={() => goToProductDetail(productID)}
+            <SubWrapper onPress={() => goToProductDetail(
+                masterProductID ? masterProductID : productID,
+                productID
+            )}
 
             >
                 {/* {
@@ -172,7 +195,7 @@ const ProductListRow = ({
                     <SeperatorFromRightOrLeft />
 
                     <DescriptionRight>
-                        <PriceText>${price}</PriceText>
+                        <PriceText>${singlePrice}</PriceText>
                         {
                             oldPrice != 0 &&
                             <DiscountedPriceText>
@@ -181,14 +204,34 @@ const ProductListRow = ({
                         }
                     </DescriptionRight>
                 </DescriptionWrapper>
+
                 {
+
+                    isNew ?
+                        <NewTextWrapper>
+                            <DiscountText>
+                                {I18n.t("$AnaSayfaYeni")}
+                            </DiscountText>
+                        </NewTextWrapper> :
+                        oldPrice != 0 &&
+                        <DiscountWrapper>
+                            <DiscountText>
+                                - {oldPrice - singlePrice} USD
+                            </DiscountText>
+                        </DiscountWrapper>
+
+                }
+
+
+                {/* {
+                    
                     oldPrice != 0 &&
                     <DiscountWrapper>
                         <DiscountText>
-                            -${oldPrice - price}
+                            -{oldPrice - price} USD
                         </DiscountText>
                     </DiscountWrapper>
-                }
+                } */}
 
             </SubWrapper>
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { View, Text, InteractionManager, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { color } from '../../../../../infrastructure/theme/color';
@@ -74,6 +74,7 @@ class ProductDetail extends BaseScreen {
         super(props);
         this.state = {
             ...this.state,
+            forceRefreshFlag1: true,
 
 
 
@@ -105,8 +106,8 @@ class ProductDetail extends BaseScreen {
         };
 
         this.selectedProductVariationId = this.props.route.params.productId
-        this.detailItem = null
-    
+
+        this.lottieRef = createRef()
 
 
     }
@@ -123,11 +124,25 @@ class ProductDetail extends BaseScreen {
     ///////NAVIGATIONS
     goToUserTab = () => { this.props.navigation.jumpTo("userNavigator") }
     goToVideoPlayer = () => { this.props.navigation.navigate("ProductVideoPlayer", { videoName: this.state.videoName, name: this.state.name }) }
-    goToBasketTab = () => { this.props.navigation.jumpTo("basketNavigator") }
+    goToBasketTab = () => {
+        if (this.props.route.params.backRouteName) {
+            this.goBack()
+        } else {
+            this.props.navigation.jumpTo("basketNavigator")
+        }
+    }
     goBack = () => { this.props.navigation.goBack() }
     //////////////////////
     ///////STATE CHANGESs
-    showSuccessModal = () => { this.setState({ successModalVisible: true }) }
+    showSuccessModal = () => {
+        this.setState({ successModalVisible: true }, () => {
+            setTimeout(() => {
+                this.setState({
+                    forceRefreshFlag1: !this.state.forceRefreshFlag1
+                })
+            }, 10)
+        })
+    }
     hideSuccessModal = () => { this.setState({ successModalVisible: false }) }
     increse = () => { this.setState({ count: this.state.count += 1 }) }
     decrease = () => {
@@ -139,6 +154,13 @@ class ProductDetail extends BaseScreen {
     hideSliderModal = () => { this.setState({ sliderModalVisible: false }) }
 
     onVariationSelected = (item) => {
+        //////////////Favoriye ekleme için gerekli
+        // item.masterProductID=this.props.route.params.productId; //varmış zaten
+        this.item = item;
+        /////favori kontrolü
+        if (this.props.UserStore.favorites.find(a => a.productID == item.productID)) this.setState({ isFavorite: true })
+        else this.setState({ isFavorite: false })
+
         this.setState({
             name: item.productShortName,
             price: item.price,
@@ -161,14 +183,15 @@ class ProductDetail extends BaseScreen {
                 data = data[0];
                 //////////////Favoriye ekleme için gerekli
                 this.item = data;
+                ////////////
                 this.setState({
-                    name: data.productShortName,
-                    price: data.price,
-                    oldPrice: data.oldPrice,
-                    description: data.productSelectedDetail ? data.productSelectedDetail : "",
-                    images: data.pictures,
-                    sizes: data.sizes,
-                    videoName: data.video_1
+                    // name: data.productShortName,
+                    // price: data.price,
+                    // oldPrice: data.oldPrice,
+                    // description: data.productSelectedDetail ? data.productSelectedDetail : "",
+                    // images: data.pictures,
+                    // sizes: data.sizes,
+                    // videoName: data.video_1
 
                 }, async () => {
                     await this.getVariations(data)
@@ -182,6 +205,13 @@ class ProductDetail extends BaseScreen {
             let data = await this.doRequestAsync(() => productService.GetVariationsByProductID(this.props.route.params.productId))
 
             if (data) {
+                [originalData, ...data].map((item, index) => {
+
+                    if (item.productID == this.props.route.params.secondaryId) {
+                        this.onVariationSelected(item)
+                        // continue;
+                    }
+                })
                 this.setState({
                     variations: [originalData, ...data]
                 })
@@ -190,13 +220,13 @@ class ProductDetail extends BaseScreen {
     }
     addToFavorites = async () => {
         if (this.state.isFavorite) {
-            let resp = await this.doRequestAsync(() => favoriteService.DeleteFavoriteProduct(this.props.route.params.productId))
+            let resp = await this.doRequestAsync(() => favoriteService.DeleteFavoriteProduct(this.item.productID))
             if (resp.status == 200) {
                 this.setState({ isFavorite: !this.state.isFavorite })
-                this.props.UserStore.deleteFromFavoriteWithId(this.props.route.params.productId)
+                this.props.UserStore.deleteFromFavoriteWithId(this.item.productID)
             }
         } else {
-            let resp = await this.doRequestAsync(() => favoriteService.AddFavoriteProduct(this.props.route.params.productId))
+            let resp = await this.doRequestAsync(() => favoriteService.AddFavoriteProduct(this.item.productID))
             if (resp.status == 200) {
                 this.setState({ isFavorite: !this.state.isFavorite })
                 this.props.UserStore.addToFavorites(this.item)
@@ -205,10 +235,14 @@ class ProductDetail extends BaseScreen {
 
     }
     addToBasket = async () => {
-        let rsp = await this.doRequestAsync(() => basketService.addToBasket(this.selectedProductVariationId, this.state.count))
+        let rsp = await this.doRequestAsync(() => basketService.addToBasket(this.item.productID, this.state.count))
         if (rsp) {
             // showToast(I18n.t("$UrunlerSepeteEklendi"));
+
             this.showSuccessModal()
+
+
+
         }
     }
 
@@ -257,18 +291,18 @@ class ProductDetail extends BaseScreen {
                 </BackButtonWrapper>
 
 
-                <FavoriteButton action={this.addToFavorites} isFavorite={this.state.isFavorite} spaceCount={3}/>
+                <FavoriteButton action={this.addToFavorites} isFavorite={this.state.isFavorite} spaceCount={3} />
 
-                {
-                    this.state.successModalVisible &&
-                    <SuccessModal
-                        successModalVisibilty={this.state.successModalVisible}
-                        hideSuccessModal={this.hideSuccessModal}
-                    // lottieName = "basketLottie",
-                    // buttonText = I18n.t("$DetayliAramaTamam"),
-                    // successMessage= I18n.t("$UrunlerSepeteEklendi")
-                    />
-                }
+
+                <SuccessModal
+                    successModalVisibilty={this.state.successModalVisible}
+                    hideSuccessModal={this.hideSuccessModal}
+                    forceRefresh={this.state.forceRefreshFlag1}
+                // lottieName = "basketLottie",
+                // buttonText = I18n.t("$DetayliAramaTamam"),
+                // successMessage= I18n.t("$UrunlerSepeteEklendi")
+                />
+
                 <ImageSliderModal
                     sliderModalVisible={this.state.sliderModalVisible}
                     hideSliderModal={this.hideSliderModal}

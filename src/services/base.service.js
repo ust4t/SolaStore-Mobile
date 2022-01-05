@@ -11,11 +11,12 @@ class BaseService {
 
     }
     handleResponse = async (rsp) => {
-
+      
         if (rsp.status == 200) {
 
             try {
                 rsp = await rsp.json();
+               
             } catch (error) {
                 return new DtoResponse(resultStatus.success, rsp)
             }

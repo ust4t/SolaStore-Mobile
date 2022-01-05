@@ -15,9 +15,7 @@ import I18n from 'i18n-js';
 import { TabActions } from '@react-navigation/routers';
 import { space } from '../../../../infrastructure/theme/space';
 
-const specifiedWidth = ((Dimensions.get("window").width) - (space[1].substr(0, 1) * 8) - (space[2].substr(0, 2) * 2))/4
-console.log(Dimensions.get("window").width)
-console.log(specifiedWidth)
+const specifiedWidth = ((Dimensions.get("window").width) - (space[1].substr(0, 1) * 8) - (space[2].substr(0, 2) * 2)) / 4
 
 
 
@@ -55,7 +53,8 @@ class CheckoutScreen extends BaseScreen {
             name: this.props.UserStore.userName != null ? this.props.UserStore.userName + " " + this.props.UserStore.userSurname : "",
             phone: this.props.UserStore.userPhone != null ? this.props.UserStore.userPhone : ""
 
-
+            // name:"test",
+            // phone:"1111"
 
 
 

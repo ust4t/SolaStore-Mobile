@@ -72,7 +72,7 @@ paddingRight:${props => props.theme.space[3]};
 `
 const RemoveIcon = styled(Icon).attrs(props => ({
     color: props.theme.color.error,
-    size: 20,
+    size: 23,
     name: trashIcon
 }))`
 
@@ -95,6 +95,7 @@ const BasketItem = ({
 
             </Header>
             <SubWrapper onPress={() => goToProductDetail(
+                masterProductID ? masterProductID : productID,
                 productID
             )}>
                 <ItemImage source={{ uri: midImageUrl + pictureOneGuidName }} resizeMode="contain" />

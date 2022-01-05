@@ -140,8 +140,9 @@ class ProductList extends BaseScreen {
     }
     /////////////////////////////
     ////////REQUESTS 
-    defaultRequestProcess = (products) => {
-        this.oldList = products;
+    defaultRequestProcess = (products, filter = false) => {
+        if (!filter) { this.oldList = products; }
+
         products.map((item) => {
             if (this.props.UserStore.favorites.find(a => a.productID == item.productID)) {
                 item["isFavorite"] = true
@@ -156,7 +157,7 @@ class ProductList extends BaseScreen {
         if (this.props.route.params.categoryID) {
             let data = await this.doRequestAsync(() => productService.GetAllByCategoryID(this.props.route.params.categoryID))
             if (data) {
-                this.defaultRequestProcess(data)
+                this.defaultRequestProcess(data.reverse())
             }
         }
     }
@@ -175,7 +176,7 @@ class ProductList extends BaseScreen {
         if (this.props.route.params.categoryID) {
             let data = await this.doRequestAsync(() => productService.GetSelectedBrandProducts(this.props.route.params.categoryID))
             if (data) {
-                this.defaultRequestProcess(data)
+                this.defaultRequestProcess(data.reverse())
             }
         }
     }
@@ -183,21 +184,24 @@ class ProductList extends BaseScreen {
     getDiscounted = async () => {
         let dtoRepsonse = await this.doRequestAsync(productService.GetSaleProducts)
         if (dtoRepsonse) {
-            this.defaultRequestProcess(dtoRepsonse)
+            this.defaultRequestProcess(dtoRepsonse.reverse())
         }
     }
 
     getBestSellers = async () => {
         let dtoRepsonse = await this.doRequestAsync(productService.GetBestSellerProducts)
         if (dtoRepsonse) {
-            this.defaultRequestProcess(dtoRepsonse)
+            this.defaultRequestProcess(dtoRepsonse.reverse())
         }
     }
 
     getNews = async () => {
         let dtoRepsonse = await this.doRequestAsync(productService.getNewProducts)
         if (dtoRepsonse) {
-            this.defaultRequestProcess(dtoRepsonse)
+            dtoRepsonse.map((item) => {
+                item["isNew"] = true;
+            })
+            this.defaultRequestProcess(dtoRepsonse.reverse())
         }
     }
 
@@ -250,7 +254,7 @@ class ProductList extends BaseScreen {
     }
     /////////////////////////////
     ////////NAVIGATION 
-    goToProductDetail = (productId) => { this.props.navigation.navigate("ProductDetail", { productId }) }
+    goToProductDetail = (productId,secondaryId) => { this.props.navigation.navigate("ProductDetail", { productId,secondaryId}) }
     goToBasket = () => { this.props.navigation.jumpTo("basketNavigator") }
     goBack = () => { this.props.navigation.goBack() }
 
@@ -382,10 +386,6 @@ class ProductList extends BaseScreen {
                 this.createParameters()
             }
         })
-
-
-
-
     }
 
     onBrandSelected = (item) => {
@@ -411,7 +411,11 @@ class ProductList extends BaseScreen {
     }
 
     createParameters = async () => {
-        let newList = this.oldList;
+        this.props.BusyStore.increase()
+        this.setState({
+            products: []
+        })
+        var newList = [...this.oldList];
 
         if (this.state.selectedSortOption != "-") {
             if (this.state.selectedSortOption == I18n.t("$UrunlerFiyatiEnYuksekOlan")) {
@@ -445,24 +449,58 @@ class ProductList extends BaseScreen {
             } else item["isFavorite"] = false
         })
 
-        this.setState({
-            products: newList,
-            productCount: newList.length,
+        // this.setState({
+        //     products: newList,
+        //     productCount: newList.length,
 
-        }, () => {
-            this.hideFilterModal()
-        })
+        // }, () => {
+        //     this.hideFilterModal()
+        // })
+
+        this.hideFilterModal()
+        setTimeout(() => {
+            this.setState({
+                products: newList,
+                productCount: newList.length,
+
+
+            }, () => {
+                this.props.BusyStore.decrease()
+
+            })
+        }, 150)
+
+
+
+
     }
     clearFilter = () => {
+        this.props.BusyStore.increase()
         this.hideFilterModal()
         this.setState({
-            selectedBrands: [],
-            minPrice: 0,
-            maxPrice: 999,
-            selectedSortOption: "-",
-        }, () => {
-            this.defaultRequestProcess(this.oldList)
+            products: []
         })
+
+        setTimeout(() => {
+            // this.setState({
+            //     products: newList,
+            //     productCount: newList.length,
+
+
+            // }, () => {
+            //     this.props.BusyStore.decrease()
+            // })
+            this.setState({
+                selectedBrands: [],
+                minPrice: 0,
+                maxPrice: 999,
+                selectedSortOption: "-",
+            }, () => {
+                this.defaultRequestProcess(this.oldList, true)
+                this.props.BusyStore.decrease()
+            })
+        }, 150)
+
     }
     dynamicSort(property) {
         var sortOrder = 1;

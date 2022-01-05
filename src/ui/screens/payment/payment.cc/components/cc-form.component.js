@@ -58,7 +58,7 @@ const CcForm = ({
     <ScrollablePage >
         <Wrapper>
             <Formik
-            
+
                 onSubmit={handleSubmit}
                 initialValues={{
                     // name: "Ahmet Mehmet",
@@ -70,7 +70,7 @@ const CcForm = ({
                     no: "",
                     cvv: "",
                     year: "",
-                  
+
 
                 }}
                 validationSchema={
@@ -79,7 +79,7 @@ const CcForm = ({
                         no: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
                         cvv: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
                         year: Yup.string().required(I18n.t("$UyarilarBuAlanBosBirakilamaz")),
-                      
+
 
                     })
                 }

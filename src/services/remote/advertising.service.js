@@ -18,6 +18,13 @@ class AdvertisingService extends BaseService {
         return this.handleResponse(rsp)
     }
 
+    getCampaigns = async () => {
+        let rsp = await remoteDataAccessObject.GetRequestBylangIntValues(`${this.controllerName}/CampaignPictruresByLang`, null, [
+
+        ]);
+        return this.handleResponse(rsp)
+    }
+
 }
 
 export default new AdvertisingService()

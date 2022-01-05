@@ -75,6 +75,12 @@ const TouchableText = styled(Text)`
     color:${props => props.theme.color.black};
     fontWeight:bold;
 `
+
+const ButtonsWrapper = styled(View)`
+    flexDirection:row;
+    alignItems:center;
+    width:100%;
+`
 const DetailedSearch = ({
     showCategoriesModal,
     showBrandsModal,
@@ -83,7 +89,8 @@ const DetailedSearch = ({
     showPricesModal,
     selectedRange,
     selectedCategories,
-    selectedBrands
+    selectedBrands,
+    clearParameters
 }) => {
     let categoryString = "";
     let brandString = "";
@@ -151,10 +158,10 @@ const DetailedSearch = ({
 
                 <ModalOpenerView onPress={showPricesModal}>
                     <OpenerLeft>
-                        <ModalOpenerTextHeader>{I18n.t("$AnaSayfaFiyat")}</ModalOpenerTextHeader>
+                        <ModalOpenerTextHeader>{I18n.t("$UrunlerFiyatAraligi")}</ModalOpenerTextHeader>
                         <ModalOpenerText ellipsizeMode="tail" numberOfLines={1}>
 
-                            {selectedRange ? selectedRange : "-"}
+                            {selectedRange ? selectedRange : I18n.t("$DetayliAramaLutfenFiyatiSeciniz")}
 
                         </ModalOpenerText>
                     </OpenerLeft>
@@ -176,12 +183,27 @@ const DetailedSearch = ({
 
                 {/* <SecondaryButton text={I18n.t("$AnaSayfaARA")} action={goToProductListWithSearchParams} /> */}
 
-                <Touchable onPress={goToProductListWithSearchParams}>
+                <ButtonsWrapper>
+                <SecondaryButton text={I18n.t("$AnaSayfaARA")} action={goToProductListWithSearchParams} />
+
+                    <SeperatorFromRightOrLeft />
+                    <PrimaryButton text={I18n.t("$KategoriHepsiniTemizle")} action={clearParameters} paddingCount={2}/>
+                   
+
+                </ButtonsWrapper>
+                {/* <Touchable onPress={goToProductListWithSearchParams}>
                     <TouchableText>
                         {I18n.t("$AnaSayfaARA")}
                     </TouchableText>
 
-                </Touchable>
+                </Touchable> */}
+
+                {/* <Touchable onPress={goToProductListWithSearchParams}>
+                    <TouchableText>
+                        {I18n.t("$AnaSayfaARA")}
+                    </TouchableText>
+
+                </Touchable> */}
 
 
 

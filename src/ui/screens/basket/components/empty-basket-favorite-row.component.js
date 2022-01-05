@@ -1,11 +1,11 @@
 import I18n from 'i18n-js';
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { imageUrl } from '../../../../util/constants';
 import SecondaryButton from '../../../components/secondary-button.component';
 
-const SupWrapper = styled(View)`
+const SupWrapper = styled(TouchableOpacity)`
     backgroundColor:${props => props.theme.color.white};
     padding:${props => props.theme.space[1]};
     marginTop:${props => props.theme.space[1]};
@@ -67,11 +67,15 @@ opacity:0.4;
 const EmptyBasketFavoriteRow = ({
     item,
     index,
-    addToBasket
+    addToBasket,
+    goToProductDetail
 }) => {
-    const { productShortName, picture_1, oldPrice, price,productID} = item;
+    const { productShortName, picture_1, oldPrice, price, productID, masterProductID } = item;
     return (
-        <SupWrapper key={index} >
+        <SupWrapper key={index} onPress={() => goToProductDetail(
+            masterProductID ? masterProductID : productID,
+            productID
+        )}>
             <ItemImage source={{ uri: `${imageUrl}${picture_1}` }} resizeMode="contain" />
             <SubWrapper style={{ justifyContent: "space-around" }}>
 

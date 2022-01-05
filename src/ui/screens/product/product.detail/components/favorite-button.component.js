@@ -31,7 +31,7 @@ const FavoriteButton = ({
     isFavorite,
     spaceCount = 2
 }) => {
-    // console.log("favorite btn rerender")
+
     return (
         <Touchable onPress={action} spaceCount={spaceCount}>
             {

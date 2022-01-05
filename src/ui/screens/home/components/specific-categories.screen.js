@@ -3,6 +3,7 @@ import React from 'react';
 import { Dimensions, FlatList, Image, ScrollView, TouchableOpacity, View, Text } from 'react-native';
 import styled from 'styled-components';
 import { imageUrl, mainAddUrl } from '../../../../util/constants';
+import { SeperatorFromTopOrBottom } from '../../../components/shared-styled.components';
 const DeviceWidth = Dimensions.get('window').width
 const SupWrapper = styled(View)`
     width:100%;
@@ -10,13 +11,15 @@ const SupWrapper = styled(View)`
 `
 const CategoryImage = styled(Image)`
   
-    width:100%;
-    height:${props => (DeviceWidth  / 574) * 305}px;
+    width:${props=>props.oneSpecImageWidth}px;
+    height:${props=>props.oneSpecImageHeight}px;
 
 
 `
 const RowTouchable = styled(TouchableOpacity)`
     padding:${props => props.theme.space[2]};
+    paddingBottom:${props => props.theme.space[1]};
+    paddingTop:0px;
     width:100%;
     
 `
@@ -81,7 +84,9 @@ const SwitchYeniUrunler = () => {
     }
 }
 const SpecificCategories = ({
-    goToProductList
+    goToProductList,
+    oneSpecImageWidth,
+    oneSpecImageHeight
 }) => {
     const defaultCategories = [
         {
@@ -112,6 +117,7 @@ const SpecificCategories = ({
                     textShadowRadius: 2
                 }}
             > {I18n.t("$AnaSayfaSizeOzel")}</Label>
+            <SeperatorFromTopOrBottom />
             <CategoriesFlatList
 
 
@@ -122,7 +128,9 @@ const SpecificCategories = ({
 
                         return (
                             <RowTouchable onPress={() => goToProductList(item)} key={index}>
-                                <CategoryImage source={{ uri:  item.squareCategoryPictureGuidName }} />
+                                <CategoryImage source={{ uri: item.squareCategoryPictureGuidName }} 
+                                oneSpecImageWidth={oneSpecImageWidth}
+                                oneSpecImageHeight={oneSpecImageHeight} />
                             </RowTouchable>
                         )
                     })

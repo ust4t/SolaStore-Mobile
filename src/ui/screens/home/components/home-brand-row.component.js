@@ -6,11 +6,16 @@ import { brandUrl, imageUrl } from '../../../../util/constants';
 const Wrapper = styled(TouchableOpacity)`
 padding:${props => props.theme.space[1]};
 alignItems:center;
+paddingBottom:0px;
+paddingTop:0px;
+
 `
 const IconWrapper = styled(View)`
 backgroundColor:${props => props.theme.color.white};
 
 borderRadius:${props => props.theme.radius[2]};
+borderWidth:0.2px;
+borderColor:${props => props.theme.color.primary};
 
 `
 const CategoryTitle = styled(Text)`
@@ -21,8 +26,8 @@ marginTop:${props => props.theme.space[1]};
 `
 const CategoryIcon = styled(Image)`
 
-    width:120px;
-    height:120px;
+    width:${props => props.oneBrandImageWidth}px;
+    height:${props => props.oneBrandImageHeight}px;;
     borderRadius:${props => props.theme.radius[2]};
     
 `
@@ -30,18 +35,23 @@ const CategoryIcon = styled(Image)`
 const HomeBrandRowComponent = ({
     item,
     index,
-    goProductsWithBrand
-   
-}) => {
-    const { brandID,brandName,guidName,guidName2 } = item;
-    return (
-        <Wrapper key={index} 
-         onPress={() => goProductsWithBrand(item)} 
-        style={{
+    goProductsWithBrand,
+    oneBrandImageWidth,
+    oneBrandImageHeight
 
-        }}>
-            <IconWrapper>
-                <CategoryIcon source={{ uri:brandUrl+ guidName }} resizeMode="stretch" />
+}) => {
+    const { brandID, brandName, guidName, guidName2 } = item;
+    return (
+        <Wrapper key={index}
+            onPress={() => goProductsWithBrand(item)}
+        >
+            <IconWrapper
+            >
+                <CategoryIcon
+                    source={{ uri: brandUrl + guidName }}
+                    resizeMode="stretch"
+                    oneBrandImageWidth={oneBrandImageWidth}
+                    oneBrandImageHeight={oneBrandImageHeight} />
             </IconWrapper>
 
         </Wrapper>

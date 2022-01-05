@@ -1,12 +1,12 @@
 import I18n from 'i18n-js';
-import React from 'react';
-import { Modal, Text, View, TouchableOpacity } from 'react-native';
+import React, { useRef } from 'react';
+import { Modal, Text, View, TouchableOpacity, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 import PrimaryButton from './primary-button.component';
 import SecondaryButton from './secondary-button.component';
 const ModalWrapper = styled(View)`
-    flex:1
+    flex:1;
     alignItems:center;
     justifyContent:center;
     backgroundColor:${props => props.theme.color.transparentBlack};
@@ -51,31 +51,38 @@ const SuccessModal = ({
     hideSuccessModal,
     lottieName = "basketLottie",
     buttonText = I18n.t("$DetayliAramaTamam"),
-    successMessage = I18n.t("$UrunlerSepeteEklendi")
+    successMessage = I18n.t("$UrunlerSepeteEklendi"),
+    forceRefreshFlag1
 
 }) => {
-    // const lottiePath=`../../../assets/medias/${lottieName}.json`
+
+
     return (
         <Modal
             visible={successModalVisibilty}
             onRequestClose={hideSuccessModal}
             transparent={true}
 
+
         >
-            <ModalWrapper>
-                <ModalContentWrapper>
+            <ModalWrapper
+                
+            >
+                <ModalContentWrapper
+                >
 
-                    {
-                        successModalVisibilty &&
-                        <LottieAnim
-                            source={require("../../../assets/medias/basketLottie.json")}
-                            autoPlay={true}
-                            loop={true}
-                            speed={1.7}
-                           
 
-                        />
-                    }
+                    <LottieAnim
+
+                        source={require("../../../assets/medias/basketLottie.json")}
+                        autoPlay={true}
+                        loop={true}
+                        speed={2}
+
+
+
+                    />
+
 
                     <SuccessMessageText>
                         {successMessage}

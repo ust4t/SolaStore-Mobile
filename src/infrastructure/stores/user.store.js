@@ -11,6 +11,7 @@ class UserStore {
     userEmail = null
     userPhone = null
     orderId = null
+    orderMessage = ""
     languageChanged = false
 
 
@@ -81,7 +82,7 @@ class UserStore {
             setFavorites: action,
             addToFavorites: action,
             deleteFromFavorite: action,
-            deleteFromFavoriteWithId:action
+            deleteFromFavoriteWithId: action
         })
     }
 }

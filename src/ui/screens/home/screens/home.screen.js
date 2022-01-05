@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, InteractionManager, ScrollView, I18nManager } from 'react-native';
+import { View, Text, InteractionManager, ScrollView, I18nManager, ActivityIndicator, Linking, Dimensions } from 'react-native';
 
 import categoryService from '../../../../services/remote/category.service';
 import { Categories, Products } from '../../../../util/fake-data';
@@ -34,6 +34,26 @@ import DtoResponse from '../../../../util/dto-response';
 import SpecificCategories from '../components/specific-categories.screen';
 import HomeBrands from '../components/home-brands.component';
 import favoriteService from '../../../../services/remote/favorite.service';
+import { space } from '../../../../infrastructure/theme/space';
+import HomeCampaigns from '../components/home-campaigns.component';
+
+///////////brand images calculates
+const deviceWidth = Dimensions.get("window").width
+const smallPaddingSum = 8 * space[1].substr(0, 1);
+const bigPaddingSum = 2 * space[2].substr(0, 2);
+const oneBrandImageWidth = (deviceWidth - smallPaddingSum - bigPaddingSum) / 4;
+const oneBrandImageHeight = (oneBrandImageWidth / 160) * 110
+
+
+const smallCmpSum = 4 * space[1].substr(0, 1);
+const oneCmpImageWidth = (deviceWidth - smallCmpSum - bigPaddingSum) / 2;
+const oneCmpImageHeight = (oneCmpImageWidth / 410) * 470
+
+const smallSpecSum = 2 * space[2].substr(0, 2);
+const oneSpecImageWidth = (deviceWidth - smallSpecSum);
+const oneSpecImageHeight = (oneSpecImageWidth / 1000) * 595
+
+
 
 
 const prices = [
@@ -56,26 +76,15 @@ const PageScrollable = styled(ScrollView).attrs(({
 }))`
 
 `
-// const defaultCategories = [
-//     {
-//         selectedCategoryName: I18n.t("$AnaSayfaYeniÜrünler"),
-//         squareCategoryPictureGuidName: "8056c903-e.jpg",
-//         type: "variation",
-//         variationType: 1
-//     },
-//     {
-//         selectedCategoryName: I18n.t("$AnaSayfaÇokSatanlar"),
-//         squareCategoryPictureGuidName: "8056c903-e.jpg",
-//         type: "variation",
-//         variationType: 2
-//     },
-//     {
-//         selectedCategoryName: I18n.t("$AnaSayfaİndirim"),
-//         squareCategoryPictureGuidName: "8056c903-e.jpg",
-//         type: "variation",
-//         variationType: 3
-//     }
-// ]
+
+const LoadingIndicator = styled(ActivityIndicator).attrs(props => ({
+    color: props.theme.color.primary,
+    size: 30,
+
+}))`
+    padding:${props => props.theme.space[5]};
+`
+
 @inject("BusyStore", "UserStore")
 @observer
 class HomeScreen extends BaseScreen {
@@ -93,6 +102,7 @@ class HomeScreen extends BaseScreen {
             products: [],
             popularProducts: [],
             brands: [],
+            organizedBrands: [],
 
             selectedCategories: [],
 
@@ -109,21 +119,33 @@ class HomeScreen extends BaseScreen {
             ads: [],
 
 
-            searchText: ""
+            searchText: "",
+
+
+
+            categoriesLoading: true,
+            brandsLoading: false,
+
+
+            organizedCampaigns: [],
+            mainCampaignsLoading: false
+
         };
+
+        this.mainCampainsIsLoaded = false;
     }
     /////////////////////////
     ///////MODAL
-    showCategoriesModal = () => {
-        this.setState({
-            categoriesModalVisible: true
-        })
-    }
-    hideCategoriesModal = () => {
-        this.setState({
-            categoriesModalVisible: false
-        })
-    }
+    showCategoriesModal = () => { this.setState({ categoriesModalVisible: true }) }
+    hideCategoriesModal = () => { this.setState({ categoriesModalVisible: false }) }
+    hideCategoriesLoading = () => { this.setState({ categoriesLoading: false }) }
+    hideBrandsLoading = () => { this.setState({ brandsLoading: false }) }
+    showCampingsLoading = () => { this.setState({ mainCampaignsLoading: true }) }
+    hideCampingsLoading = () => { this.setState({ mainCampaignsLoading: false }) }
+
+
+
+
     showBrandsModal = () => {
         this.setState({
             brandsModalVisible: true
@@ -173,32 +195,32 @@ class HomeScreen extends BaseScreen {
     componentDidMount() {
         InteractionManager.runAfterInteractions(async () => {
             await this.getSelectedLanguage()
-            this.loginControl()
+            // this.loginControl() mainnavigatore taşındı
             this.getAllCategories()
             this.getBrands()
-            this.getAdvertisingSlider()
-            
+            //this.getAdvertisingSlider()
+
             // this.getDiscountedProducts()
             // this.getBestSellers()
 
         })
     }
 
-    getAndSetFavorites = async () => {
-        let dtoResponse = await this.doRequestAsync(favoriteService.GetUserFavoritesList)
-        if (dtoResponse) {
-            this.props.UserStore.setFavorites(dtoResponse)
-        }
-    }
+    // getAndSetFavorites = async () => {
+    //     let dtoResponse = await this.doRequestAsync(favoriteService.GetUserFavoritesList)
+    //     if (dtoResponse) {
+    //         this.props.UserStore.setFavorites(dtoResponse)
+    //     }
+    // }
 
-    loginControl = async () => {
-        const userInfos = await userLocalService.getUSerData()
-        if (userInfos != null) {
-            let resp = await this.doRequestAsync(() => userService.isMember(userInfos.userEmail, userInfos.userPassword))
-            if (resp) this.props.UserStore.login(resp)
-        }
-        this.getAndSetFavorites()
-    }
+    // loginControl = async () => {
+    //     const userInfos = await userLocalService.getUSerData()
+    //     if (userInfos != null) {
+    //         let resp = await this.doRequestAsync(() => userService.isMember(userInfos.userEmail, userInfos.userPassword))
+    //         if (resp) this.props.UserStore.login(resp)
+    //     }
+    //     this.getAndSetFavorites()
+    // }
 
     getSelectedLanguage = async () => {
         const rsp = await userLocalService.getLanguagePref();
@@ -208,8 +230,8 @@ class HomeScreen extends BaseScreen {
     }
 
     getAllCategories = async () => {
-        this.props.BusyStore.increase()
-        let dtoRepsonse = await this.doRequestAsync(categoryService.getAllCategories)
+        // this.props.BusyStore.increase()
+        let dtoRepsonse = await this.doRequestAsync(categoryService.getAllCategories, false)
         if (dtoRepsonse) {
             // dtoRepsonse.map((item) => {
             //     item.isSelected = false
@@ -264,16 +286,37 @@ class HomeScreen extends BaseScreen {
         }
     }
     getBrands = async () => {
-        let dtoRepsonse = await this.doRequestAsync(brandService.GetAllBrands)
+        let dtoRepsonse = await this.doRequestAsync(brandService.GetAllBrands, false)
+
         if (dtoRepsonse) {
+            var organizedBrands = this.listToMatrix(dtoRepsonse, 4)
             this.setState({
-                brands: dtoRepsonse
+                brands: dtoRepsonse,
+                organizedBrands: organizedBrands
+            }, () => {
+
             })
         }
+        this.hideBrandsLoading()
+    }
+    listToMatrix(list, elementsPerSubArray) {
+        var matrix = [], i, k;
+
+        for (i = 0, k = -1; i < list.length; i++) {
+            if (i % elementsPerSubArray === 0) {
+                k++;
+                matrix[k] = [];
+            }
+
+            matrix[k].push(list[i]);
+        }
+
+        return matrix;
     }
 
     getAdvertisingSlider = async () => {
-        let dtoRepsonse = await this.doRequestAsync(advertisingService.Slider)
+        let dtoRepsonse = await this.doRequestAsync(advertisingService.Slider, false)
+
         if (dtoRepsonse) {
             this.setState({
                 ads: dtoRepsonse
@@ -285,7 +328,7 @@ class HomeScreen extends BaseScreen {
         const all = [...this.state.categories]
         await mainCategories.map(async (item) => {
 
-            let dtoRepsonse = await this.doRequestAsync(() => categoryService.GetSubCategoryList(item.categoryID))
+            let dtoRepsonse = await this.doRequestAsync(() => categoryService.GetSubCategoryList(item.categoryID), false)
             all.push(item)
             if (dtoRepsonse) {
                 dtoRepsonse.map((item) => {
@@ -297,14 +340,34 @@ class HomeScreen extends BaseScreen {
         })
 
         this.setState({ categories: all }, () => {
-
+            this.hideCategoriesLoading();
         })
-        this.props.BusyStore.decrease()
+        // this.props.BusyStore.decrease()
+    }
+
+    getMainCampaings = async () => {
+        this.mainCampainsIsLoaded = true;
+        this.showCampingsLoading()
+        let rsp = await this.doRequestAsync(advertisingService.getCampaigns, false)
+        if (rsp) {
+            var organizedCampaigns = this.listToMatrix(rsp, 2)
+            this.setState({
+                organizedCampaigns
+            })
+        }
+        this.hideCampingsLoading()
     }
 
 
     /////////////////////////
     ///////NAVIGATIONS
+    clearParameters = () => {
+        this.setState({
+            selectedCategories: [],
+            selectedBrands: [],
+            selectedRange: null
+        })
+    }
     goToProductListWithSearchParams = () => {
         if (this.state.selectedCategories.length == 0 &&
             this.state.selectedBrands.length == 0
@@ -337,6 +400,7 @@ class HomeScreen extends BaseScreen {
     }
 
 
+    openLink = (url) => { Linking.openURL(url) }
 
     /////////////////////////
     ///////SEARCH
@@ -345,12 +409,24 @@ class HomeScreen extends BaseScreen {
         if (this.state.searchText.length != 0) this.props.navigation.navigate("ProductList", { type: "variation", variationType: 5, text: this.state.searchText })
     }
 
+    isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - 150;
+    };
+
     render() {
 
         return (
             <SafeArea style={{ backgroundColor: 'white' }}>
 
-                <PageScrollable>
+                <PageScrollable
+                    onScroll={({ nativeEvent }) => {
+                        if (this.isCloseToBottom(nativeEvent) && !this.mainCampainsIsLoaded && !this.state.brandsLoading && !this.state.mainCampaignsLoading) {
+                            this.getMainCampaings()
+                        }
+                    }}
+                    scrollEventThrottle={400}
+                >
                     <LanguageSelector onSelected={this.onSelected} />
                     {/* <SearchBarComponent goToBasket={this.goToBasket} /> */}
 
@@ -363,11 +439,19 @@ class HomeScreen extends BaseScreen {
 
                     <SeperatorFromTopOrBottom />
                     <HomeSlider
-                        images={this.state.ads} />
-                    <CategoryList
-                        // categories={[...this.state.categories,...defaultCategories]}
-                        categories={this.state.categoriesForList}
-                        goToProductList={this.goToProductList} />
+                        //images={this.state.ads}
+                        goToProductList={this.goToProductList}
+                        openLink={this.openLink} />
+
+                    {
+                        this.state.categoriesLoading ?
+                            <LoadingIndicator /> :
+                            <CategoryList
+                                // categories={[...this.state.categories, ...defaultCategories]}
+                                categories={this.state.categoriesForList}
+                                goToProductList={this.goToProductList} />
+                    }
+
 
 
                     <SeperatorFromTopOrBottom />
@@ -382,18 +466,48 @@ class HomeScreen extends BaseScreen {
 
                         selectedCategories={this.state.selectedCategories}
                         selectedBrands={this.state.selectedBrands}
-                        subCategories={this.state.subCategories} />
+                        subCategories={this.state.subCategories}
+                        clearParameters={this.clearParameters} />
 
 
                     <SeperatorFromTopOrBottom />
                     <SpecificCategories
-                        goToProductList={this.goToProductList} />
+                        goToProductList={this.goToProductList}
+                        oneSpecImageWidth={oneSpecImageWidth}
+                        oneSpecImageHeight={oneSpecImageHeight} />
 
 
                     <SeperatorFromTopOrBottom />
-                    <HomeBrands
-                        brands={this.state.brands}
-                        goProductsWithBrand={this.goProductsWithBrand} />
+
+                    {
+                        this.state.mainCampaignsLoading ?
+                            <LoadingIndicator /> :
+                            <HomeCampaigns
+                                organizedCampaigns={this.state.organizedCampaigns}
+                                oneCmpImageWidth={oneCmpImageWidth}
+                                oneCmpImageHeight={oneCmpImageHeight}
+                                goToProductList={this.goToProductList}
+                            />
+                    }
+
+                    <SeperatorFromTopOrBottom />
+                    {
+                        this.state.brandsLoading ?
+                            <LoadingIndicator /> :
+                            <HomeBrands
+                                organizedBrands={this.state.organizedBrands}
+                                goProductsWithBrand={this.goProductsWithBrand}
+                                oneBrandImageHeight={oneBrandImageWidth}
+                                oneBrandImageWidth={oneBrandImageWidth}
+                                campaignLength={this.state.organizedCampaigns.length}
+                            />
+                    }
+
+
+
+
+
+
 
 
 

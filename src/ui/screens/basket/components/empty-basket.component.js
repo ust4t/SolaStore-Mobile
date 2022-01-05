@@ -7,15 +7,16 @@ import EmptyBasketFavoriteRow from './empty-basket-favorite-row.component';
 
 const EmptyBasketFavoritesFlatList = styled(FlatList)`
     flex:1;
+    
 
 `
 const EmptyBasket = ({
-    favoritesList,goBack,addToBasket
+    favoritesList, goBack, addToBasket, goToProductDetail
 }) => (
     <EmptyBasketFavoritesFlatList
         data={favoritesList}
-        renderItem={({item, index}) => <EmptyBasketFavoriteRow item={item} index={index} addToBasket={addToBasket} />}
-        ListHeaderComponent={<EmptyBasketHeader goBack={goBack} />}
+        renderItem={({ item, index }) => <EmptyBasketFavoriteRow item={item} index={index} addToBasket={addToBasket} goToProductDetail={goToProductDetail} />}
+        ListHeaderComponent={<EmptyBasketHeader goBack={goBack} goToProductDetail={goToProductDetail} totalFavoritesCount={favoritesList.length} />}
 
     />
 );

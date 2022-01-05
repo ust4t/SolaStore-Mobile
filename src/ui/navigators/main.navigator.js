@@ -31,6 +31,8 @@ import OrderDetailNavigator from './order-detail.navigator';
 import { intercept, observe } from 'mobx';
 import I18n from '../../../assets/i18n/_i18n';
 import OnBoardScreen from '../screens/onboarding/screens/on-board.screen';
+import favoriteService from '../../services/remote/favorite.service';
+import userService from '../../services/remote/user.service';
 enableScreens(true);
 const Tab = createBottomTabNavigator();
 
@@ -48,8 +50,28 @@ class MainNavigator extends Component {
         };
     }
 
+    doRequestAsync = async (requestFunc, showLoadingModal = true) => {
+        try {
+            let response = await requestFunc()
+            if (response.resultStatus == resultStatus.success) {
+                return response.data
+            } else if (response.resultStatus == resultStatus.noContent) {
+                return []
+            } else if (response.resultStatus == resultStatus.notFound) {
+                return "notFound"
+            }
+            else throw new Error(response.errorMessage)
+        } catch (error) {
+            // console.log(error)
+            if (this._isMounted) this.showErrorModal(error.message ? error.message : I18n.t("$UyarilarBirHataOlustu"));
+        } finally {
+
+        }
+    }
+
     componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
+        InteractionManager.runAfterInteractions(async () => {
+            await this.loginControl()
             this.getFirstTimeValue()
             // observe(this.props.UserStore.userId,()=>{
 
@@ -65,6 +87,21 @@ class MainNavigator extends Component {
             //this.getAll()
         })
 
+    }
+
+    getAndSetFavorites = async () => {
+        let dtoResponse = await this.doRequestAsync(favoriteService.GetUserFavoritesList)
+        if (dtoResponse) {
+            this.props.UserStore.setFavorites(dtoResponse)
+        }
+    }
+    loginControl = async () => {
+        const userInfos = await userLocalService.getUSerData()
+        if (userInfos != null) {
+            let resp = await this.doRequestAsync(() => userService.isMember(userInfos.userEmail, userInfos.userPassword))
+            if (resp) this.props.UserStore.login(resp)
+        }
+        this.getAndSetFavorites()
     }
 
     getFirstTimeValue = async () => {
@@ -114,7 +151,7 @@ class MainNavigator extends Component {
                 })
             } else {
                 rsp.map((item, index) => {
-                    I18n.locale == "tr-TR"
+                    I18n.locale = "tr-TR"
                     tr[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
             }
