@@ -166,8 +166,13 @@ class UserLogin extends BaseScreen {
                     >
                         {({ values, handleChange, handleSubmit, errors, touched, setFieldTouched, isValid }) => (
                             <Form>
-                                <InputWrapper>
+                                <InputWrapper> 
                                     <Input
+                                    style={{
+                                        textAlignVertical:"top",
+                                       
+                                    }}
+                                   
                                         placeholder={I18n.t("$HesabimEmailOrPhone")}
                                         value={values.mail}
                                         onChangeText={handleChange("mail")}

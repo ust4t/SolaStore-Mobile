@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Image, Dimensions, Text, TouchableOpacity, Modal } from 'react-native';
+import { ScrollView, View, Image, Dimensions, Text, TouchableOpacity, Modal, Platform } from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { maxImageUrl } from '../../../../../util/constants';
@@ -11,7 +11,7 @@ import FastImage from 'react-native-fast-image';
 const CloseButton = styled(TouchableOpacity)`
 padding:${props => props.theme.space[2]};
 position:absolute;
-top:${props => props.theme.space[2]};
+top:${props => Platform.OS=="ios" ? props.theme.space[5] :props.theme.space[2]};
 right:${props => props.theme.space[2]};
 elevation:99;
 zIndex:99;

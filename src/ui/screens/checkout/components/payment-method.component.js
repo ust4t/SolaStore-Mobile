@@ -55,6 +55,8 @@ const InputWrapper = styled(View)`
 `
 const Input = styled(TextInput)`
     flex:1;
+    padding:${props=>props.theme.space[2]};
+
 `
 const ItemTouchable = styled(TouchableOpacity)`
     flexDirection:row;

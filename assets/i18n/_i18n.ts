@@ -9,7 +9,7 @@ import ar from './ar';
 
 
 const locales = RNLocalize.getLocales();
-I18n.locale = locales[0].languageTag;
+I18n.locale = "tr-TR"
 export const isRtl = locales[0].isRTL;
 // I18nManager.forceRTL(isRtl); // Arayüz bileşenlerinin soldan sağa yerine sağdan sola doğru dizilmesini zorunlu tutmak içindir.
 I18n.fallbacks = true;

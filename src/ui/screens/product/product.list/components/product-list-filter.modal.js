@@ -1,7 +1,7 @@
 //yeni filter modal
 import I18n from 'i18n-js';
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, Dimensions, TextInput } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, SafeAreaView, Dimensions, TextInput, Platform } from 'react-native';
 import styled from 'styled-components';
 import ModalHeader from '../../../../components/modal-header.component';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -10,7 +10,7 @@ import { Line, SeperatorFromRightOrLeft, SeperatorFromTopOrBottom } from '../../
 import PrimaryButton from '../../../../components/primary-button.component';
 import SecondaryButton from '../../../../components/secondary-button.component';
 const deviceWidth = Dimensions.get("window").width;
-const ModalWrapper = styled(View)`
+const ModalWrapper = styled(SafeAreaView)`
     width:${deviceWidth}px;
     height:100%;
     backgroundColor:${props => props.theme.color.transparentBlack};
@@ -75,6 +75,7 @@ padding:${props => props.theme.space[1]};
 `
 const RangeInput = styled(TextInput)`
 flex:1;
+padding:${props=>props.theme.space[2]};
 `
 const InputWrapper = styled(View)`
     backgroundColor:${props => props.theme.color.lightGray};
@@ -142,7 +143,7 @@ const ProductListFilterModal = ({
         <Modal
             visible={filterModalVisible}
             transparent={true}
-            animationType="none"
+            animationType="fade"
             onRequestClose={hideFilterModal}>
 
             <ModalWrapper>
@@ -182,7 +183,9 @@ const ProductListFilterModal = ({
 
                         </TouchableText>
                     </Touchable> */}
-                    <Touchable
+                    {
+                        Platform.OS=="android" &&
+                        <Touchable
                         onPress={showSortModal}
                         style={{
                             shadowColor: "#000",
@@ -203,6 +206,7 @@ const ProductListFilterModal = ({
                             {selectedSortOption}
                         </TouchableText>
                     </Touchable>
+                    }
 
                     <Touchable onPress={showBrandsModal}
                         style={{

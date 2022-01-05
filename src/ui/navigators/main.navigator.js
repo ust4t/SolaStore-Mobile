@@ -128,7 +128,6 @@ class MainNavigator extends Component {
 
             rsp = rsp.data;
 
-
             if (I18n.locale == "tr-TR") {
                 rsp.map((item, index) => {
                     tr[item.defaultValue.replace(".", "")] = item.selectedValue
@@ -150,12 +149,13 @@ class MainNavigator extends Component {
                     fr[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
             } else {
+       
+                I18n.locale = "tr-TR"
                 rsp.map((item, index) => {
-                    I18n.locale = "tr-TR"
                     tr[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
             }
-
+       
         }
         if (firstVal) {
             this.setState({ firstTime: false })

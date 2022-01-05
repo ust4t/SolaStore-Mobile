@@ -25,7 +25,8 @@ backgroundColor:${props => props.theme.color.white};
 `
 const SearchEditText = styled(TextInput)`
     flex:1;
-    padding:${props => props.theme.space[1]};
+    textAlignVertical:top;
+    padding:${props => props.theme.space[2]};
     paddingLeft:${props => props.theme.space[2]};
 `
 const SearchIconWrapper = styled(TouchableOpacity)`
@@ -72,9 +73,9 @@ const SearchBar = ({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 6,
+            height: 2,
         },
-        shadowOpacity: 0.39,
+        shadowOpacity: 0.2,
         shadowRadius: 8.30,
 
         elevation: 13,

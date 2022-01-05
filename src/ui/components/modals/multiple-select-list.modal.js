@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, ScrollView, Dimensions,SafeAreaView} from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { checkmarkIcon, forwardChevron } from '../../../util/icons';
@@ -7,7 +7,7 @@ import ModalHeader from '../modal-header.component';
 import { ScrollablePage } from '../shared-styled.components';
 import { color } from '../../../infrastructure/theme/color';
 const deviceWidth = Dimensions.get("window").width;
-const ModalWrapper = styled(View)`
+const ModalWrapper = styled(SafeAreaView)`
     width:${deviceWidth}px;
     height:100%;
     backgroundColor:${props => props.theme.color.transparentBlack};
@@ -96,7 +96,7 @@ const MultipleSelectListModal = ({
         <Modal
             visible={selectListModalVisible}
             transparent={true}
-            animationType="none"
+            animationType="fade"
             onRequestClose={hideSelectListModal}>
             <ModalWrapper>
                 <ContentWrapper >

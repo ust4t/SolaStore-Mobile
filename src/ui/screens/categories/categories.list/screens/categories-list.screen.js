@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Platform } from 'react-native';
 import { SafeArea, SeperatorFromRightOrLeft } from '../../../../components/shared-styled.components';
 import Tabbar from '../../../../components/tabbar.component';
 import BaseScreen from '../../../../shared/base.screen';
@@ -24,9 +24,10 @@ const Header = styled(View)`
 const HeaderTouchable = styled(TouchableOpacity)`
 `
 const HeaderText = styled(Text)`
+borderWidth:${props=>Platform.OS=="ios" && 1}px;
 borderBottomWidth:1px;
 padding:${props => props.theme.space[2]};
-borderColor:${props => props.selectedHeader == props.headerVal ? props.theme.color.primary : props.theme.color.white};
+borderColor:${props => props.selectedHeader == props.headerVal ? props.theme.color.secondary : props.theme.color.white};
 `
 const List = styled(FlatList).attrs(({
     contentContainerStyle: {
@@ -128,7 +129,9 @@ class CategoriesListScreen extends BaseScreen {
 
                 <Header >
                     <HeaderTouchable onPress={() => this.changeHeaderSelected(1)}>
-                        <HeaderText selectedHeader={this.state.selectedHeader} headerVal={1}>
+                        <HeaderText 
+                        
+                        selectedHeader={this.state.selectedHeader} headerVal={1}>
                             {I18n.t("$AnaSayfaKategoriler")}
                         </HeaderText>
                     </HeaderTouchable>

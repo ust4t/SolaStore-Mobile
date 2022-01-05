@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, InteractionManager, Dimensions } from 'react-native';
+import { View, Text, FlatList, InteractionManager, Dimensions, Platform } from 'react-native';
 import { SafeArea } from '../../../../components/shared-styled.components';
 import styled from 'styled-components';
 import ProductListRow from '../components/product-list-row.component';
@@ -97,11 +97,13 @@ class ProductList extends BaseScreen {
     // }
     showBrandsModal = () => {
         this.setState({
+            filterModalVisible:false,
             brandsModalVisible: true
         })
     }
     hideBrandsModal = () => {
         this.setState({
+            filterModalVisible:true,
             brandsModalVisible: false
         })
     }
@@ -411,7 +413,9 @@ class ProductList extends BaseScreen {
     }
 
     createParameters = async () => {
-        this.props.BusyStore.increase()
+        if(Platform.OS=="android")  this.props.BusyStore.increase()
+        this.hideFilterModal()
+      
         this.setState({
             products: []
         })
@@ -457,7 +461,7 @@ class ProductList extends BaseScreen {
         //     this.hideFilterModal()
         // })
 
-        this.hideFilterModal()
+        
         setTimeout(() => {
             this.setState({
                 products: newList,
@@ -475,7 +479,8 @@ class ProductList extends BaseScreen {
 
     }
     clearFilter = () => {
-        this.props.BusyStore.increase()
+        if(Platform.OS=="android") this.props.BusyStore.increase()
+       
         this.hideFilterModal()
         this.setState({
             products: []
