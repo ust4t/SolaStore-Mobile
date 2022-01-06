@@ -25,8 +25,8 @@ backgroundColor:${props => props.theme.color.white};
 `
 const SearchEditText = styled(TextInput)`
     flex:1;
-    textAlignVertical:top;
-    padding:${props => props.theme.space[2]};
+    
+    padding:${props => props.theme.space[1]};
     paddingLeft:${props => props.theme.space[2]};
 `
 const SearchIconWrapper = styled(TouchableOpacity)`

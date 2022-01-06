@@ -61,15 +61,15 @@ const CcForm = ({
 
                 onSubmit={handleSubmit}
                 initialValues={{
-                    // name: "Ahmet Mehmet",
-                    // no: "4546-7112-3456-7894",
-                    // cvv: "123",
-                    // year: "12/26",
+                    name: "Ahmet Mehmet",
+                    no: "4546-7112-3456-7894",
+                    cvv: "123",
+                    year: "12/26",
 
-                    name: "",
-                    no: "",
-                    cvv: "",
-                    year: "",
+                    // name: "",
+                    // no: "",
+                    // cvv: "",
+                    // year: "",
 
 
                 }}

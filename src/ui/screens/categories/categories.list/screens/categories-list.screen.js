@@ -24,7 +24,7 @@ const Header = styled(View)`
 const HeaderTouchable = styled(TouchableOpacity)`
 `
 const HeaderText = styled(Text)`
-borderWidth:${props=>Platform.OS=="ios" && 1}px;
+borderWidth:${props => Platform.OS == "ios" ? 1 : 0}px;
 borderBottomWidth:1px;
 padding:${props => props.theme.space[2]};
 borderColor:${props => props.selectedHeader == props.headerVal ? props.theme.color.secondary : props.theme.color.white};
@@ -129,9 +129,9 @@ class CategoriesListScreen extends BaseScreen {
 
                 <Header >
                     <HeaderTouchable onPress={() => this.changeHeaderSelected(1)}>
-                        <HeaderText 
-                        
-                        selectedHeader={this.state.selectedHeader} headerVal={1}>
+                        <HeaderText
+
+                            selectedHeader={this.state.selectedHeader} headerVal={1}>
                             {I18n.t("$AnaSayfaKategoriler")}
                         </HeaderText>
                     </HeaderTouchable>

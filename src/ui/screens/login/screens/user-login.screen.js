@@ -169,7 +169,7 @@ class UserLogin extends BaseScreen {
                                 <InputWrapper> 
                                     <Input
                                     style={{
-                                        textAlignVertical:"top",
+                                       
                                        
                                     }}
                                    

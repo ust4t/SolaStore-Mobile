@@ -40,10 +40,13 @@ class PaymentCC extends BaseScreen {
             permissionModalVisible: false,
             indicatorVisible: false
         };
+        this.baseUrl = "https://api.solastore.com.tr/api/";
+        this.paymentSuccessUrl = "http://uselesswebsiteurlsuccess.com";
+        this.paymentFailUrl = "http://uselesswebsiteurlfail.com";
         this.webRef = createRef()
         this.hash = "";
-        this.okUrl = "Home/CCSuccess";
-        this.failUrl = "Home/CCFail";
+        this.okUrl = this.baseUrl + "Helpers/CCSuccess";
+        this.failUrl = this.baseUrl + "Helpers/CCFail";
         this.rnd = new Date().toJSON();
         this.islemtipi = "Auth";
         this.oid = this.props.route.params.orderId;
@@ -71,12 +74,12 @@ class PaymentCC extends BaseScreen {
     handleUrlChange = async (params) => {
 
         const { url } = params;
-        // console.log("\n" + url + "\n")
+        console.log("\n" + url + "\n")
         // console.log(this.webRef.current)
         // if (this.webRef.current.props.source.html == "") this.setState({ indicatorVisible: true })
         // else this.setState({ indicatorVisible: false })
         if (!url) return false;
-        if (url.includes('https://www.solastore.com.tr/Home/Thanks')) {
+        if (url.includes(this.paymentSuccessUrl)) {
             this.props.UserStore.orderMessage = I18n.t("$UyarilarSiparisinizAlinmistir")
             this.setState({
                 case: 3
@@ -91,7 +94,7 @@ class PaymentCC extends BaseScreen {
 
             return false
         }
-        if (url.includes('https://www.solastore.com.tr/Home/CCError')) {
+        if (url.includes(this.paymentFailUrl)) {
             this.props.UserStore.orderId = -1 * this.props.UserStore.orderId;
             this.props.UserStore.orderMessage = I18n.t("$OdemeOdemeYapilmadi")
             this.setState({
@@ -162,11 +165,12 @@ class PaymentCC extends BaseScreen {
             'islemtipi': this.islemtipi,
             'amount': this.amount,
             'currency': '840',
-            'okUrl': 'https://www.solastore.com.tr/' + this.okUrl,
-            'failUrl': 'https://www.solastore.com.tr/' + this.failUrl,
+            'okUrl': this.okUrl,
+            'failUrl': this.failUrl,
             'lang': I18n.locale.substring(0, 2),
             'oid': this.oid,
             'rnd': this.rnd,
+            'sourceProof':"ugurturkmenn@gmail.com",
             // 'pan': '5401341234567891',
             // 'Ecom_Payment_Card_ExpDate_Year': '26',
             // 'Ecom_Payment_Card_ExpDate_Month': '12',
@@ -182,7 +186,10 @@ class PaymentCC extends BaseScreen {
         }
         formBody = formBody.join("&");
 
-        var rsp = await fetch('https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate', {
+        var rsp = await fetch(
+            'https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate',
+            // 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate',
+            {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
