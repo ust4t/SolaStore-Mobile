@@ -15,6 +15,7 @@ target 'solastore' do
   pod 'react-native-google-maps', :path => rn_maps_path
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
+  pod 'Firebase/Core'
   
   target 'solastoreTests' do
     inherit! :complete

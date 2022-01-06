@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Text, TouchableOpacity, ActivityIndicator, Touchable } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, ActivityIndicator, Touchable, Platform } from 'react-native';
 import styled from 'styled-components';
 import { searchIcon, basketIcon } from '../../../../util/icons';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -26,7 +26,7 @@ backgroundColor:${props => props.theme.color.white};
 const SearchEditText = styled(TextInput)`
     flex:1;
     
-    padding:${props => props.theme.space[1]};
+    padding:${props => Platform.OS=="ios"? props.theme.space[2]: props.theme.space[1]};
     paddingLeft:${props => props.theme.space[2]};
 `
 const SearchIconWrapper = styled(TouchableOpacity)`
@@ -81,7 +81,9 @@ const SearchBar = ({
         elevation: 13,
     }}>
         <SearchBarView>
-            <SearchEditText placeholder={I18n.t("$AnaSayfaArama")} value={searchText} onChangeText={onChangeText} />
+            <SearchEditText
+            
+            placeholder={I18n.t("$AnaSayfaArama")} value={searchText} onChangeText={onChangeText} />
 
             <SearchIconWrapper onPress={action}>
 
