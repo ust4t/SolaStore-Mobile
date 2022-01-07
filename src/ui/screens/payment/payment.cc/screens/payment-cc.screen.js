@@ -74,7 +74,7 @@ class PaymentCC extends BaseScreen {
     handleUrlChange = async (params) => {
 
         const { url } = params;
-        console.log("\n" + url + "\n")
+        //console.log("\n" + url + "\n")
         // console.log(this.webRef.current)
         // if (this.webRef.current.props.source.html == "") this.setState({ indicatorVisible: true })
         // else this.setState({ indicatorVisible: false })

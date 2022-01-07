@@ -230,13 +230,13 @@ class ProductList extends BaseScreen {
                 999
         ))
         if (data) {
-            this.defaultRequestProcess(data)
+            this.defaultRequestProcess(data.reverse())
         }
     }
     search = async () => {
         let response = await this.doRequestAsync(() => productService.searchProducts(this.props.route.params.text))
         if (response) {
-            this.defaultRequestProcess(response)
+            this.defaultRequestProcess(response.reverse())
         }
     }
     addToFavorites = async (item) => {

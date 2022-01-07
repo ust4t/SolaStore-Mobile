@@ -125,7 +125,7 @@ class NewPasswordScreen extends BaseScreen {
 
 
 
-                                <PrimaryButton text={I18n.t("$Hesabim.Guncelle")} action={handleSubmit} />
+                                <PrimaryButton text={I18n.t("$HesabimGuncelle")} action={handleSubmit} />
                             </Form>
                         )}
                     </Formik>
