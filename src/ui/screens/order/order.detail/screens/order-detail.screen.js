@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, InteractionManager, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, InteractionManager, FlatList, TouchableOpacity, Platform } from 'react-native';
 import styled from 'styled-components';
 import orderService from '../../../../../services/remote/order.service';
 import ScreenHeader from '../../../../components/screen-header.component';
@@ -110,7 +110,7 @@ class OrderDetail extends BaseScreen {
         let rsp = await this.doRequestAsync(() => orderService.getOrderDetail(
             this.props.UserStore.orderId != null ? Math.abs(this.props.UserStore.orderId) :
                 this.props.route.params.orderId
-        ))
+        ),Platform.OS==="android" ? true :false)
         if (rsp) {
             let total = 0;
             rsp.map((item) => {
