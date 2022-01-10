@@ -1,4 +1,4 @@
-package com.solastore;
+package com.solastore.solastoreapp;
 
 import com.facebook.react.ReactActivity;
 

@@ -29,6 +29,49 @@
             {
               "client_id": "1006484601184-fe7344qhfma1nej7e8fealoqb0ceko2t.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1006484601184-9g0eptmpoh8l5i5q8gle1b2le015qnli.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.solastore"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006484601184:android:8e9ee3e7798cf8f3cf0605",
+        "android_client_info": {
+          "package_name": "com.solastore.solastoreapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006484601184-fe7344qhfma1nej7e8fealoqb0ceko2t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtR8BQiSYezwVK82TxhDOt3FPgGAZ-C-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006484601184-fe7344qhfma1nej7e8fealoqb0ceko2t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1006484601184-9g0eptmpoh8l5i5q8gle1b2le015qnli.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.solastore"
+              }
             }
           ]
         }
