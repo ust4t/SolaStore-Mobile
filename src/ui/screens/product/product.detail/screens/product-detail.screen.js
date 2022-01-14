@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { View, Text, InteractionManager, TouchableOpacity } from 'react-native';
+import { View, Text, InteractionManager, TouchableOpacity, Linking, Share } from 'react-native';
 import styled from 'styled-components';
 import { color } from '../../../../../infrastructure/theme/color';
 import productService from '../../../../../services/remote/product.service';
@@ -273,6 +273,7 @@ class ProductDetail extends BaseScreen {
                         increase={this.increse}
                         decrease={this.decrease}
                         showSliderModal={this.showSliderModal}
+                        shareProduct={this.shareProduct}
                     />
 
 
@@ -312,6 +313,13 @@ class ProductDetail extends BaseScreen {
                 <this.RenderErrorModal />
             </SafeArea>
         );
+    }
+
+    shareProduct = async () => {
+        await Share.share({
+            message: `https://solastore.com.tr/Category/Product/${this.item.productID}`
+        })
+        //Linking.openURL()
     }
 }
 

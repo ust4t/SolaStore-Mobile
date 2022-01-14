@@ -13,6 +13,7 @@ export const color = {
     error:"#B72242",
     pink:"#ffc8dd",
     succes:"#2bba0e",
+    darkGray:"#606060",
 
 
     darkGreen:"#abc4ff",

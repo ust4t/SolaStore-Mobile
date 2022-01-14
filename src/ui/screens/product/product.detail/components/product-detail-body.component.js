@@ -10,6 +10,7 @@ import { SeperatorFromTopOrBottom } from '../../../../components/shared-styled.c
 import ProductVariation from './product-variation.component';
 import I18n from 'i18n-js';
 import PaymentImage from './payment-images.component';
+import ShareButton from './share-button.component';
 
 const SupWrapper = styled(View)`
  
@@ -90,7 +91,7 @@ color:${props => props.theme.color.primary};
 
 const ProductDetailBody = ({
     name, price, description, variations, onVariationSelected, count, decrease, increase,
-    sizes, oldPrice
+    sizes, oldPrice, shareProduct
 }) => {
 
 
@@ -158,17 +159,27 @@ const ProductDetailBody = ({
                 renderItem={({ item, index }) => <ProductVariation item={item} index={index} action={onVariationSelected} />}
             />
 
+            <SeperatorFromTopOrBottom />
+            <ShareButton shareProduct={shareProduct} />
+            <SeperatorFromTopOrBottom />
+            
             <VariationItemWrapper>
 
                 <VariationName>
                     {I18n.t("$UrunlerAciklama")} :
-</VariationName>
+                </VariationName>
 
             </VariationItemWrapper>
-            <SeperatorFromTopOrBottom />
+
+
+
             <Description>
                 {description}
             </Description>
+
+
+
+
 
             <PaymentImage />
 

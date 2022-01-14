@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { basketIcon, heartIcon, homeIcon, notificationIcon, ordersIcon, personIcon, searchIcon, starIcon } from '../../util/icons';
 import { color } from '../../infrastructure/theme/color';
 import I18n from 'i18n-js';
+import StaticWpButton from './static-wp-button.component';
 const SupWrapper = styled(View)`
 
 paddingBottom:${props => props.theme.space[2]};
@@ -44,6 +45,7 @@ const Tabbar = ({
     navigatorName = "homeNavigator"
 }) => (
     <SupWrapper>
+        <StaticWpButton />
         <SubWrapper style={{
             shadowColor: "#000",
             shadowOffset: {

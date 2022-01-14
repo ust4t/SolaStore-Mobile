@@ -1,28 +1,20 @@
 import React, { Component } from 'react';
-import { View, Text, InteractionManager, ScrollView, I18nManager, ActivityIndicator, Linking, Dimensions } from 'react-native';
+import { View, Text, InteractionManager, ScrollView, I18nManager, ActivityIndicator, Linking, Dimensions, FlatList } from 'react-native';
 
 import categoryService from '../../../../services/remote/category.service';
 import { Categories, Products } from '../../../../util/fake-data';
-import { SafeArea, ScrollablePage, SeperatorFromTopOrBottom } from '../../../components/shared-styled.components';
+import { Line, SafeArea, ScrollablePage, SeperatorFromTopOrBottom } from '../../../components/shared-styled.components';
 import Tabbar from '../../../components/tabbar.component';
 import BaseScreen from '../../../shared/base.screen';
 import CategoryList from '../components/category-list.component';
-import DiscountedItems from '../components/discounted-items-list.component';
-import PopularList from '../components/popular-list.component';
 import SearchBar from '../components/search-bar.component';
-
-
 import { inject, observer } from 'mobx-react';
 import productService from '../../../../services/remote/product.service';
-import userService from '../../../../services/remote/user.service';
 import userLocalService from '../../../../services/local/user-local.service';
-import languageService from '../../../../services/remote/language.service';
 import I18n from '../../../../../assets/i18n/_i18n';
 import _I18n from '../../../../../assets/i18n/_i18n';
-import HomeMenu from '../components/home-menu.component';
 import LanguageSelector from '../components/language-selector.component';
 import { showToast } from '../../../../util/toast-message';
-import tr from '../../../../../assets/i18n/tr';
 import DetailedSearch from '../components/detailed-search.component';
 import SelectListModal from '../../../components/modals/selectlist-modal';
 import brandService from '../../../../services/remote/brand.service';
@@ -30,12 +22,12 @@ import HomeSlider from '../components/home-slider.component';
 import styled from 'styled-components';
 import MultipleSelectListModal from '../../../components/modals/multiple-select-list.modal';
 import advertisingService from '../../../../services/remote/advertising.service';
-import DtoResponse from '../../../../util/dto-response';
 import SpecificCategories from '../components/specific-categories.screen';
 import HomeBrands from '../components/home-brands.component';
-import favoriteService from '../../../../services/remote/favorite.service';
 import { space } from '../../../../infrastructure/theme/space';
 import HomeCampaigns from '../components/home-campaigns.component';
+import SocialMedias from '../../../components/social-medias.component';
+import { brandUrl, SocialMediasList } from '../../../../util/constants';
 
 ///////////brand images calculates
 const deviceWidth = Dimensions.get("window").width
@@ -427,6 +419,15 @@ class HomeScreen extends BaseScreen {
                     }}
                     scrollEventThrottle={400}
                 >
+
+                    {/* <FlatList
+                        data={SocialMediasList}
+
+                        numColumns={8}
+                        renderItem={({ item, index }) => <SocialMedias rowWidth={deviceWidth / 8} openLink={this.openLink} item={item} index={index} />}
+
+
+                    /> */}
                     <LanguageSelector onSelected={this.onSelected} />
                     {/* <SearchBarComponent goToBasket={this.goToBasket} /> */}
 
@@ -503,23 +504,14 @@ class HomeScreen extends BaseScreen {
                             />
                     }
 
+                  
+                    <SocialMedias openLink={this.openLink} />
 
 
 
 
 
 
-
-
-
-
-                    {/* <DiscountedItems products={this.state.products} goToProductDetail={this.goToProductDetail} />
-                    <HomeMenu
-                        goToFavorites={this.goToFavorites}
-                        goToContact={this.goToContact}
-                        goToSettings={this.goToSettings}
-                    /> */}
-                    {/* <PopularList popularProducts={this.state.popularProducts} goToProductDetail={this.goToProductDetail} /> */}
                 </PageScrollable>
 
 
@@ -537,14 +529,6 @@ class HomeScreen extends BaseScreen {
                     propertyName="selectedCategoryName"
 
                 />
-                {/* <SelectListModal
-                    selectListModalVisible={this.state.categoriesModalVisible}
-                    hideSelectListModal={this.hideCategoriesModal}
-                    onSelected={this.onCategorySelected}
-                    selectItems={this.state.categories.slice(3, this.state.categories.length)}
-                    propertyName="selectedCategoryName"
-                /> */}
-
 
                 <MultipleSelectListModal
                     selectListModalVisible={this.state.brandsModalVisible}
@@ -555,14 +539,7 @@ class HomeScreen extends BaseScreen {
                     propertyName="brandName"
 
                 />
-                {/* <SelectListModal
-                    selectListModalVisible={this.state.brandsModalVisible}
-                    hideSelectListModal={this.hideBrandsModal}
-                    onSelected={this.onBrandSelected}
-                    selectItems={this.state.brands}
 
-                    propertyName="brandName"
-                /> */}
 
                 <SelectListModal
                     selectListModalVisible={this.state.pricesModalVisible}
@@ -575,6 +552,8 @@ class HomeScreen extends BaseScreen {
             </SafeArea>
         );
     }
+
+
 
     onSelected = (value) => {
         userLocalService.storeLanguagePref(value);

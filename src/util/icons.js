@@ -285,7 +285,10 @@ const forwardCircleIcon=Platform.select({
     android:"md-arrow-forward-circle"
 })
 
-
+const shareIcon=Platform.select({
+    ios:"ios-share-social",
+    android:"md-share-social"
+})
 
 export  {
     cartIcon,starIcon,cancelIcon,addIcon,removeIcon,homeIcon,searchIcon,giftIcon,personIcon,caretIcon,watchIcon,cashIcon,carIcon,
@@ -293,6 +296,6 @@ export  {
     lockIcon,arrowBack,locationIcon,checkmarkIcon,walletIcon,heartIcon,appsIcon,heartOutlineIcon,forwardChevron,downChevron,logOutIdon
     ,elipsisHorizontalIcon,trashBinOutline,alertIcon,filterIcon,ellipsisVertical,optionsIcon,notificationIcon,
     eyeIcon,eyeOffIcon,settingsIcon,heartDislikeIcon,whatsappIcon,FlagIcon,PlayIcon,CallIcon,swapIcon,personAddIcon,
-    backCircleIcon,forwardCircleIcon
+    backCircleIcon,forwardCircleIcon,shareIcon
 
 }

@@ -149,13 +149,13 @@ class MainNavigator extends Component {
                     fr[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
             } else {
-       
+
                 I18n.locale = "tr-TR"
                 rsp.map((item, index) => {
                     tr[item.defaultValue.replace(".", "")] = item.selectedValue
                 })
             }
-       
+
         }
         if (firstVal) {
             this.setState({ firstTime: false })
