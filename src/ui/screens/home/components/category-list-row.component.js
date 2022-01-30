@@ -41,7 +41,15 @@ const CategoryListRow = ({
 
         }}>
             <IconWrapper>
-                <CategoryIcon source={{ uri: imageUrl + squareCategoryPictureGuidName }} resizeMode="stretch" />
+                {
+                    squareCategoryPictureGuidName  ?
+                        <CategoryIcon source={{
+                            uri:
+                                imageUrl + squareCategoryPictureGuidName
+                        }} resizeMode="stretch" /> :
+                        <CategoryIcon source={require('../../../../../assets/medias/sola.jpg')} resizeMode="stretch" />
+                }
+
             </IconWrapper>
             <CategoryTitle>
                 {selectedCategoryName}

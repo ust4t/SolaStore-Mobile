@@ -391,6 +391,19 @@ class ProductList extends BaseScreen {
     }
 
     onBrandSelected = (item) => {
+        if (item == null) {
+            if (this.state.selectedBrands.length == this.state.brands.length) {
+                this.setState({
+                    selectedBrands: []
+                })
+            } else {
+                this.setState({
+                    selectedBrands: [...this.state.brands]
+                })
+            }
+
+            return;
+        }
         if (this.state.selectedBrands.includes(item)) {
             this.setState({
                 selectedBrands: this.state.selectedBrands.filter(x => x != item)

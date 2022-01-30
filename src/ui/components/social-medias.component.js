@@ -12,6 +12,7 @@ marginTop:25px;
 borderTopWidth:1px;
 borderTopColor:${props=>props.theme.color.lightGray};
 paddingTop:${props=>props.theme.space[2]};
+marginBottom:70px;
 `
 const Wrapper = styled(View)`
     alignItems:center;

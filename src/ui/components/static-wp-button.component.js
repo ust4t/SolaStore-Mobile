@@ -11,6 +11,7 @@ marginBottom:${props=>props.theme.space[1]};
 alignItems:center;
 justifyContent:center;
 
+
 `
 const WpIcon = styled(Icon).attrs(props => (
     {
@@ -31,7 +32,7 @@ const StaticWpIcon = ({
     
 }) => (
     <TouchableWrapper onPress={messageToWp} >
-       <WpIcon />
+       <WpIcon style={{overflow:"hidden"}}/>
     </TouchableWrapper>
 );
 

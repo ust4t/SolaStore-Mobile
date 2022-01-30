@@ -1,11 +1,12 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, Dimensions,SafeAreaView} from 'react-native';
+import { Modal, View, Text, TouchableOpacity, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { checkmarkIcon, forwardChevron } from '../../../util/icons';
 import ModalHeader from '../modal-header.component';
 import { ScrollablePage } from '../shared-styled.components';
 import { color } from '../../../infrastructure/theme/color';
+import i18n from 'i18n-js';
 const deviceWidth = Dimensions.get("window").width;
 const ModalWrapper = styled(SafeAreaView)`
     width:${deviceWidth}px;
@@ -91,7 +92,7 @@ const MultipleSelectListModal = ({
     propertyName = null,
 
 }) => {
-  
+
     return (
         <Modal
             visible={selectListModalVisible}
@@ -103,9 +104,45 @@ const MultipleSelectListModal = ({
                     <ModalHeader hideModal={hideSelectListModal} />
                     <ModalScroll
                         contentContainerStyle={{
-                             padding: 10
+                            padding: 10
                         }}
                     >
+                        <ItemView style={{
+
+                        }}>
+                            <ItemTouchable onPress={() => onSelected(null,)}
+                                //inludes yerine bir liste içinde isselected false ya da true sonra indexof ile bakılabilir
+                                isSelected={selectItems.length == selectedItems.length}
+                                style={{
+                                    shadowColor: "#000",
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 1,
+                                    },
+                                    shadowOpacity: 0.18,
+                                    shadowRadius: 1.00,
+
+                                    elevation: 1,
+                                }}
+                            >
+                                <RadioButtonWrapper>
+                                    <RadioButton isSelected={selectItems.length == selectedItems.length}>
+
+                                    </RadioButton>
+                                </RadioButtonWrapper>
+                                <ItemText numberOfLines={1} ellipsizeMode='tail'>
+                                    {
+                                        selectedItems.length ==selectItems.length  ?
+                                        i18n.t("$KategoriHepsiniTemizle"):
+                                        i18n.t("$AnaSayfaHepsiniSec")
+                                        
+                                    }
+                                    
+
+                                </ItemText>
+
+                            </ItemTouchable>
+                        </ItemView>
                         {
                             selectItems.map((item, index) => {
                                 return (

@@ -152,6 +152,19 @@ class HomeScreen extends BaseScreen {
     hidePricesModal = () => { this.setState({ pricesModalVisible: false }) }
     onCategorySelected = (item) => {
         // this.setState({ selectedCategory: item });
+        if (item == null) {
+            if (this.state.selectedCategories.length == this.state.categories.slice(0, this.state.categories.length - 3).length) {
+                this.setState({
+                    selectedCategories: []
+                })
+            } else {
+                this.setState({
+                    selectedCategories: [...this.state.categories.slice(0, this.state.categories.length - 3)]
+                })
+            }
+
+            return;
+        }
         if (this.state.selectedCategories.includes(item)) {
             this.setState({
                 selectedCategories: this.state.selectedCategories.filter(x => x != item)
@@ -165,6 +178,20 @@ class HomeScreen extends BaseScreen {
 
     }
     onBrandSelected = (item) => {
+        if (item == null) {
+            if (this.state.selectedBrands.length == this.state.brands.length) {
+                this.setState({
+                    selectedBrands: []
+                })
+            } else {
+                this.setState({
+                    selectedBrands: [...this.state.brands]
+                })
+            }
+
+            return;
+        }
+
         if (this.state.selectedBrands.includes(item)) {
             this.setState({
                 selectedBrands: this.state.selectedBrands.filter(x => x != item)
@@ -412,6 +439,7 @@ class HomeScreen extends BaseScreen {
             <SafeArea style={{ backgroundColor: 'white' }}>
 
                 <PageScrollable
+
                     onScroll={({ nativeEvent }) => {
                         if (this.isCloseToBottom(nativeEvent) && !this.mainCampainsIsLoaded && !this.state.brandsLoading && !this.state.mainCampaignsLoading) {
                             this.getMainCampaings()
@@ -504,7 +532,7 @@ class HomeScreen extends BaseScreen {
                             />
                     }
 
-                  
+
                     <SocialMedias openLink={this.openLink} />
 
 
