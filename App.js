@@ -8,6 +8,10 @@ import { Provider } from 'mobx-react';
 import indexStore from './src/infrastructure/stores/index.store';
 import messaging from '@react-native-firebase/messaging';
 
+if(Platform.OS=="ios"){
+  messaging().requestPermission();
+}
+
 const MyStatusBar = ({backgroundColor, ...props}) => (
     <View style={[styles.statusBar, { backgroundColor:color.primary }]}>
       <SafeAreaView>
