@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
 import { View, Text, FlatList, InteractionManager, Dimensions } from 'react-native';
 import BaseScreen from '../../../shared/base.screen';
 import { inject, observer } from 'mobx-react';
@@ -50,6 +50,9 @@ class CheckoutScreen extends BaseScreen {
             selectedRepId: 0,
 
 
+            wrongOrderInfos: false,
+
+
             name: this.props.UserStore.userName != null ? this.props.UserStore.userName + " " + this.props.UserStore.userSurname : "",
             phone: this.props.UserStore.userPhone != null ? this.props.UserStore.userPhone : ""
 
@@ -59,6 +62,8 @@ class CheckoutScreen extends BaseScreen {
 
 
         };
+
+        this.flatListRef = React.createRef()
     }
 
     //////////////////////
@@ -88,10 +93,16 @@ class CheckoutScreen extends BaseScreen {
     goToPayment = async () => {
 
 
-        if (this.state.name.length == "" || this.state.phone.length == "") {
+        if (this.state.name == "" || this.state.phone == "") {
             this.showErrorModal(I18n.t("$UyarilarSiparisBilgileriniEksiksizDoldurunuz"))
+            this.setState({ wrongOrderInfos: true })
+            this.flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
             return;
-        } if (this.state.selectedRepId == 0) {
+        }
+        else {
+            this.setState({ wrongOrderInfos: false })
+        }
+        if (this.state.selectedRepId == 0) {
             this.showErrorModal(I18n.t("$UyarilarLutfenTemsilciSeciniz"))
             return;
         }
@@ -157,6 +168,7 @@ class CheckoutScreen extends BaseScreen {
 
 
                 <CheckoutItemsFlatList
+                    ref={this.flatListRef}
                     ListHeaderComponent={<PaymentMethod
                         specifiedWidth={specifiedWidth}
                         salesReps={this.state.reps}
@@ -169,7 +181,8 @@ class CheckoutScreen extends BaseScreen {
                         onNameChanged={this.onNameChanged}
                         onPhoneChanged={this.onPhoneChanged}
                         onPaymentMethodSelected={this.onSelect}
-                        selectedPaymentMethodName={this.state.selectedPaymentMethodName} />}
+                        selectedPaymentMethodName={this.state.selectedPaymentMethodName}
+                        wrongOrderInfos={this.state.wrongOrderInfos} />}
                     data={this.state.items}
                     renderItem={({ item, index }) => <Row item={item} index={index} />}
                 />

@@ -52,10 +52,11 @@ const InputWrapper = styled(View)`
     justifyContent:center;
     padding:${props => props.theme.space[0]};
     paddingLeft:${props => props.theme.space[1]};
+  
 `
 const Input = styled(TextInput)`
     flex:1;
-    padding:${props=>props.theme.space[2]};
+    padding:${props => props.theme.space[2]};
 
 `
 const ItemTouchable = styled(TouchableOpacity)`
@@ -66,8 +67,8 @@ const ItemTouchable = styled(TouchableOpacity)`
     marginTop:${props => props.theme.space[2]};
     padding:${props => props.theme.space[2]};
     borderWidth:1px;
-    borderColor:${props=>props.theme.color.lightGray};
-    borderRadius:${props=>props.theme.space[2]};
+    borderColor:${props => props.theme.color.lightGray};
+    borderRadius:${props => props.theme.space[2]};
 
 `
 const ItemText = styled(Text)`
@@ -97,7 +98,11 @@ backgroundColor:${props => props.isSelected ? props.theme.color.darkGreen : prop
 `
 
 
-
+const InputBorderWrapper = styled(View)`
+    width:100%;
+    borderWidth:${props => props.wrongOrderInfos ? "0.4px" : "0px"};
+    borderColor:${props => props.wrongOrderInfos ? "red" : "white"};
+`
 
 const PaymentMethodComponent = ({
 
@@ -113,33 +118,38 @@ const PaymentMethodComponent = ({
 
     selectedPaymentMethodName,
     onPaymentMethodSelected,
-    specifiedWidth
+    specifiedWidth,
+
+    wrongOrderInfos
 }) => {
     const options = [{ name: I18n.t("$SiparisCariHesapIle"), value: "Order" }, { name: I18n.t("$SiparisKrediKartiIle"), value: "CC" }];
     return (
         <SupWrapper>
-            <PaymentMethodText>
-                {I18n.t("$SiparisSiparisBilgileri")}
-            </PaymentMethodText>
-            <SeperatorFromTopOrBottom />
-            <InputWrapper>
-                <Input
-                    placeholder={I18n.t("$UyarilarLutfenAdSoyadGiriniz")}
-                    value={name}
-                    onChangeText={onNameChanged}
-                />
-            </InputWrapper>
-            <SeperatorFromTopOrBottom />
-            <InputWrapper>
-                <Input
-                    placeholder={I18n.t("$HesabimTelefon")}
-                    value={phone}
-                    onChangeText={onPhoneChanged}
-                    keyboardType='numeric'
-                />
-            </InputWrapper>
+            <InputBorderWrapper wrongOrderInfos={wrongOrderInfos}>
+                <PaymentMethodText>
+                    {I18n.t("$SiparisSiparisBilgileri")}
+                </PaymentMethodText>
+                <SeperatorFromTopOrBottom />
+                <InputWrapper>
+                    <Input
+                        placeholder={I18n.t("$UyarilarLutfenAdSoyadGiriniz")}
+                        value={name}
+                        onChangeText={onNameChanged}
+                    />
+                </InputWrapper>
+                <SeperatorFromTopOrBottom />
+                <InputWrapper>
+                    <Input
+                        placeholder={I18n.t("$HesabimTelefon")}
+                        value={phone}
+                        onChangeText={onPhoneChanged}
+                        keyboardType='numeric'
+                    />
+                </InputWrapper>
+            </InputBorderWrapper>
 
             <SeperatorFromTopOrBottom />
+
             <SubWrapper>
 
 
