@@ -35,7 +35,6 @@ const CategoryListRow = ({
     index,
     goToProductList
 }) => {
-    console.log(item)
     const { selectedCategoryName, squareCategoryPictureGuidName, categoryID } = item;
     return (
         <Wrapper key={index} onPress={() => goToProductList(item)} style={{

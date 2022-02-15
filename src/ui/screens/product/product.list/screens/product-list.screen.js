@@ -144,7 +144,6 @@ class ProductList extends BaseScreen {
     ////////REQUESTS 
     defaultRequestProcess = (products, filter = false) => {
         if (!filter) { this.oldList = products; }
-
         products.map((item) => {
             if (this.props.UserStore.favorites.find(a => a.productID == item.productID)) {
                 item["isFavorite"] = true

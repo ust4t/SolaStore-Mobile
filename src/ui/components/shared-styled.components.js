@@ -42,7 +42,7 @@ const ErrorText=styled(Text)`
 
 const Line = styled(View)`
     width:100%;
-    borderWidth:1;
+    borderWidth:1px;
     borderColor:${props => props.theme.color.lightGray};
 `
 export {

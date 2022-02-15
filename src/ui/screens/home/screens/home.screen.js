@@ -217,7 +217,7 @@ class HomeScreen extends BaseScreen {
             // this.loginControl() mainnavigatore taşındı
             this.getAllCategories()
             this.getBrands()
-            //this.getAdvertisingSlider()
+            this.getAdvertisingSlider()
 
             // this.getDiscountedProducts()
             // this.getBestSellers()
@@ -333,12 +333,26 @@ class HomeScreen extends BaseScreen {
         return matrix;
     }
 
-    getAdvertisingSlider = async () => {
-        let dtoRepsonse = await this.doRequestAsync(advertisingService.Slider, false)
+    chooseSliderType=(id) => {
+        switch(id){
+            case 55552:
+                return 3;
+            case 55641:
+                return 1;
+            default:
+                return 1;
+        }
+    }
 
-        if (dtoRepsonse) {
+    getAdvertisingSlider = async () => {
+        let dtoResponse = await this.doRequestAsync(advertisingService.Slider, false)
+        if (dtoResponse) {
             this.setState({
-                ads: dtoRepsonse
+                ads: dtoResponse.map(item=>({
+                    ...item,
+                    type: "variation",
+                    variationType: this.chooseSliderType(item.pictureID)
+                }))
             })
         }
     }
@@ -418,9 +432,6 @@ class HomeScreen extends BaseScreen {
         })
     }
 
-
-    openLink = (url) => { Linking.openURL(url) }
-
     /////////////////////////
     ///////SEARCH
     onChangeText = (val) => { this.setState({ searchText: val }) }
@@ -468,9 +479,8 @@ class HomeScreen extends BaseScreen {
 
                     <SeperatorFromTopOrBottom />
                     <HomeSlider
-                        //images={this.state.ads}
-                        goToProductList={this.goToProductList}
-                        openLink={this.openLink} />
+                        images={this.state.ads}
+                        goToProductList={this.goToProductList} />
 
                     {
                         this.state.categoriesLoading ?

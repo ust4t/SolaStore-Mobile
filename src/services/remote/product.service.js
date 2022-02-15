@@ -56,8 +56,8 @@ class ProductService extends BaseService {
         let rsp = await remoteDataAccessObject.GetRequest(`Helpers/AdvancedSearchProductList`, null, [
             { name: "CatIDList", val: categories },
             { name: "BrandIDList", val: brands },
-            { name: "MinPrice", val: parseInt(minPrice) },
-            { name: "MaxPrice", val: parseInt(minPrice) }
+            { name: "MinPrice", val: Number(minPrice) },
+            { name: "MaxPrice", val: Number(maxPrice) }
         ]);
         return this.handleResponse(rsp)
     }

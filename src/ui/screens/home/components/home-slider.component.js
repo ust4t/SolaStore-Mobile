@@ -221,7 +221,6 @@ const HomeSlider = ({
                         return (
                             <SliderWrapper key={index} onPress={() => goToProductList(item)}>
                                 <SliderImage
-                                    // source={{ uri: maxImageUrl + item.guidName }}
                                     source={{ uri: `${sliderUrl}${item.guidName}` }}
                                     resizeMode="contain" />
 
