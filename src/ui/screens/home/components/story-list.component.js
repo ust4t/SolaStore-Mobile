@@ -40,7 +40,7 @@ export const StoryItems = () => {
     <StoryWrapper>
       {/* <StoryList
         data={staticData}
-        renderItem={({item}) => (
+        renderItems={({item}) => (
           <StoryItems image={item.img} label={item.name} />
         )}
       /> */}

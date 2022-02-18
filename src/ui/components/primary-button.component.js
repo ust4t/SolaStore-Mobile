@@ -3,24 +3,24 @@ import {TouchableOpacity, View, Text} from 'react-native';
 import styled from 'styled-components';
 
 const TouchableFlex = styled(TouchableOpacity)`
-  backgroundcolor: ${props => props.theme.color.primary};
-  borderradius: ${props => props.theme.radius[4]};
+  background-color: ${props => props.theme.color.primary};
+  border-radius: ${props => props.theme.radius[4]};
   padding: ${props => props.theme.space[props.paddingCount]};
-  justifycontent: center;
-  alignitems: center;
+  justify-content: center;
+  align-items: center;
   flex: 1;
 `;
 const TouchableWidth = styled(TouchableOpacity)`
-  backgroundcolor: ${props => props.theme.color.primary};
-  borderradius: ${props => props.theme.radius[4]};
+  background-color: ${props => props.theme.color.primary};
+  border-radius: ${props => props.theme.radius[4]};
   padding: ${props => props.theme.space[props.paddingCount]};
-  justifycontent: center;
-  alignitems: center;
+  justify-content: center;
+  align-items: center;
   width: 100%;
 `;
 const TouchableText = styled(Text)`
   color: ${props => props.theme.color.white};
-  fontweight: bold;
+  font-weight: bold;
 `;
 const PrimaryButton = ({
   text = 'Tamam',
