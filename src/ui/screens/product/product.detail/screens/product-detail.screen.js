@@ -4,7 +4,7 @@ import {
   Text,
   InteractionManager,
   TouchableOpacity,
-  //   Linking,
+  // Linking,
   Platform,
   Share,
 } from 'react-native';
@@ -355,13 +355,13 @@ class ProductDetail extends BaseScreen {
       message: `https://solastore.com.tr/detail/${encodeURLString(
         this.item.productShortName,
       )}:${this.item.productID}?selected=${this.item.productID}`,
-      url: Platform.ios
-        ? `https://solastore.com.tr/detail/${encodeURLString(
-            this.item.productShortName,
-          )}:${this.item.productID}?selected=${this.item.productID}`
-        : '',
+      url:
+        Platform.OS === 'ios'
+          ? `https://solastore.com.tr/detail/${encodeURLString(
+              this.item.productShortName,
+            )}:${this.item.productID}?selected=${this.item.productID}`
+          : '',
     });
-    //Linking.openURL()
   };
 }
 
