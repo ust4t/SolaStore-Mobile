@@ -1,5 +1,4 @@
 import React from 'react';
-import {View} from 'react-native';
 import {enableScreens} from 'react-native-screens';
 import HomeScreen from '../screens/home/screens/home.screen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -9,7 +8,6 @@ import ProductVideoPlayer from '../screens/product/product.video/screens/product
 import UserFavoriteListScreen from '../screens/user/user.favorites/screens/user-favorites.screen';
 import ContactScreen from '../screens/contact/contact.screen';
 import SettingScreen from '../screens/settings/screens/setting.screen';
-import StoryScreen from '../screens/story/screens/stories.screen';
 
 enableScreens(true);
 const Stack = createNativeStackNavigator();
@@ -51,11 +49,6 @@ const HomeNavigator = ({}) => (
       options={{headerShown: false}}
       name="SettingScreen"
       component={SettingScreen}
-    />
-    <Stack.Screen
-      options={{headerShown: false}}
-      name="StoryScreen"
-      component={StoryScreen}
     />
   </Stack.Navigator>
 );

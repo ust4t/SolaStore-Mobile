@@ -42,8 +42,13 @@ import HomeBrands from '../components/home-brands.component';
 import {space} from '../../../../infrastructure/theme/space';
 import HomeCampaigns from '../components/home-campaigns.component';
 import SocialMedias from '../../../components/social-medias.component';
-import {brandUrl, SocialMediasList} from '../../../../util/constants';
-import {StoryItems} from '../components/story-list.component';
+import {
+  brandUrl,
+  imageUrl,
+  maxImageUrl,
+  SocialMediasList,
+} from '../../../../util/constants';
+import StoryItems from '../components/story-list.component';
 
 ///////////brand images calculates
 const deviceWidth = Dimensions.get('window').width;
@@ -535,7 +540,7 @@ class HomeScreen extends BaseScreen {
           />
 
           <SeperatorFromTopOrBottom />
-          {/* <StoryItems /> */}
+
           <HomeSlider
             images={this.state.ads}
             goToProductList={this.goToProductList}
