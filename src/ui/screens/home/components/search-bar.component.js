@@ -84,6 +84,7 @@ const SearchBar = ({goToBasket, searchText = '', onChangeText, action}) => (
         placeholderTextColor="#909090"
         value={searchText}
         onChangeText={onChangeText}
+        onSubmitEditing={action}
       />
 
       <SearchIconWrapper onPress={action}>
