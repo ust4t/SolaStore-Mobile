@@ -1,56 +1,55 @@
 import React from 'react';
-import { View, Text ,TouchableOpacity,Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import styled from 'styled-components';
-import { mainCampaignsUrl } from '../../../../util/constants';
+import {mainCampaignsUrl} from '../../../../util/constants';
 
 const Wrapper = styled(TouchableOpacity)`
-padding:${props => props.theme.space[1]};
-paddingBottom:0px;
-paddingTop:0px;
-alignItems:center;
-
-`
+  padding: ${props => props.theme.space[1]};
+  padding-bottom: 0px;
+  padding-top: 0px;
+  align-items: center;
+`;
 const IconWrapper = styled(View)`
-backgroundColor:${props => props.theme.color.white};
+  background-color: ${props => props.theme.color.white};
 
-borderRadius:${props => props.theme.radius[2]};
-
-
-`
+  border-radius: ${props => props.theme.radius[2]};
+`;
 
 const CategoryIcon = styled(Image)`
-
-    width:${props => props.oneCmpImageWidth}px;
-    height:${props => props.oneCmpImageHeight}px;
-    borderRadius:${props => props.theme.radius[2]};
-    
-`
+  width: ${props => props.oneCmpImageWidth}px;
+  height: ${props => props.oneCmpImageHeight}px;
+  border-radius: ${props => props.theme.radius[2]};
+`;
 
 const HomeCampaignRow = ({
-    item,
-    index,
-    oneCmpImageWidth,
-    oneCmpImageHeight,
-    goToProductList
+  item,
+  index,
+  oneCmpImageWidth,
+  oneCmpImageHeight,
+  goToProductList,
 }) => {
-    console.log(oneCmpImageWidth,oneCmpImageHeight)
-    const { pictureGuidName ,pictureLink} = item;
-    return (
-        <Wrapper key={index}
-             onPress={() => goToProductList({categoryID: pictureLink.substr((pictureLink.indexOf("x/"))+2,pictureLink.length)})}
-        >
-            <IconWrapper
-            >
-                <CategoryIcon
-                    source={{ uri: mainCampaignsUrl + pictureGuidName }}
-                    resizeMode="stretch"
-                    oneCmpImageWidth={oneCmpImageWidth}
-                    oneCmpImageHeight={oneCmpImageHeight} 
-                    />
-            </IconWrapper>
-
-        </Wrapper>
-    );
-}
+  const {pictureGuidName, pictureLink} = item;
+  return (
+    <Wrapper
+      key={index}
+      onPress={() =>
+        goToProductList({
+          categoryID: pictureLink.substr(
+            pictureLink.indexOf('x/') + 2,
+            pictureLink.length,
+          ),
+        })
+      }>
+      <IconWrapper>
+        <CategoryIcon
+          source={{uri: mainCampaignsUrl + pictureGuidName}}
+          resizeMode="stretch"
+          oneCmpImageWidth={oneCmpImageWidth}
+          oneCmpImageHeight={oneCmpImageHeight}
+        />
+      </IconWrapper>
+    </Wrapper>
+  );
+};
 
 export default React.memo(HomeCampaignRow);

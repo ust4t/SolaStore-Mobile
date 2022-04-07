@@ -540,7 +540,7 @@ class HomeScreen extends BaseScreen {
           />
 
           <SeperatorFromTopOrBottom />
-          {/* <StoryItems /> */}
+          <StoryItems navigation={this.goToProductDetail} />
           <HomeSlider
             images={this.state.ads}
             goToProductList={this.goToProductList}

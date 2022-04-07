@@ -1,156 +1,168 @@
 import React from 'react';
+import {View, StyleSheet, Share, TouchableOpacity} from 'react-native';
+import Story from 'react-native-stories-plus';
 import {inject, observer} from 'mobx-react';
-import {View} from 'react-native';
-import Stories from 'react-native-stories-media';
+import I18n from 'i18n-js';
 
+import productService from '../../../../services/remote/product.service';
 import BaseScreen from '../../../shared/base.screen';
-const data = [
-  {
-    username: 'Guilherme',
-    title: 'Title story',
-    profile:
-      'https://avatars2.githubusercontent.com/u/26286830?s=460&u=5d586a3783a6edeb226c557240c0ba47294a4229&v=4',
-    stories: [
-      {
-        id: 1,
-        url: 'https://images.unsplash.com/photo-1532579853048-ec5f8f15f88d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-    ],
-  },
-  {
-    username: 'Bruno',
-    profile: 'https://avatars2.githubusercontent.com/u/45196619?s=460&v=4',
-    title: 'Travel',
-    stories: [
-      {
-        id: 0,
-        url: 'https://images.unsplash.com/photo-1500099817043-86d46000d58f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-      {
-        id: 1,
-        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-        type: 'video',
-        duration: 2,
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-      {
-        id: 2,
-        url: 'https://images.unsplash.com/photo-1476292026003-1df8db2694b8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-        isReadMore: false,
-        url_readmore: '',
-        created: '2021-01-07T03:24:00',
-      },
-      {
-        id: 3,
-        url: 'https://images.unsplash.com/photo-1498982261566-1c28c9cf4c02?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-        isReadMore: true,
-      },
-    ],
-  },
-  {
-    username: 'Steve Jobs',
-    profile:
-      'https://s3.amazonaws.com/media.eremedia.com/uploads/2012/05/15181015/stevejobs.jpg',
-    title: 'Tech',
-    stories: [
-      {
-        id: 1,
-        url: 'https://images.unsplash.com/photo-1515578706925-0dc1a7bfc8cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-      {
-        id: 3,
-        url: 'https://images.unsplash.com/photo-1496287437689-3c24997cca99?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
+import favoriteService from '../../../../services/remote/favorite.service';
+import basketService from '../../../../services/remote/basket.service';
+import {encodeURLString} from '../../../../util/encodeURLString';
+import SuccessModal from '../../../components/success-modal';
 
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-      {
-        id: 4,
-        url: 'https://images.unsplash.com/photo-1514870262631-55de0332faf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-    ],
-  },
-  {
-    username: 'Jacob',
-    profile:
-      'https://images.unsplash.com/profile-1531581190171-0cf831d86212?dpr=2&auto=format&fit=crop&w=150&h=150&q=60&crop=faces&bg=fff',
-    title: 'News',
-    stories: [
-      {
-        id: 4,
-        url: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-      {
-        id: 5,
-        url: 'https://images.unsplash.com/photo-1478397453044-17bb5f994100?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-        type: 'image',
-        duration: 2,
-
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-      {
-        id: 4,
-        url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=581&q=80',
-        type: 'image',
-        duration: 2,
-        isReadMore: true,
-        url_readmore: 'https://github.com/iguilhermeluis',
-        created: '2021-01-07T03:24:00',
-      },
-    ],
-  },
-];
 @inject('BusyStore', 'UserStore')
 @observer
-class StoryItems extends BaseScreen {
-  constructor(props) {
-    super(props);
+class StoryList extends BaseScreen {
+  state = {
+    story: [],
+    likedList: [],
+    successModalVisible: false,
+    forceRefreshFlag1: true,
+  };
+
+  showSuccessModal = () => {
+    this.setState({successModalVisible: true}, () => {
+      setTimeout(() => {
+        this.setState({
+          forceRefreshFlag1: !this.state.forceRefreshFlag1,
+        });
+      }, 10);
+    });
+  };
+
+  hideSuccessModal = () => {
+    this.setState({successModalVisible: false});
+  };
+
+  addToFavorites = async id => {
+    const favoriteState = this.props.UserStore.favorites.find(
+      a => a.masterProductID == id,
+    )
+      ? true
+      : false;
+
+    if (favoriteState) {
+      const resp = await this.doRequestAsync(() =>
+        favoriteService.DeleteFavoriteProduct(id),
+      );
+
+      this.setState({
+        likedList: this.state.likedList.filter(
+          item => item.masterProductID !== id,
+        ),
+      });
+      if (resp.status == 200) {
+        this.props.UserStore.deleteFromFavoriteWithId(id);
+      }
+    } else {
+      let resp = await this.doRequestAsync(() =>
+        favoriteService.AddFavoriteProduct(id),
+      );
+
+      if (resp.status == 200) {
+        let resp = await this.doRequestAsync(() =>
+          productService.GetProductById(id),
+        );
+        this.props.UserStore.addToFavorites(resp[0]);
+      }
+    }
+  };
+
+  fetchNew = async () => {
+    let dtoResponse = await this.doRequestAsync(productService.getNewProducts);
+    this.setState({
+      story: dtoResponse
+        .slice(0, 6)
+        .filter(item => item.picture_1 !== null)
+        .map((item, i) => ({
+          user_id: i,
+          user_image: `https://solastore.com.tr/img/ProductWM/maxPic/${item.picture_1}`,
+          user_name: item.productShortName,
+          stories: item.pictures.map((pic, index) => ({
+            id: item.masterProductID,
+            productId: item.productID,
+            story_id: index,
+            story_image: `https://solastore.com.tr/img/ProductWM/maxPic/${pic.guidName}`,
+            swipeText: I18n.t('goToProduct'),
+            onBottomPress: null,
+          })),
+        })),
+    });
+  };
+
+  addToBasket = async id => {
+    let rsp = await this.doRequestAsync(() => basketService.addToBasket(id, 1));
+    if (rsp) {
+      // showToast(I18n.t("$UrunlerSepeteEklendi"));
+      this.showSuccessModal();
+    }
+  };
+
+  shareProduct = async id => {
+    let resp = await this.doRequestAsync(() =>
+      productService.GetProductById(id),
+    );
+    const respData = resp[0];
+    await Share.share({
+      title: respData.productShortName,
+      message: `https://solastore.com.tr/detail/${encodeURLString(
+        respData.productShortName,
+      )}:${respData.productID}?selected=${respData.productID}`,
+      url:
+        Platform.OS === 'ios'
+          ? `https://solastore.com.tr/detail/${encodeURLString(
+              respData.productShortName,
+            )}:${respData.productID}?selected=${respData.productID}`
+          : '',
+    });
+  };
+
+  componentDidMount() {
+    this.fetchNew();
   }
 
   render() {
     return (
-      <View style={{flex: 1, paddingVertical: 20}}>
-        <Stories data={data} />
+      <View style={styles.container}>
+        <SuccessModal
+          successModalVisibilty={this.state.successModalVisible}
+          hideSuccessModal={this.hideSuccessModal}
+          forceRefresh={this.state.forceRefreshFlag1}
+          // lottieName = "basketLottie",
+          // buttonText = I18n.t("$DetayliAramaTamam"),
+          // successMessage= I18n.t("$UrunlerSepeteEklendi")
+        />
+        {this.state.story.length ? (
+          <Story
+            data={this.state.story}
+            avatarSize={65}
+            avatarTextStyle={{
+              fontSize: 12,
+            }}
+            likedList={this.props.UserStore.favorites.map(
+              item => item.masterProductID,
+            )}
+            onLikePress={this.addToFavorites}
+            onCartPress={this.addToBasket}
+            onSharePress={this.shareProduct}
+            iconSize={45}
+            duration={5}
+            style={{marginTop: 30}}
+          />
+        ) : (
+          <></>
+        )}
       </View>
     );
   }
 }
 
-export default StoryItems;
+export default StoryList;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
