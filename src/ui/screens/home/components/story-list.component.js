@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Share, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Share, Platform, Alert} from 'react-native';
 import Story from 'react-native-stories-plus';
 import {inject, observer} from 'mobx-react';
 import I18n from 'i18n-js';
@@ -94,8 +94,13 @@ class StoryList extends BaseScreen {
   addToBasket = async id => {
     let rsp = await this.doRequestAsync(() => basketService.addToBasket(id, 1));
     if (rsp) {
+      const platform = Platform.OS;
       // showToast(I18n.t("$UrunlerSepeteEklendi"));
-      this.showSuccessModal();
+      if (platform === 'ios') {
+        Alert.alert(I18n.t('$AnaSayfaSepet'), I18n.t('$UrunlerSepeteEklendi'));
+      } else {
+        this.showSuccessModal();
+      }
     }
   };
 
