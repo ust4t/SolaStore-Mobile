@@ -485,6 +485,9 @@ class HomeScreen extends BaseScreen {
       type: 'brands',
     });
   };
+  openLink = link => {
+    Linking.openURL(link);
+  };
 
   /////////////////////////
   ///////SEARCH
