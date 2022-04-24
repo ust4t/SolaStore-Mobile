@@ -206,7 +206,7 @@ class CheckoutScreen extends BaseScreen {
               onNameChanged={this.onNameChanged}
               onPhoneChanged={this.onPhoneChanged}
               onPaymentMethodSelected={this.onSelect}
-              selectedPaymentMethodName={this.state.selectedPaymentMethodName}
+              // selectedPaymentMethodName={this.state.selectedPaymentMethodName}
               wrongOrderInfos={this.state.wrongOrderInfos}
             />
           }
