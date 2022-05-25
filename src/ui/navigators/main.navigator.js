@@ -107,7 +107,7 @@ class MainNavigator extends Component {
         });
         //this.getAll()
         // await this.checkAppVersion();
-        if (this.state.currentVersion === this.state.storeVersion)
+        if (this.state.currentVersion !== this.state.storeVersion)
           this.showUpdateModal();
       });
     });

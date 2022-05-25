@@ -71,7 +71,7 @@ const tr = {
   missingInfo: 'Informations utilisateur incorrectes',
   goToProduct: 'Aller au produit',
   updateModal:
-    'La nouvelle version de notre application est sortie. Veuillez télécharger la nouvelle version.',
+    'La nouvelle version de notre application est sortie. \n\n Veuillez télécharger la nouvelle version.',
   updateButton: "Mettre à jour L'application",
 };
 export default tr;

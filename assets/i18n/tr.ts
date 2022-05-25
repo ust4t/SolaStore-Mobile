@@ -71,7 +71,7 @@ const tr = {
   missingInfo: 'Yanlış Kullanıcı Bilgileri',
   goToProduct: 'Ürüne Git',
   updateModal:
-    'Uygulamamızın yeni sürümü çıkmıştır. Lütfen yeni sürümü indiriniz.',
+    'Uygulamamızın yeni sürümü çıkmıştır. \n\n Lütfen yeni sürümü indiriniz.',
   updateButton: 'Uygulamayı Güncelle',
 };
 export default tr;
