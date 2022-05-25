@@ -70,5 +70,8 @@ const tr = {
   missingRep: 'Bir Satış Temsilcisi Seçiniz',
   missingInfo: 'Yanlış Kullanıcı Bilgileri',
   goToProduct: 'Ürüne Git',
+  updateModal:
+    'Uygulamamızın yeni sürümü çıkmıştır. Lütfen yeni sürümü indiriniz.',
+  updateButton: 'Uygulamayı Güncelle',
 };
 export default tr;

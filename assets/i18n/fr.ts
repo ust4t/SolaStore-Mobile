@@ -70,5 +70,8 @@ const tr = {
   missingRep: 'Sélectionnez un représentant des ventes',
   missingInfo: 'Informations utilisateur incorrectes',
   goToProduct: 'Aller au produit',
+  updateModal:
+    'La nouvelle version de notre application est sortie. Veuillez télécharger la nouvelle version.',
+  updateButton: "Mettre à jour L'application",
 };
 export default tr;
